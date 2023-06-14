@@ -14,15 +14,15 @@ def run_before_tests():
 
 
 def test_scanner_discovers_files_to_be_transferred():
-    create_desired_files()
+    create_desired_source_files()
 
     files_to_transfer = scanner.scan_dirs()
 
-    assert sorted(files_to_transfer) == sorted(desired_source_filepath_list())
+    assert sorted(files_to_transfer) == sorted(desired_source_filepaths())
 
 
 def test_scanner_ignores_files_without_desired_extensions():
-    create_desired_files()
+    create_desired_source_files()
     undesired_files = [
         source_dir + "sales.zip",
         source_dir + "sales.rar",
@@ -33,4 +33,4 @@ def test_scanner_ignores_files_without_desired_extensions():
 
     files_to_transfer = scanner.scan_dirs()
 
-    assert sorted(files_to_transfer) == sorted(desired_source_filepath_list())
+    assert sorted(files_to_transfer) == sorted(desired_source_filepaths())

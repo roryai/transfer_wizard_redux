@@ -7,15 +7,15 @@ target_dir = "/Users/rory/code/transfer_wizard_redux/test/media/target/"
 DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
 
 
-def desired_source_filepath_list():
+def desired_source_filepaths():
     files = []
     for ext in DESIRED_PHOTO_EXTENSIONS:  # TODO use list comprehension here
         files.append(source_dir + 'a_file' + ext)
     return files
 
 
-def create_desired_files():
-    for file_path in desired_source_filepath_list():
+def create_desired_source_files():
+    for file_path in desired_source_filepaths():
         open(file_path, 'x').close()
 
 

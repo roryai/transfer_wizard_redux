@@ -13,19 +13,19 @@ def run_before_tests():
 
 def test_desired_files_are_transferred():
     assert filenames_in_directory(target_dir) == []
-    create_desired_files()
+    create_desired_source_files()
 
-    source_files = desired_source_filepath_list()
+    source_files = desired_source_filepaths()
     Transfer().copy_files(source_files, target_dir)
 
     assert filenames_in_directory(target_dir) == filenames_in_directory(source_dir)
 
 def test_does_not_copy_files_if_file_already_exists():
-    create_desired_files()
+    create_desired_source_files()
     existing_filepath = target_dir + 'a_file.jpeg'
     open(existing_filepath, 'x').close()
     existing_file_mod_time_pre_copy = os.stat(existing_filepath).st_mtime
-    source_files = desired_source_filepath_list()
+    source_files = desired_source_filepaths()
     Transfer().copy_files(source_files, target_dir)
 
     existing_file_mod_time_post_copy = os.stat(existing_filepath).st_mtime

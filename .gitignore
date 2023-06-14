@@ -132,3 +132,7 @@ dmypy.json
 
 *.iml
 .idea
+test/media/source/
+test/media/target/
+dev_media/
+notes/

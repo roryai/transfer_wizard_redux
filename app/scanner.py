@@ -1,5 +1,7 @@
 import os
 
+PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
+
 
 class Scanner:
 
@@ -13,6 +15,6 @@ class Scanner:
         for (root, dirs, files) in file_tree:
             for file in files:
                 filename, extension = os.path.splitext(file)
-                if extension == ".jpeg":
+                if extension in PHOTO_EXTENSIONS:
                     matching_files.append(root + file)
         return matching_files

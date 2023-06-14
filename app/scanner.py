@@ -12,9 +12,9 @@ class Scanner:
     def scan_dirs(self):
         file_tree = os.walk(self.source_dir)
         matching_files = []
-        for (root, dirs, files) in file_tree:
+        for (root, _, files) in file_tree:
             for file in files:
-                filename, extension = os.path.splitext(file)
+                _, extension = os.path.splitext(file)
                 if extension in PHOTO_EXTENSIONS:
                     matching_files.append(root + file)
         return matching_files

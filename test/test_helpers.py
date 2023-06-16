@@ -32,9 +32,14 @@ def filenames_in_directory(directory):
     return sorted(files)
 
 
-def create_file_with_data(directory, filename, data):
+def create_file_with_data(directory, filename, data=''):
     file_path = directory + filename
     file = open(file_path, 'x')
     file.write(data)
     file.close()
     return file_path
+
+
+def create_file(directory, filename):
+    return create_file_with_data(directory, filename)
+

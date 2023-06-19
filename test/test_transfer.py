@@ -49,8 +49,7 @@ def test_increments_number_suffix_if_already_exists():
     source_filepath = create_file(source_dir, 'a_file___1.jpeg')
     create_file_with_data(target_dir, 'a_file___1.jpeg', 'Some original data')
 
-    source_files = [source_filepath]
-    Transfer().copy_files(source_files, target_dir)
+    Transfer().copy_files([source_filepath], target_dir)
 
     assert os.path.isfile(target_dir + 'a_file___2.jpeg')
 
@@ -65,5 +64,14 @@ def test_increments_duplicate_number_suffix_until_unused_path_discovered():
     assert os.path.isfile(target_dir + 'a_file___2.jpeg')
 
 
-def test_skips_file_if_incremented_identical_file_discovered():
-    pass
+def test_skips_file_if_identical_file_discovered_after_name_clash():
+    source_filepath = create_file_with_data(source_dir, 'a_file.jpeg', 'Same data')
+    create_file_with_data(target_dir, 'a_file.jpeg', 'Unique data')
+    duplicate_path = create_file_with_data(target_dir, 'a_file___1.jpeg', 'Same data')
+
+    existing_file_mod_time_pre_copy = os.stat(duplicate_path).st_mtime
+    Transfer().copy_files([source_filepath], target_dir)
+    existing_file_mod_time_post_copy = os.stat(duplicate_path).st_mtime
+
+    assert existing_file_mod_time_post_copy == existing_file_mod_time_pre_copy
+    assert not os.path.isfile(target_dir + 'a_file___2.jpeg')

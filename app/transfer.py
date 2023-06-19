@@ -8,27 +8,27 @@ class Transfer:
 
     def copy_files(self, source_files, target_directory):
         for source_filepath in source_files:
-            target_path = target_directory + pathlib.Path(source_filepath).name
-            if self.file_already_exists(target_path):
-                if self.files_are_same_size(source_filepath, target_path):
-                    continue
-                else:
-                    target_path = self.generate_next_available_path(target_path)
-            shutil.copy2(source_filepath, target_path)
+            prospective_target_filepath = target_directory + pathlib.Path(source_filepath).name
+            target_filepath = self.handle_duplicates(source_filepath, prospective_target_filepath)
+            if target_filepath:
+                shutil.copy2(source_filepath, target_filepath)
 
-    def generate_next_available_path(self, target_path):
-        path = pathlib.Path(target_path)
-        target_dir = path.parent
-        file_stem = path.stem
-        file_ext = path.suffix
-
-        file_stem = self.add_suffix(file_stem)
-        next_increment_path = self.construct_path(target_dir, file_stem, file_ext)
-        if self.file_already_exists(next_increment_path):
-            # TODO if same size, abandon this iteration
-            return self.generate_next_available_path(next_increment_path)
+    def handle_duplicates(self, source_filepath, target_filepath):
+        if not self.path_in_use(target_filepath):
+            return target_filepath
+        if self.files_are_same_size(source_filepath, target_filepath):
+            return ''
         else:
-            return self.construct_path(target_dir, file_stem, file_ext)
+            return self.generate_next_available_path(source_filepath, target_filepath)
+
+    def generate_next_available_path(self, source_filepath, target_filepath):
+        path = pathlib.Path(target_filepath)
+        file_stem = self.add_suffix(path.stem)
+        incremented_path = self.construct_path(path.parent, file_stem, path.suffix)
+        if self.path_in_use(incremented_path):
+            return self.handle_duplicates(source_filepath, incremented_path)
+        else:
+            return incremented_path
 
     def add_suffix(self, file_stem):
         if bool(re.search("___", file_stem)):
@@ -44,7 +44,7 @@ class Transfer:
         number_suffix = str(int(existing_number_suffix) + 1)
         return file_stem.rsplit('___', 1)[0] + '___' + number_suffix
 
-    def file_already_exists(self, path):
+    def path_in_use(self, path):
         return os.path.isfile(path)
 
     def files_are_same_size(self, path_1, path_2):

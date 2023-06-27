@@ -11,7 +11,7 @@ def desired_source_filepaths():
     files = []
     for ext in DESIRED_PHOTO_EXTENSIONS:  # TODO use list comprehension here
         files.append(source_dir + 'a_file' + ext)
-    return files
+    return sorted(files)
 
 
 def create_desired_source_files():

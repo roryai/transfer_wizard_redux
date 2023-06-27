@@ -23,26 +23,23 @@ class Transfer:
 
     def generate_next_available_path(self, source_filepath, target_filepath):
         path = pathlib.Path(target_filepath)
-        file_stem = self.add_suffix(path.stem)
-        incremented_path = self.construct_path(path.parent, file_stem, path.suffix)
+        filename = self.add_suffix(path.stem)
+        incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.path_in_use(incremented_path):
             return self.handle_duplicates(source_filepath, incremented_path)
         else:
             return incremented_path
 
-    def add_suffix(self, file_stem):
-        if bool(re.search("___", file_stem)):
-            return self.increment_number_suffix(file_stem)
+    def add_suffix(self, filename):
+        if bool(re.search("___", filename)):
+            return self.increment_suffix_number(filename)
         else:
-            return file_stem + '___1'
+            return filename + '___1'
 
-    def construct_path(self, target_dir, file_stem, file_ext):
-        return f'{target_dir}/{file_stem}{file_ext}'
-
-    def increment_number_suffix(self, file_stem):
-        file_stem, existing_number_suffix = file_stem.rsplit('___', 1)
+    def increment_suffix_number(self, filename):
+        filename, existing_number_suffix = filename.rsplit('___', 1)
         number_suffix = str(int(existing_number_suffix) + 1)
-        return file_stem.rsplit('___', 1)[0] + '___' + number_suffix
+        return filename.rsplit('___', 1)[0] + '___' + number_suffix
 
     def path_in_use(self, path):
         return os.path.isfile(path)

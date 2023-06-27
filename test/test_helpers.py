@@ -2,6 +2,7 @@ import os
 
 
 source_dir = "/Users/rory/code/transfer_wizard_redux/test/media/source/"
+permanent_source_dir = "/Users/rory/code/transfer_wizard_redux/test/media/permanent_source/"
 target_dir = "/Users/rory/code/transfer_wizard_redux/test/media/target/"
 
 DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']

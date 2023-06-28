@@ -44,3 +44,5 @@ def create_file_with_data(directory, filename, data=''):
 def create_file(directory, filename):
     return create_file_with_data(directory, filename)
 
+def create_directory(directory_path):
+    os.makedirs(directory_path)

@@ -1,6 +1,6 @@
 import os
 
-PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
+VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
 
 
 class Scanner:
@@ -14,6 +14,6 @@ class Scanner:
         for (root, _, files) in file_tree:
             for file in files:
                 _, extension = os.path.splitext(file)
-                if extension in PHOTO_EXTENSIONS:
+                if extension in VALID_PHOTO_EXTENSIONS:
                     matching_files.append(root + file)
         return sorted(matching_files)

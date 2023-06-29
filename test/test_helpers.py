@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import shutil
 
-from app.scanner import PHOTO_EXTENSIONS
+from app.scanner import VALID_PHOTO_EXTENSIONS
 
 test_media_directory = '/Users/rory/code/transfer_wizard_redux/test/media/'
 static_source_directory = test_media_directory + 'static_source/'
@@ -18,7 +18,7 @@ def create_valid_files():
 
 def valid_source_filepaths():
     files = []
-    for ext in PHOTO_EXTENSIONS:
+    for ext in VALID_PHOTO_EXTENSIONS:
         files.append(dynamic_source_directory + 'a_file' + ext)
     return sorted(files)
 

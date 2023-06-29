@@ -14,9 +14,9 @@ def teardown():
 
 def test_desired_files_are_transferred():
     assert filenames_in_directory(target_root_directory) == []
-    create_desired_source_files()
+    create_valid_files()
 
-    source_files = desired_source_filepaths()
+    source_files = valid_source_filepaths()
     Transfer().copy_files(source_files, target_root_directory)
 
     assert filenames_in_directory(target_directory) == filenames_in_directory(dynamic_source_directory)

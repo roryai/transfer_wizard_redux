@@ -2,24 +2,25 @@ import os
 from pathlib import Path
 import shutil
 
-static_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/static_source/'
-dynamic_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/dynamic_source/'
-target_root_directory = '/Users/rory/code/transfer_wizard_redux/test/media/target/'
+from app.scanner import PHOTO_EXTENSIONS
+
+test_media_directory = '/Users/rory/code/transfer_wizard_redux/test/media/'
+static_source_directory = test_media_directory + 'static_source/'
+dynamic_source_directory = test_media_directory + 'dynamic_source/'
+target_root_directory = test_media_directory + 'target/'
 target_directory = target_root_directory + '2023/Q2/'
 
-DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']  # TODO used? delete?
+
+def create_valid_files():
+    for file_path in valid_source_filepaths():
+        open(file_path, 'x').close()
 
 
-def desired_source_filepaths():
+def valid_source_filepaths():
     files = []
-    for ext in DESIRED_PHOTO_EXTENSIONS:
+    for ext in PHOTO_EXTENSIONS:
         files.append(dynamic_source_directory + 'a_file' + ext)
     return sorted(files)
-
-
-def create_desired_source_files():
-    for file_path in desired_source_filepaths():
-        open(file_path, 'x').close()
 
 
 def clear_test_directories():

@@ -13,15 +13,15 @@ def teardown():
 
 
 def test_scanner_discovers_files_to_be_transferred():
-    create_desired_source_files()
+    create_valid_files()
 
     files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
 
-    assert files_to_transfer == desired_source_filepaths()
+    assert files_to_transfer == valid_source_filepaths()
 
 
 def test_scanner_ignores_files_without_desired_extensions():
-    create_desired_source_files()
+    create_valid_files()
     undesired_files = [
         dynamic_source_directory + "sales.zip",
         dynamic_source_directory + "sales.rar",
@@ -32,4 +32,4 @@ def test_scanner_ignores_files_without_desired_extensions():
 
     files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
 
-    assert files_to_transfer == desired_source_filepaths()
+    assert files_to_transfer == valid_source_filepaths()

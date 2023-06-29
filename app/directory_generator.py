@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-import pathlib
+from pathlib import Path
 import re
 
 
@@ -23,12 +23,12 @@ class DirectoryGenerator:
         else:
             return self.__generate_next_available_path(source_filepath, target_filepath)
 
-    def __create_directory(self, target_filepath):
-        path = pathlib.Path(target_filepath)
-        os.makedirs(path.parent)
+    def __create_directory(self, target_filepath):  # TODO refactor this away to another class
+        path = Path(target_filepath)
+        Path(path.parent).mkdir(parents=True, exist_ok=True)
 
     def __generate_next_available_path(self, source_filepath, target_filepath):
-        path = pathlib.Path(target_filepath)
+        path = Path(target_filepath)
         filename = self.__add_suffix(path.stem)
         incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.__path_in_use(incremented_path):

@@ -6,8 +6,9 @@ import re
 
 class DirectoryGenerator:
 
-    def prepare_target_path(self, source_filepath, target_directory, filename):
-        decimal_birthtime = os.stat(source_filepath).st_birthtime
+    def prepare_target_path(self, source_directory, target_directory, filename):
+        source_filepath = source_directory + filename
+        decimal_birthtime = os.stat(source_directory).st_birthtime
         birthtime = datetime.fromtimestamp(decimal_birthtime)
         quarter = self.__determine_quarter(birthtime.month)
         prospective_path = f'{target_directory}{birthtime.year}/{quarter}/{filename}'

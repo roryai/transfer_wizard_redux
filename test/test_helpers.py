@@ -1,17 +1,19 @@
 import os
+from pathlib import Path
+import shutil
 
+source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/permanent_source/'  # TODO change actual folder name and this path
+temp_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/source/'
+target_root_directory = '/Users/rory/code/transfer_wizard_redux/test/media/target/'
+target_directory = target_root_directory + '2023/Q2/'
 
-source_dir = "/Users/rory/code/transfer_wizard_redux/test/media/source/"
-permanent_source_dir = "/Users/rory/code/transfer_wizard_redux/test/media/permanent_source/"
-target_dir = "/Users/rory/code/transfer_wizard_redux/test/media/target/"
-
-DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
+DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']  # TODO used? delete?
 
 
 def desired_source_filepaths():
     files = []
-    for ext in DESIRED_PHOTO_EXTENSIONS:  # TODO use list comprehension here
-        files.append(source_dir + 'a_file' + ext)
+    for ext in DESIRED_PHOTO_EXTENSIONS:
+        files.append(temp_source_directory + 'a_file' + ext)
     return sorted(files)
 
 
@@ -20,9 +22,21 @@ def create_desired_source_files():
         open(file_path, 'x').close()
 
 
+def clear_test_directories():
+    generated_target_path = target_root_directory + '2023'
+    if os.path.isdir(generated_target_path):
+        shutil.rmtree(generated_target_path)
+    delete_files_in(temp_source_directory)
+    delete_files_in(target_root_directory)
+
+
 def delete_files_in(directory):
     for f in os.listdir(directory):
         os.remove(os.path.join(directory, f))
+
+
+def delete_file(filepath):
+    os.remove(filepath)
 
 
 def filenames_in_directory(directory):
@@ -33,8 +47,10 @@ def filenames_in_directory(directory):
     return sorted(files)
 
 
-def create_file_with_data(directory, filename, data=''):
-    file_path = directory + filename
+def create_file_with_data(directory_path, filename, data=''):
+    if not os.path.isdir(directory_path):
+        create_directory(directory_path)
+    file_path = directory_path + filename
     file = open(file_path, 'x')
     file.write(data)
     file.close()
@@ -44,5 +60,6 @@ def create_file_with_data(directory, filename, data=''):
 def create_file(directory, filename):
     return create_file_with_data(directory, filename)
 
+
 def create_directory(directory_path):
-    os.makedirs(directory_path)
+    Path(directory_path).mkdir(parents=True, exist_ok=True)

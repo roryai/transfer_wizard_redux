@@ -19,6 +19,6 @@ def test_desired_files_are_transferred():
     source_files = desired_source_filepaths()
     Transfer().copy_files(source_files, target_root_directory)
 
-    assert filenames_in_directory(target_directory) == filenames_in_directory(temp_source_directory)
+    assert filenames_in_directory(target_directory) == filenames_in_directory(dynamic_source_directory)
 
 

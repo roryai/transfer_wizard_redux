@@ -132,7 +132,7 @@ dmypy.json
 
 *.iml
 .idea
-test/media/source/
+test/media/dynamic_source/
 test/media/target/
 dev_media/
 notes/

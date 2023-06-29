@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 import shutil
 
-source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/permanent_source/'  # TODO change actual folder name and this path
-temp_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/source/'
+static_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/static_source/'
+dynamic_source_directory = '/Users/rory/code/transfer_wizard_redux/test/media/dynamic_source/'
 target_root_directory = '/Users/rory/code/transfer_wizard_redux/test/media/target/'
 target_directory = target_root_directory + '2023/Q2/'
 
@@ -13,7 +13,7 @@ DESIRED_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.t
 def desired_source_filepaths():
     files = []
     for ext in DESIRED_PHOTO_EXTENSIONS:
-        files.append(temp_source_directory + 'a_file' + ext)
+        files.append(dynamic_source_directory + 'a_file' + ext)
     return sorted(files)
 
 
@@ -26,7 +26,7 @@ def clear_test_directories():
     generated_target_path = target_root_directory + '2023'
     if os.path.isdir(generated_target_path):
         shutil.rmtree(generated_target_path)
-    delete_files_in(temp_source_directory)
+    delete_files_in(dynamic_source_directory)
     delete_files_in(target_root_directory)
 
 

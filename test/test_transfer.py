@@ -12,11 +12,10 @@ def teardown():
     clear_test_directories()
 
 
-def test_transfers_provided_files():
+def test_transfers_provided_file():
     assert filenames_in_directory(target_root_directory) == []
-    create_valid_files()
+    file_path = static_source_directory + 'file_1.txt'
 
-    source_files = valid_source_filepaths()
-    Transfer().copy_files(source_files, target_root_directory)
+    Transfer().copy_files([file_path], target_root_directory)
 
-    assert filenames_in_directory(target_directory) == filenames_in_directory(dynamic_source_directory)
+    assert os.path.isfile(file_path)

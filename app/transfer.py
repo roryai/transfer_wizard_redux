@@ -9,7 +9,8 @@ class Transfer:
 
     def copy_files(self, source_files, target_directory):
         for source_filepath in source_files:
-            target_filepath = FilepathGenerator().generate_target_filepath(source_filepath, target_directory)
+            target_filepath = FilepathGenerator(
+                source_filepath, target_directory).generate_target_filepath()
             target_directory = Path(target_filepath).parent
             DirectoryCreator().create_directory(target_directory)
             if target_filepath:

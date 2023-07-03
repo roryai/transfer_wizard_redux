@@ -6,28 +6,32 @@ import re
 
 class FilepathGenerator:
 
-    def generate_target_filepath(self, source_filepath, target_directory):
-        filename = Path(source_filepath).name
-        file_birthtime = datetime.fromtimestamp(os.stat(source_filepath).st_birthtime)
+    def __init__(self, source_filepath, target_directory):
+        self.source_filepath = source_filepath
+        self.target_directory = target_directory
+
+    def generate_target_filepath(self):
+        filename = Path(self.source_filepath).name
+        file_birthtime = datetime.fromtimestamp(os.stat(self.source_filepath).st_birthtime)
         quarter = self.__determine_quarter(file_birthtime.month)
-        prospective_path = f'{target_directory}{file_birthtime.year}/{quarter}/{filename}'
+        prospective_target_filepath = f'{self.target_directory}{file_birthtime.year}/{quarter}/{filename}'
 
-        return self.__detect_duplicates(source_filepath, prospective_path)
+        return self.__detect_duplicates(prospective_target_filepath)
 
-    def __detect_duplicates(self, source_filepath, target_filepath):
+    def __detect_duplicates(self, target_filepath):
         if not self.__path_in_use(target_filepath):
             return target_filepath
-        if self.__files_are_same_size(source_filepath, target_filepath):
+        if self.__target_and_source_files_are_same_size(target_filepath):
             return ''
         else:
-            return self.__generate_next_available_path(source_filepath, target_filepath)
+            return self.__generate_next_available_path(target_filepath)
 
-    def __generate_next_available_path(self, source_filepath, target_filepath):
+    def __generate_next_available_path(self, target_filepath):
         path = Path(target_filepath)
         filename = self.__add_suffix(path.stem)
         incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.__path_in_use(incremented_path):
-            return self.__detect_duplicates(source_filepath, incremented_path)
+            return self.__detect_duplicates(incremented_path)
         else:
             return incremented_path
 
@@ -45,8 +49,8 @@ class FilepathGenerator:
     def __path_in_use(self, path):
         return os.path.isfile(path)
 
-    def __files_are_same_size(self, path_1, path_2):
-        return os.stat(path_1).st_size == os.stat(path_2).st_size
+    def __target_and_source_files_are_same_size(self, target_filepath):
+        return os.stat(self.source_filepath).st_size == os.stat(target_filepath).st_size
 
     def __determine_quarter(self, month):
         match month:

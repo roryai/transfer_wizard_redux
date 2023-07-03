@@ -7,9 +7,9 @@ class Scanner:
 
     def scan_dirs(self, source_dir):
         file_tree = os.walk(source_dir)
-        return self.filepaths_with_matching_extensions(file_tree)
+        return self.__filepaths_with_matching_extensions(file_tree)
 
-    def filepaths_with_matching_extensions(self, file_tree):
+    def __filepaths_with_matching_extensions(self, file_tree):
         matching_files = []
         for (root, _, files) in file_tree:
             for file in files:

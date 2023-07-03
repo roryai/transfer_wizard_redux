@@ -7,10 +7,9 @@ import re
 class DirectoryGenerator:
 
     def prepare_target_path(self, source_filepath, target_directory, filename):
-        decimal_birthtime = os.stat(source_filepath).st_birthtime
-        birthtime = datetime.fromtimestamp(decimal_birthtime)
-        quarter = self.__determine_quarter(birthtime.month)
-        prospective_path = f'{target_directory}{birthtime.year}/{quarter}/{filename}'
+        file_birthtime = datetime.fromtimestamp(os.stat(source_filepath).st_birthtime)
+        quarter = self.__determine_quarter(file_birthtime.month)
+        prospective_path = f'{target_directory}{file_birthtime.year}/{quarter}/{filename}'
 
         return self.__detect_duplicates(source_filepath, prospective_path)
 

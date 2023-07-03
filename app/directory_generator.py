@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 import re
 
+from app.directory_creator import DirectoryCreator
+
 
 class DirectoryGenerator:
 
@@ -15,16 +17,13 @@ class DirectoryGenerator:
 
     def __detect_duplicates(self, source_filepath, target_filepath):
         if not self.__path_in_use(target_filepath):
-            self.__create_directory(target_filepath)
+            target_directory = Path(target_filepath).parent
+            DirectoryCreator().create_directory(target_directory)
             return target_filepath
         if self.__files_are_same_size(source_filepath, target_filepath):
             return ''
         else:
             return self.__generate_next_available_path(source_filepath, target_filepath)
-
-    def __create_directory(self, target_filepath):  # TODO refactor this away to another class
-        path = Path(target_filepath)
-        Path(path.parent).mkdir(parents=True, exist_ok=True)
 
     def __generate_next_available_path(self, source_filepath, target_filepath):
         path = Path(target_filepath)

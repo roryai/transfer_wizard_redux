@@ -16,30 +16,8 @@ def test_generates_path_including_year_and_quarter():
     filename = 'test_file.txt'
     source_filepath = static_source_directory + filename
     generated_path = generator.prepare_target_path(source_filepath, target_root_directory, filename)
+
     assert generated_path == target_directory + filename
-
-
-def test_creates_year_and_quarter_target_directories():
-    filename = 'test_file.txt'
-    source_filepath = static_source_directory + filename
-    assert not os.path.isdir(target_directory)
-
-    generator.prepare_target_path(source_filepath, target_root_directory, filename)
-
-    assert os.path.isdir(target_directory)
-
-
-def test_creates_quarter_target_directory_if_year_directory_already_exists():
-    filename = 'test_file.txt'
-    source_filepath = static_source_directory + filename
-    desired_target_dir_year = target_root_directory + '2023/'
-
-    assert not os.path.isdir(desired_target_dir_year)
-
-    create_directory(desired_target_dir_year)
-    generator.prepare_target_path(source_filepath, target_root_directory, filename)
-
-    assert os.path.isdir(target_directory)
 
 
 def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():

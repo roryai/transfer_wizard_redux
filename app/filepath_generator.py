@@ -6,7 +6,8 @@ import re
 
 class FilepathGenerator:
 
-    def generate_target_filepath(self, source_filepath, target_directory, filename):
+    def generate_target_filepath(self, source_filepath, target_directory):
+        filename = Path(source_filepath).name
         file_birthtime = datetime.fromtimestamp(os.stat(source_filepath).st_birthtime)
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_path = f'{target_directory}{file_birthtime.year}/{quarter}/{filename}'

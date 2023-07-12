@@ -4,7 +4,7 @@ import shutil
 
 from app.scanner import VALID_PHOTO_EXTENSIONS
 
-test_media_directory = '/Users/rory/code/transfer_wizard_redux/test/media/'
+test_media_directory = 'media/'
 static_source_directory = test_media_directory + 'static_source/'
 dynamic_source_directory = test_media_directory + 'dynamic_source/'
 target_root_directory = test_media_directory + 'target/'

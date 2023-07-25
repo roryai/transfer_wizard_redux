@@ -8,7 +8,8 @@ from app.directory_creator import DirectoryCreator
 class Transfer:
 
     def copy_files(self, source_files, target_directory,
-                   filepath_generator=FilepathGenerator, directory_creator=DirectoryCreator):
+                   filepath_generator=FilepathGenerator,
+                   directory_creator=DirectoryCreator):
         for source_filepath in source_files:
             target_filepath = filepath_generator(
                 source_filepath, target_directory).generate_target_filepath()

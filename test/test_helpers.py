@@ -4,7 +4,8 @@ import shutil
 
 from app.scanner import VALID_PHOTO_EXTENSIONS
 
-test_media_directory = 'media/'
+test_directory = str(Path(__file__).parent)
+test_media_directory = test_directory + '/media/'
 static_source_directory = test_media_directory + 'static_source/'
 dynamic_source_directory = test_media_directory + 'dynamic_source/'
 target_root_directory = test_media_directory + 'target/'
@@ -24,20 +25,13 @@ def valid_source_filepaths():
 
 
 def clear_test_directories():
-    generated_target_path = target_root_directory + '2023'
-    if os.path.isdir(generated_target_path):
-        shutil.rmtree(generated_target_path)
-    delete_files_in(dynamic_source_directory)
-    delete_files_in(target_root_directory)
-
-
-def delete_files_in(directory):
-    for f in os.listdir(directory):
-        os.remove(os.path.join(directory, f))
-
-
-def delete_file(filepath):
-    os.remove(filepath)
+    paths = [dynamic_source_directory, target_root_directory]
+    for path in paths:
+        for root, dirs, files in os.walk(path):
+            for f in files:
+                os.unlink(os.path.join(root, f))
+            for d in dirs:
+                shutil.rmtree(os.path.join(root, d))
 
 
 def filenames_in_directory(directory):

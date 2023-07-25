@@ -1,5 +1,6 @@
 from main import main
-from .test_helpers import *
+
+from .helpers import *
 
 
 @pytest.fixture(autouse=True)

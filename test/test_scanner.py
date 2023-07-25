@@ -1,5 +1,6 @@
-from .test_helpers import *
 from app.scanner import Scanner
+
+from .helpers import *
 
 scanner = Scanner()
 

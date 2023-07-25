@@ -1,7 +1,3 @@
-import os
-
-import pytest
-
 from app.transfer import Transfer
 from .test_helpers import *
 

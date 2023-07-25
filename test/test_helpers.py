@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import pytest
 import shutil
 
 from app.scanner import VALID_PHOTO_EXTENSIONS

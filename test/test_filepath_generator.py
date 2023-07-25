@@ -1,5 +1,3 @@
-import pytest
-
 from .test_helpers import *
 from app.filepath_generator import FilepathGenerator
 

@@ -15,9 +15,9 @@ def main(source_directory, target_directory):
 
     filepaths = Scanner().scan_dirs(source_directory)
 
-    for file in filepaths:
+    for path in filepaths:
         try:
-            Transfer().copy_files([file], target_directory)
+            Transfer().copy_files(path, target_directory)
         except StopIteration:
             break
 

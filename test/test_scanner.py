@@ -16,7 +16,7 @@ def test_scanner_discovers_files_to_be_transferred():
 
     files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
 
-    assert files_to_transfer == valid_source_filepaths()
+    assert sorted(list(files_to_transfer)) == valid_source_filepaths()
 
 
 def test_scanner_ignores_files_without_desired_extensions():
@@ -31,4 +31,4 @@ def test_scanner_ignores_files_without_desired_extensions():
 
     files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
 
-    assert files_to_transfer == valid_source_filepaths()
+    assert sorted(list(files_to_transfer)) == valid_source_filepaths()

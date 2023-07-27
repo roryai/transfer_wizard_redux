@@ -14,7 +14,12 @@ def main(source_directory, target_directory):
     target_directory = __sanitise_filepath(target_directory)
 
     filepaths = Scanner().scan_dirs(source_directory)
-    Transfer().copy_files(filepaths, target_directory)
+
+    for file in filepaths:
+        try:
+            Transfer().copy_files([file], target_directory)
+        except StopIteration:
+            break
 
 
 def __sanitise_filepath(filepath):

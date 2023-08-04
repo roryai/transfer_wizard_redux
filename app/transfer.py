@@ -1,18 +1,14 @@
 from pathlib import Path
 import shutil
 
-from app.filepath_generator import FilepathGenerator
 from app.directory_creator import DirectoryCreator
 
 
 class Transfer:
 
-    def copy_files(self, source_filepath, target_directory,
-                   filepath_generator=FilepathGenerator,
+    def copy_files(self, source_filepath, target_filepath,
                    directory_creator=DirectoryCreator):
-        target_filepath = filepath_generator(
-            source_filepath, target_directory).generate_target_filepath()
         target_directory = Path(target_filepath).parent
-        directory_creator(target_directory).create_directory()
+        directory_creator(target_directory).create_directory()  # perform a check to see if required?
         if target_filepath:
             shutil.copy2(source_filepath, target_filepath)

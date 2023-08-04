@@ -1,6 +1,10 @@
 import argparse
 import os
 
+from app.file import File
+from app.file_gateway import FileGateway
+from app.filepath_generator import FilepathGenerator
+from app.db_initializer import DBInitializer
 from app.scanner import Scanner
 from app.transfer import Transfer
 
@@ -13,13 +17,21 @@ def main(source_directory, target_directory):
     source_directory = __sanitise_filepath(source_directory)
     target_directory = __sanitise_filepath(target_directory)
 
-    filepaths = Scanner().scan_dirs(source_directory)
+    DBInitializer().init_prod_database()
+    FileGateway().delete_all()  # dev only
 
-    for path in filepaths:
-        try:
-            Transfer().copy_files(path, target_directory)
-        except StopIteration:
-            break
+    source_filepaths = Scanner().scan_dirs(source_directory)
+
+    for source_filepath in source_filepaths:
+        target_filepath = FilepathGenerator(
+            source_filepath, target_directory).generate_target_filepath()
+        size = os.stat(source_filepath).st_size
+        File(source_filepath, target_filepath, size).insert_into_db()
+
+    records = FileGateway().select_all()
+    for record in records:
+        file = File.init_from_record(record)
+        Transfer().copy_files(file.source_filepath, file.target_filepath)
 
 
 def __sanitise_filepath(filepath):

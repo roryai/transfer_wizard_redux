@@ -1,5 +1,3 @@
-from pathlib import Path
-import sqlite3
 from sqlite3 import Error
 
 
@@ -14,15 +12,12 @@ class DBControllerMeta(type):
 
 class DBController(metaclass=DBControllerMeta):
 
-    def __init__(self, db_name='files'):
-        self.connection = self.__connection(db_name)
+    def __init__(self):
+        self.connection = None
 
-    def __connection(self, db_name):
-        db_filepath = self.__db_path(db_name)
-        return sqlite3.connect(db_filepath)
-
-    def __db_path(self, db_name):
-        return str(Path(__file__).parent.parent) + f'/{db_name}.db'
+    def set_connection(self, connection):
+        self.connection = connection
+        return self
 
     def execute_query(self, query, values):
         cursor = self.connection.cursor()

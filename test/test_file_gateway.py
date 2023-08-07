@@ -1,5 +1,4 @@
 from app.file import File
-from app.file_gateway import FileGateway
 from app.db_initializer import DBInitializer
 from .helpers import *
 

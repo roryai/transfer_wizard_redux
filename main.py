@@ -17,17 +17,21 @@ def main(source_directory, target_directory):
     source_directory = __sanitise_filepath(source_directory)
     target_directory = __sanitise_filepath(target_directory)
 
+    # init database
     DBInitializer().init_prod_database()
     FileGateway().delete_all()  # dev only
 
+    # collect filepaths from source directory
     source_filepaths = Scanner().scan_dirs(source_directory)
 
+    # generate target path, create db record including paths and size data
     for source_filepath in source_filepaths:
         target_filepath = FilepathGenerator(
             source_filepath, target_directory).generate_target_filepath()
         size = os.stat(source_filepath).st_size
-        File(source_filepath, target_filepath, size).insert_into_db()
+        File(source_filepath, target_filepath, size).save()
 
+    # copy all files in db to target paths
     records = FileGateway().select_all()
     for record in records:
         file = File.init_from_record(record)

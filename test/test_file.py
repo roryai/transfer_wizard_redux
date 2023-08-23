@@ -1,8 +1,5 @@
-from app.db_initializer import DBInitializer
 from app.file import File
 from .helpers import *
-
-DBInitializer().init_test_database()
 
 
 def test_can_insert_and_read_record():

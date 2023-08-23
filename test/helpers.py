@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 import shutil
 
+from app.db_initializer import DBInitializer
 from app.file_gateway import FileGateway
 from app.scanner import VALID_PHOTO_EXTENSIONS
 
@@ -12,6 +13,8 @@ static_source_directory = test_media_directory + 'static_source/'
 dynamic_source_directory = test_media_directory + 'dynamic_source/'
 target_root_directory = test_media_directory + 'target/'
 target_directory = target_root_directory + '2023/Q2/'
+
+DBInitializer().init_test_database()
 
 
 def create_valid_files():

@@ -1,9 +1,7 @@
 from app.file import File
-from app.db_initializer import DBInitializer
 from .helpers import *
 
 
-DBInitializer().init_test_database()
 gateway = FileGateway()
 file = File('/source', '/target', 1024)
 

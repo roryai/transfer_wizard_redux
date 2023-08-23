@@ -34,7 +34,7 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)
 
-    def delete_all(self):
+    def wipe_database(self):
         statement = f"""
             DELETE FROM files;
         """

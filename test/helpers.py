@@ -66,4 +66,4 @@ def create_directory(directory_path):
 
 
 def clear_database():
-    FileGateway().delete_all()
+    FileGateway().wipe_database()

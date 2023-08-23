@@ -45,6 +45,6 @@ def test_deletes_rows():
 
     assert gateway.count() == 1
 
-    gateway.delete_all()
+    gateway.wipe_database()
 
     assert gateway.count() == 0

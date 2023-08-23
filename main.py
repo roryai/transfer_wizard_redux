@@ -6,7 +6,7 @@ from app.db_initializer import DBInitializer
 
 def main(source_directory, target_directory):
     DBInitializer().init_prod_database()
-    AppController().run(source_directory, target_directory)
+    AppController(source_directory, target_directory).run()
 
 
 if __name__ == '__main__':

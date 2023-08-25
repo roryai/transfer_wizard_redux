@@ -34,8 +34,3 @@ def test_copies_file_when_paths_given_with_no_backslash_on_end(monkeypatch):
     AppController(source_directory, target_directory).run()
 
     assert os.path.isfile(file_path)
-
-
-def test_throws_error_when_path_not_valid():
-    with pytest.raises(FileNotFoundError):
-        AppController(static_source_directory + 'jkjkjkjk', target_root_directory).run()

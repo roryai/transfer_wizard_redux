@@ -1,5 +1,6 @@
 import os
 
+from app.directory_manager import DirectoryManager
 from app.file import File
 from app.file_gateway import FileGateway
 from app.filepath_generator import FilepathGenerator
@@ -12,19 +13,16 @@ class AppController:
     def __init__(self, source_directory, target_directory):
         self.source_directory = self.__sanitise_filepath(source_directory)
         self.target_directory = self.__sanitise_filepath(target_directory)
+        self.directory_manager = DirectoryManager()
 
     def run(self):
-        self.__guard_against_invalid_filepaths()
+        self.directory_manager.check_if_directory_exists(self.source_directory)
+        self.directory_manager.create_directory_if_not_exists(self.target_directory)
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_entries_for_files_to_be_transferred()
         self.__present_stats_to_user()
         self.__user_confirmation_of_transfer()
         FileGateway().wipe_database()  # TODO dev only, remove later
-
-    def __guard_against_invalid_filepaths(self):
-        for path in [self.source_directory, self.target_directory]:
-            if not os.path.isdir(path):
-                raise FileNotFoundError(f'{path} is not a valid directory.')
 
     def __sanitise_filepath(self, filepath):
         if filepath[-1] != '/':
@@ -51,8 +49,7 @@ class AppController:
         print(f'Proceed with transfer? ( y / n )')
 
     def __user_confirmation_of_transfer(self):
-        key = input()
-        if key == 'y':
+        if input() == 'y':
             records = FileGateway().select_all()
             for record in records:
                 file = File.init_from_record(record)

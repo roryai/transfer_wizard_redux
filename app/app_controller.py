@@ -11,8 +11,8 @@ from app.transfer import Transfer
 class AppController:
 
     def __init__(self, source_directory, target_directory):
-        self.source_directory = self.__sanitise_filepath(source_directory)
-        self.target_directory = self.__sanitise_filepath(target_directory)
+        self.source_directory = source_directory
+        self.target_directory = target_directory
         self.directory_manager = DirectoryManager()
 
     def run(self):
@@ -23,11 +23,6 @@ class AppController:
         self.__present_stats_to_user()
         self.__user_confirmation_of_transfer()
         FileGateway().wipe_database()  # TODO dev only, remove later
-
-    def __sanitise_filepath(self, filepath):
-        if filepath[-1] != '/':
-            filepath += '/'
-        return filepath
 
     def __create_db_entries_for_files_to_be_transferred(self):
         source_filepaths = Scanner().scan_dirs(self.source_directory)

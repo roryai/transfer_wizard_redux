@@ -11,4 +11,9 @@ class Scanner:
             for file in files:
                 _, extension = os.path.splitext(file)
                 if extension in VALID_PHOTO_EXTENSIONS:
-                    yield root + file
+                    yield self.__sanitise_filepath(root) + file
+
+    def __sanitise_filepath(self, filepath):
+        if filepath[-1] != '/':
+            filepath += '/'
+        return filepath

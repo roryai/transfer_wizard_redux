@@ -8,7 +8,7 @@ class FilepathGenerator:
 
     def __init__(self, source_filepath, target_directory):
         self.source_filepath = source_filepath
-        self.target_directory = target_directory
+        self.target_directory = self.__sanitise_filepath(target_directory)
 
     def generate_target_filepath(self):
         filename = Path(self.source_filepath).name
@@ -64,3 +64,8 @@ class FilepathGenerator:
                 return 'Q4'
             case _:
                 raise TypeError
+
+    def __sanitise_filepath(self, filepath):
+        if filepath[-1] != '/':
+            filepath += '/'
+        return filepath

@@ -32,7 +32,8 @@ class DBInitializer:
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  source_filepath TEXT NOT NULL,
                  target_filepath TEXT NOT NULL,
-                 size INTEGER NOT NULL
+                 size INTEGER NOT NULL,
+                 name_clash BOOLEAN
              );
          """
         DBController().set_connection(self.connection).execute_query(create_files_table, [])

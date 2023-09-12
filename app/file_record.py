@@ -10,5 +10,6 @@ class FileRecord:
         return {
             'source_filepath': record[1],
             'target_filepath': record[2],
-            'size': record[3]
+            'size': record[3],
+            'name_clash': record[4]
         }

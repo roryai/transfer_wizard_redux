@@ -9,11 +9,12 @@ class FileGateway:
     def insert(self, file):
         statement = f"""
             INSERT INTO
-                files (source_filepath, target_filepath, size)
+                files (source_filepath, target_filepath, size, name_clash)
             VALUES
-                (?, ?, ?);
+                (?, ?, ?, ?);
         """
-        values = [file.source_filepath, file.target_filepath, file.size]
+        name_clash = 1 if file.name_clash else 0
+        values = [file.source_filepath, file.target_filepath, file.size, name_clash]
         return self.db_controller.execute_query(statement, values)
 
     def sum_size(self):

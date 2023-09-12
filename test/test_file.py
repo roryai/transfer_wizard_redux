@@ -3,7 +3,7 @@ from .helpers import *
 
 
 def test_can_insert_and_read_record():
-    file = File('/source', '/target', 1024)
+    file = File('/source', '/target', 1024, False)
     file.save()
 
     record = FileGateway().select_all()[0]

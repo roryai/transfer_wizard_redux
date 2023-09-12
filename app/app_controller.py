@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from app.directory_manager import DirectoryManager
 from app.file import File
@@ -30,7 +31,14 @@ class AppController:
             target_filepath = FilepathGenerator(
                 source_filepath, self.target_directory).generate_target_filepath()
             size = os.stat(source_filepath).st_size
-            File(source_filepath, target_filepath, size).save()
+            name_clash = self.__name_clash(source_filepath, target_filepath)
+            file = File(source_filepath, target_filepath, size, name_clash)
+            file.save()
+
+    def __name_clash(self, source_filepath, target_filepath):
+        source_filename = Path(source_filepath).name
+        target_filename = Path(source_filepath).name
+        return source_filename == target_filename
 
     def __present_stats_to_user(self):
         file_gateway = FileGateway()

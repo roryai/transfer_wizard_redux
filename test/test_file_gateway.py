@@ -48,3 +48,19 @@ def test_deletes_rows():
     gateway.wipe_database()
 
     assert gateway.count() == 0
+
+
+def test_updates_a_record():
+    gateway.insert(file)
+
+    new_file = File('/source', '/target/new', 1024, True)
+
+    gateway.update(new_file)
+
+    record = FileGateway().select_all()[0]
+    file_from_record = File.init_from_record(record)
+
+    assert file_from_record.source_filepath == file.source_filepath
+    assert file_from_record.target_filepath == '/target/new'
+    assert file_from_record.size == file.size
+    assert file_from_record.name_clash == True

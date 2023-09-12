@@ -3,7 +3,7 @@ from .helpers import *
 
 
 gateway = FileGateway()
-file = File('/source', '/target', 1024)
+file = File('/source', '/target', 1024, False)
 
 
 @pytest.fixture(autouse=True)
@@ -15,12 +15,12 @@ def teardown():
 def test_can_insert_and_read_record():
     gateway.insert(file)
 
-    record = FileGateway().select_all()
-    record = record[0]
+    record = FileGateway().select_all()[0]
 
     assert file.source_filepath == record[1]
     assert file.target_filepath == record[2]
     assert file.size == record[3]
+    assert file.name_clash == record[4]
 
 
 def test_sums_size_of_all_files():

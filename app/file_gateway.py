@@ -13,8 +13,7 @@ class FileGateway:
             VALUES
                 (?, ?, ?, ?);
         """
-        name_clash = 1 if file.name_clash else 0
-        values = [file.source_filepath, file.target_filepath, file.size, name_clash]
+        values = [file.source_filepath, file.target_filepath, file.size, file.name_clash]
         return self.db_controller.execute_query(statement, values)
 
     def sum_size(self):

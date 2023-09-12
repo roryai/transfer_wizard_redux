@@ -35,6 +35,18 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)
 
+    def duplicate_count(self):
+        statement = """
+            SELECT COUNT(*) FROM files WHERE target_filepath = '';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def name_clashes_count(self):
+        statement = """
+            SELECT COUNT(*) FROM files WHERE name_clash = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
     def wipe_database(self):
         statement = f"""
             DELETE FROM files;

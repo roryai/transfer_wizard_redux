@@ -19,7 +19,7 @@ class File:
             vals['source_filepath'],
             vals['target_filepath'],
             vals['size'],
-            vals['name_clash']
+            True if vals['name_clash'] == 1 else False
         )
 
     def __eq__(self, other):

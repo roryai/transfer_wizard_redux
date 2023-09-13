@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from pathlib import Path
 import pytest
@@ -67,3 +68,20 @@ def create_directory(directory_path):
 
 def clear_database():
     FileGateway().wipe_database()
+
+
+def determine_year_and_quarter(filepath):
+    birthtime = datetime.fromtimestamp(os.stat(filepath).st_birthtime)
+    quarter = ''
+    match birthtime.month:
+        case 1 | 2 | 3:
+            quarter = 'Q1'
+        case 4 | 5 | 6:
+            quarter = 'Q2'
+        case 7 | 8 | 9:
+            quarter = 'Q3'
+        case 10 | 11 | 12:
+            quarter = 'Q4'
+        case _:
+            raise TypeError
+    return f'{birthtime.year}/{quarter}/'

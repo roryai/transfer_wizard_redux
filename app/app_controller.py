@@ -26,23 +26,6 @@ class AppController:
         for source_filepath in source_filepaths:
             FileBuilder(source_filepath, self.target_directory).build()
 
-    def __present_stats_to_user(self):
-        file_gateway = FileGateway()
-        sum_size = file_gateway.sum_size()
-        count = file_gateway.count()
-        duplicates = file_gateway.duplicate_count()
-        name_clashes = file_gateway.name_clashes_count()
-        print()
-        print(f'{count} files selected to be transferred.')
-        print(f'Total file size: {round(sum_size / (1024 ** 2), 3)}MB')
-        print(f'{duplicates} files are duplicates. Duplicates will not be copied')
-        print(f'{name_clashes} files had name clashes. Files will be copied with a suffix.')
-        print(f'Source directory: {self.source_directory}')
-        print(f'Target directory: {self.target_directory}')
-        print()
-        print(f'Proceed with transfer? ( y / n )')
-        print()
-
     def __user_confirmation_of_transfer(self):
         if input() == 'y':
             records = FileGateway().select_all()

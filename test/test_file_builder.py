@@ -23,7 +23,7 @@ def test_a_file_is_built_and_saved():
     assert file.source_filepath == source_filepath
     assert file.target_filepath == target_directory + filename
     assert file.size == 0
-    assert file.name_clash == False
+    assert file.name_clash is False
 
 
 def test_a_file_has_name_clash_when_existing_target_file_has_same_name_and_different_size():
@@ -42,4 +42,4 @@ def test_a_file_has_name_clash_when_existing_target_file_has_same_name_and_diffe
     assert file.source_filepath == source_filepath
     assert file.target_filepath == target_directory + expected_filename
     assert file.size == 0
-    assert file.name_clash == True
+    assert file.name_clash is True

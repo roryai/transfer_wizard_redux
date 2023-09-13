@@ -15,7 +15,6 @@ class AppController:
 
     def run(self):
         self.directory_manager.check_if_directory_exists(self.source_directory)
-        self.directory_manager.create_directory_if_not_exists(self.target_directory)
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_entries_for_files_to_be_transferred()
         self.__present_stats_to_user()

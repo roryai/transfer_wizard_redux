@@ -15,7 +15,7 @@ def teardown():
 def test_can_insert_and_read_record():
     gateway.insert(file)
 
-    record = FileGateway().select_all()[0]
+    record = gateway.select_all()[0]
 
     assert file.source_filepath == record[1]
     assert file.target_filepath == record[2]
@@ -57,7 +57,7 @@ def test_updates_a_record():
 
     gateway.update(new_file)
 
-    record = FileGateway().select_all()[0]
+    record = gateway.select_all()[0]
     file_from_record = File.init_from_record(record)
 
     assert file_from_record.source_filepath == file.source_filepath

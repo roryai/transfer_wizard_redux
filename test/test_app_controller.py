@@ -6,6 +6,7 @@ from .helpers import *
 def teardown():
     yield
     clear_test_directories()
+    clear_database()
 
 
 def test_copies_file_to_generated_directory(monkeypatch):

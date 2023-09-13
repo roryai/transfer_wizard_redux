@@ -14,7 +14,7 @@ def teardown():
 def test_scanner_discovers_files_to_be_transferred():
     create_valid_files()
 
-    files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
+    files_to_transfer = scanner.scan_directory(dynamic_source_directory)
 
     assert sorted(list(files_to_transfer)) == valid_source_filepaths()
 
@@ -29,7 +29,7 @@ def test_scanner_ignores_files_without_desired_extensions():
     for file in undesired_files:
         open(file, 'x').close()
 
-    files_to_transfer = scanner.scan_dirs(dynamic_source_directory)
+    files_to_transfer = scanner.scan_directory(dynamic_source_directory)
 
     assert sorted(list(files_to_transfer)) == valid_source_filepaths()
 
@@ -37,7 +37,7 @@ def test_scanner_ignores_files_without_desired_extensions():
 def test_copies_file_when_provided_source_path_does_not_have_backslash_as_final_char():
     create_valid_files()
     source_directory = static_source_directory[0:-1]
-    files_to_transfer = scanner.scan_dirs(source_directory)
+    files_to_transfer = scanner.scan_directory(source_directory)
     expected_filepath = static_source_directory + 'a_file___1.jpeg'
 
     assert sorted(list(files_to_transfer)) == [expected_filepath]

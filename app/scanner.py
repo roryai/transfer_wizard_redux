@@ -5,7 +5,7 @@ VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tif
 
 class Scanner:
 
-    def scan_dirs(self, source_dir):
+    def scan_directory(self, source_dir):
         file_tree = os.walk(source_dir)
         for (root, _, files) in file_tree:
             for file in files:

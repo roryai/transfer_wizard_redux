@@ -1,10 +1,7 @@
-import os
-from pathlib import Path
-
 from app.directory_manager import DirectoryManager
 from app.file import File
+from app.file_builder import FileBuilder
 from app.file_gateway import FileGateway
-from app.filepath_generator import FilepathGenerator
 from app.scanner import Scanner
 from app.transfer import Transfer
 
@@ -28,17 +25,7 @@ class AppController:
     def __create_db_entries_for_files_to_be_transferred(self):
         source_filepaths = Scanner().scan_dirs(self.source_directory)
         for source_filepath in source_filepaths:
-            target_filepath = FilepathGenerator(
-                source_filepath, self.target_directory).generate_target_filepath()
-            size = os.stat(source_filepath).st_size
-            name_clash = self.__name_clash(source_filepath, target_filepath)
-            file = File(source_filepath, target_filepath, size, name_clash)
-            file.save()
-
-    def __name_clash(self, source_filepath, target_filepath):
-        source_filename = Path(source_filepath).name
-        target_filename = Path(source_filepath).name
-        return source_filename == target_filename
+            FileBuilder(source_filepath, self.target_directory).build()
 
     def __present_stats_to_user(self):
         file_gateway = FileGateway()

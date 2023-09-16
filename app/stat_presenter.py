@@ -17,8 +17,6 @@ class StatPresenter:
         print(f'Source directory: {source_directory}')
         print(f'Target directory: {target_directory}')
         print()
-        print(f'Proceed with transfer? ( y / n )')
-        print()
 
     def __size_calc(self, sum_size):
         if sum_size is None:

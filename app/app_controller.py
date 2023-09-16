@@ -27,6 +27,8 @@ class AppController:
             FileBuilder(source_filepath, self.target_directory).build()
 
     def __user_confirmation_of_transfer(self):
+        print(f'Proceed with transfer? ( y / n )')
+        print()
         if input() == 'y':
             records = FileGateway().select_all()
             for record in records:

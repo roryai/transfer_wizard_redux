@@ -6,7 +6,6 @@ from app.file_builder import FileBuilder
 
 @pytest.fixture(autouse=True)
 def teardown():
-    yield
     clear_database()
     clear_test_directories()
 

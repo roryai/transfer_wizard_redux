@@ -5,7 +5,6 @@ from .helpers import *
 
 @pytest.fixture(autouse=True)
 def teardown():
-    yield
     clear_test_directories()
 
 

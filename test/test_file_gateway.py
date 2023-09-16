@@ -8,7 +8,6 @@ file = File('/source', '/target', 1024, False)
 
 @pytest.fixture(autouse=True)
 def teardown():
-    yield
     clear_database()
 
 

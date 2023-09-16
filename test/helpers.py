@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from pathlib import Path
+from pathlib import Path as p
 import pytest
 import shutil
 
@@ -8,7 +8,7 @@ from app.db_initializer import DBInitializer
 from app.file_gateway import FileGateway
 from app.scanner import VALID_PHOTO_EXTENSIONS
 
-test_directory = str(Path(__file__).parent)
+test_directory = str(p(__file__).parent)
 test_media_directory = test_directory + '/media/'
 static_source_directory = test_media_directory + 'static_source/'
 dynamic_source_directory = test_media_directory + 'dynamic_source/'
@@ -63,7 +63,7 @@ def create_file(directory, filename):
 
 
 def create_directory(directory_path):
-    Path(directory_path).mkdir(parents=True, exist_ok=True)
+    p(directory_path).mkdir(parents=True, exist_ok=True)
 
 
 def clear_database():

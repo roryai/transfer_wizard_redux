@@ -18,12 +18,12 @@ def test_copies_file_to_generated_directory(monkeypatch):
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
     target_filepath = target_directory + filename
 
-    assert not Path(target_directory).is_dir()
-    assert not Path(target_filepath).is_file()
+    assert not p(target_directory).is_dir()
+    assert not p(target_filepath).is_file()
 
     AppController(dynamic_source_directory, target_root_directory).run()
 
-    assert Path(target_filepath).is_file()
+    assert p(target_filepath).is_file()
     assert open(target_filepath).read() == 'datum'
 
 
@@ -37,13 +37,13 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
     target_filepath = target_directory + filename
     create_file_with_data(target_directory, filename, 'datum')
-    existing_file_mtime_pre_run = os.stat(target_filepath).st_mtime
+    existing_file_mtime_pre_run = p(target_filepath).stat().st_mtime
 
     AppController(dynamic_source_directory, target_root_directory).run()
 
-    existing_file_mtime_post_run = os.stat(target_filepath).st_mtime
+    existing_file_mtime_post_run = p(target_filepath).stat().st_mtime
 
-    assert Path(target_filepath).is_file()
+    assert p(target_filepath).is_file()
     assert open(target_filepath).read() == 'datum'
     assert existing_file_mtime_post_run == existing_file_mtime_pre_run
 
@@ -64,7 +64,7 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
 
     AppController(dynamic_source_directory, target_root_directory).run()
 
-    assert Path(target_filepath).is_file()
+    assert p(target_filepath).is_file()
     assert open(target_filepath).read() == 'datum'
-    assert Path(name_clash_file).is_file()
+    assert p(name_clash_file).is_file()
     assert open(name_clash_file).read() == 'DATA'

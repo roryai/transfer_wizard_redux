@@ -15,4 +15,4 @@ def test_transfers_provided_file():
 
     Transfer().copy_files(file_path, target_root_directory)
 
-    assert os.path.isfile(file_path)
+    assert p(file_path).is_file()

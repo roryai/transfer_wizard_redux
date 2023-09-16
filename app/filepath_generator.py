@@ -1,6 +1,5 @@
 from datetime import datetime
-import os
-from pathlib import Path
+from pathlib import Path as p
 import re
 
 
@@ -11,8 +10,8 @@ class FilepathGenerator:
         self.target_directory = self.__sanitise_filepath(target_directory)
 
     def generate_target_filepath(self):
-        filename = Path(self.source_filepath).name
-        file_birthtime = datetime.fromtimestamp(os.stat(self.source_filepath).st_birthtime)
+        filename = p(self.source_filepath).name
+        file_birthtime = datetime.fromtimestamp(p(self.source_filepath).stat().st_birthtime)
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_target_filepath = f'{self.target_directory}{file_birthtime.year}/{quarter}/{filename}'
 
@@ -27,7 +26,7 @@ class FilepathGenerator:
             return self.__generate_next_available_path(target_filepath)
 
     def __generate_next_available_path(self, target_filepath):
-        path = Path(target_filepath)
+        path = p(target_filepath)
         filename = self.__add_suffix(path.stem)
         incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.__path_in_use(incremented_path):
@@ -47,10 +46,10 @@ class FilepathGenerator:
         return filename.rsplit('___', 1)[0] + '___' + number_suffix
 
     def __path_in_use(self, path):
-        return os.path.isfile(path)
+        return p(path).is_file()
 
     def __target_and_source_files_are_same_size(self, target_filepath):
-        return os.stat(self.source_filepath).st_size == os.stat(target_filepath).st_size
+        return p(self.source_filepath).stat().st_size == p(target_filepath).stat().st_size
 
     def __determine_quarter(self, month):
         match month:

@@ -72,7 +72,6 @@ def clear_database():
 
 def determine_year_and_quarter(filepath):
     birthtime = datetime.fromtimestamp(os.stat(filepath).st_birthtime)
-    quarter = ''
     match birthtime.month:
         case 1 | 2 | 3:
             quarter = 'Q1'

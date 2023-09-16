@@ -13,7 +13,6 @@ test_media_directory = test_directory + '/media/'
 static_source_directory = test_media_directory + 'static_source/'
 dynamic_source_directory = test_media_directory + 'dynamic_source/'
 target_root_directory = test_media_directory + 'target/'
-target_directory = target_root_directory + '2023/Q2/'
 
 DBInitializer().init_test_database()
 

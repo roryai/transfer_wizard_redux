@@ -12,32 +12,26 @@ def teardown():
 
 
 def test_scanner_discovers_files_to_be_transferred():
-    create_valid_files()
+    create_files_with_desired_extensions()
 
-    files_to_transfer = scanner.scan_directory(dynamic_source_directory)
+    files_to_transfer = scanner.scan_directory(source_directory)
 
     assert sorted(list(files_to_transfer)) == valid_source_filepaths()
 
 
 def test_scanner_ignores_files_without_desired_extensions():
-    create_valid_files()
-    undesired_files = [
-        dynamic_source_directory + "sales.zip",
-        dynamic_source_directory + "sales.rar",
-        dynamic_source_directory + "sales.bin",
-        ]
-    for file in undesired_files:
-        open(file, 'x').close()
+    create_files_with_desired_extensions()
+    create_files_without_desired_extensions()
 
-    files_to_transfer = scanner.scan_directory(dynamic_source_directory)
+    files_to_transfer = scanner.scan_directory(source_directory)
 
     assert sorted(list(files_to_transfer)) == valid_source_filepaths()
 
 
-def test_copies_file_when_provided_source_path_does_not_have_backslash_as_final_char():
-    create_valid_files()
-    source_directory = static_source_directory[0:-1]
-    files_to_transfer = scanner.scan_directory(source_directory)
-    expected_filepath = static_source_directory + 'a_file___1.jpeg'
+def test_copies_file_when_provided_source_path_does_not_have_trailing_backslash():
+    filename = 'a_file.jpeg'
+    source_filepath = create_file(source_directory, filename)
+    source_directory_without_trailing_backslash = source_directory[0:-1]
+    files_to_transfer = scanner.scan_directory(source_directory_without_trailing_backslash)
 
-    assert sorted(list(files_to_transfer)) == [expected_filepath]
+    assert list(files_to_transfer) == [source_filepath]

@@ -12,8 +12,8 @@ def teardown():
 def test_copies_file_to_generated_directory(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
     filename = 'file.jpeg'
-    create_file_with_data(dynamic_source_directory, filename, 'datum')
-    source_filepath = dynamic_source_directory + filename
+    create_file_with_data(source_directory, filename, 'datum')
+    source_filepath = source_directory + filename
 
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
     target_filepath = target_directory + filename
@@ -21,7 +21,7 @@ def test_copies_file_to_generated_directory(monkeypatch):
     assert not p(target_directory).is_dir()
     assert not p(target_filepath).is_file()
 
-    AppController(dynamic_source_directory, target_root_directory).run()
+    AppController(source_directory, target_root_directory).run()
 
     assert p(target_filepath).is_file()
     assert open(target_filepath).read() == 'datum'
@@ -31,15 +31,15 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
 
     filename = 'file.jpeg'
-    create_file_with_data(dynamic_source_directory, filename, 'datum')
-    source_filepath = dynamic_source_directory + filename
+    create_file_with_data(source_directory, filename, 'datum')
+    source_filepath = source_directory + filename
 
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
     target_filepath = target_directory + filename
     create_file_with_data(target_directory, filename, 'datum')
     existing_file_mtime_pre_run = p(target_filepath).stat().st_mtime
 
-    AppController(dynamic_source_directory, target_root_directory).run()
+    AppController(source_directory, target_root_directory).run()
 
     existing_file_mtime_post_run = p(target_filepath).stat().st_mtime
 
@@ -52,8 +52,8 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     monkeypatch.setattr('builtins.input', lambda: 'y')
 
     filename = 'file.jpeg'
-    create_file_with_data(dynamic_source_directory, filename, 'datum')
-    source_filepath = dynamic_source_directory + filename
+    create_file_with_data(source_directory, filename, 'datum')
+    source_filepath = source_directory + filename
 
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
     # create a file with same name but different contents
@@ -62,7 +62,7 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     target_filename = 'file___1.jpeg'
     target_filepath = target_directory + target_filename
 
-    AppController(dynamic_source_directory, target_root_directory).run()
+    AppController(source_directory, target_root_directory).run()
 
     assert p(target_filepath).is_file()
     assert open(target_filepath).read() == 'datum'

@@ -11,8 +11,8 @@ def teardown():
 
 def test_transfers_provided_file():
     assert filenames_in_directory(target_root_directory) == []
-    file_path = static_source_directory + 'file_1.txt'
+    source_filepath = create_file(source_directory, 'a_file.jpeg')
 
-    Transfer().copy_files(file_path, target_root_directory)
+    Transfer().copy_files(source_filepath, target_root_directory)
 
-    assert p(file_path).is_file()
+    assert p(source_filepath).is_file()

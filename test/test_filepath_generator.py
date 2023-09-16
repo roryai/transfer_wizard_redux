@@ -10,8 +10,8 @@ def teardown():
 
 
 def test_generates_path_including_year_and_quarter():
-    filename = 'test_file.txt'
-    source_filepath = static_source_directory + filename
+    filename = 'test_file.jpeg'
+    source_filepath = create_file(source_directory, filename)
     generated_path = FilepathGenerator(source_filepath, target_root_directory).generate_target_filepath()
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
 
@@ -19,20 +19,20 @@ def test_generates_path_including_year_and_quarter():
 
 
 def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():
-    filename = 'file_1.txt'
-    source_filepath = static_source_directory + filename
+    filename = 'file_1.jpeg'
+    source_filepath = create_file(source_directory, filename)
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
 
     create_file_with_data(target_directory, filename, 'Some original data')
 
     path = FilepathGenerator(source_filepath, target_root_directory).generate_target_filepath()
 
-    assert path == target_directory + 'file_1___1.txt'
+    assert path == target_directory + 'file_1___1.jpeg'
 
 
 def test_increments_number_suffix_if_name_clashes_with_file_with_suffix():
     filename = 'a_file___1.jpeg'
-    source_filepath = static_source_directory + filename
+    source_filepath = create_file(source_directory, filename)
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
 
     create_file_with_data(target_directory, filename, 'Some original data')
@@ -43,12 +43,12 @@ def test_increments_number_suffix_if_name_clashes_with_file_with_suffix():
 
 
 def test_returns_empty_path_if_generated_path_points_to_file_with_identical_name_suffix_and_size():
-    filename = 'this_file.txt'
-    source_filepath = static_source_directory + filename
+    filename = 'this_file.jpeg'
+    source_filepath = create_file_with_data(source_directory, filename, 'Same data')
     target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
 
     create_file_with_data(target_directory, filename, 'Unique data')
-    create_file_with_data(target_directory, 'this_file___1.txt', 'Same data')
+    create_file_with_data(target_directory, 'this_file___1.jpeg', 'Same data')
 
     path = FilepathGenerator(source_filepath, target_root_directory).generate_target_filepath()
 

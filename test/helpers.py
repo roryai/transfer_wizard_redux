@@ -10,27 +10,32 @@ from app.scanner import VALID_PHOTO_EXTENSIONS
 
 test_directory = str(p(__file__).parent)
 test_media_directory = test_directory + '/media/'
-static_source_directory = test_media_directory + 'static_source/'
-dynamic_source_directory = test_media_directory + 'dynamic_source/'
+source_directory = test_media_directory + 'source/'
 target_root_directory = test_media_directory + 'target/'
 
 DBInitializer().init_test_database()
 
 
-def create_valid_files():
+def create_files_with_desired_extensions():
     for file_path in valid_source_filepaths():
         open(file_path, 'x').close()
 
 
+def create_files_without_desired_extensions():
+    undesired_filenames = ["sales.zip", "sales.rar", "sales.bin"]
+    for filename in undesired_filenames:
+        create_file(source_directory, filename)
+
+
 def valid_source_filepaths():
-    files = []
+    filepaths = []
     for ext in VALID_PHOTO_EXTENSIONS:
-        files.append(dynamic_source_directory + 'a_file' + ext)
-    return sorted(files)
+        filepaths.append(source_directory + 'a_file' + ext)
+    return sorted(filepaths)
 
 
 def clear_test_directories():
-    paths = [dynamic_source_directory, target_root_directory]
+    paths = [source_directory, target_root_directory]
     for path in paths:
         for root, dirs, files in os.walk(path):
             for f in files:

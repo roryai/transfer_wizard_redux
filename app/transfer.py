@@ -2,13 +2,31 @@ from pathlib import Path as p
 import shutil
 
 from app.directory_manager import DirectoryManager
+from app.file import File
+from app.file_gateway import FileGateway
 
 
 class Transfer:
 
-    def copy_files(self, source_filepath, target_filepath,
-                   directory_manager=DirectoryManager):
-        target_directory = p(target_filepath).parent
-        directory_manager().create_directory_if_not_exists(target_directory)
-        if target_filepath:
-            shutil.copy2(source_filepath, target_filepath)
+    def __init__(self, directory_manager=DirectoryManager, file_gateway=FileGateway):
+        self.directory_manager = directory_manager
+        self.file_gateway = file_gateway
+
+    def copy_files(self):
+        gateway = self.file_gateway()
+        record = gateway.select_one_file_where_copy_not_attempted()
+        if record:
+            file = File.init_from_record(record)
+            target_directory = p(file.target_filepath).parent
+            self.directory_manager().create_directory_if_not_exists(target_directory)
+            if file.target_filepath:
+                self.__copy_file(file)
+                if self.__file_copied(file):
+                    file.copied = True
+                    gateway.update_copied(file)
+
+    def __copy_file(self, file):
+        shutil.copy2(file.source_filepath, file.target_filepath)
+
+    def __file_copied(self, file):
+        p(file.target_filepath).is_file()

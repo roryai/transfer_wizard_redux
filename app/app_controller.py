@@ -1,5 +1,4 @@
 from app.directory_manager import DirectoryManager
-from app.file import File
 from app.file_builder import FileBuilder
 from app.file_gateway import FileGateway
 from app.scanner import Scanner
@@ -28,9 +27,5 @@ class AppController:
 
     def __user_confirmation_of_transfer(self):
         print(f'Proceed with transfer? ( y / n )')
-        print()
         if input() == 'y':
-            records = FileGateway().select_all()
-            for record in records:
-                file = File.init_from_record(record)
-                Transfer().copy_files(file.source_filepath, file.target_filepath)
+            Transfer().copy_files()

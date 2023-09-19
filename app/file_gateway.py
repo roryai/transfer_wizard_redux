@@ -18,31 +18,38 @@ class FileGateway:
 
     def sum_size(self):
         statement = f"""
-            SELECT SUM(size) from files;
+            SELECT SUM(size) 
+            FROM files;
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def count(self):
         statement = f"""
-            SELECT COUNT(*) from files;
+            SELECT COUNT(*) 
+            FROM files;
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def select_all(self):
         statement = f"""
-            SELECT * FROM files;
+            SELECT * 
+            FROM files;
         """
         return self.db_controller.execute_read_query(statement)
 
     def duplicate_count(self):
         statement = """
-            SELECT COUNT(*) FROM files WHERE target_filepath = '';
+            SELECT COUNT(*)
+            FROM files
+            WHERE target_filepath = '';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def name_clashes_count(self):
         statement = """
-            SELECT COUNT(*) FROM files WHERE name_clash = '1';
+            SELECT COUNT(*)
+            FROM files
+            WHERE name_clash = '1';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 

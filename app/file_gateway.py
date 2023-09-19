@@ -16,20 +16,6 @@ class FileGateway:
         values = [file.source_filepath, file.target_filepath, file.size, file.name_clash]
         return self.db_controller.execute_query(statement, values)
 
-    def update(self, file):
-        statement = f"""
-            UPDATE files
-            SET 
-                source_filepath = '{file.source_filepath}',
-                target_filepath = '{file.target_filepath}',
-                size = '{file.size}',
-                name_clash = {file.name_clash}
-            WHERE
-                source_filepath = '{file.source_filepath}' AND
-                size = '{file.size}'
-        """
-        return self.db_controller.execute_query(statement, [])
-
     def sum_size(self):
         statement = f"""
             SELECT SUM(size) from files;

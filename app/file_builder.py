@@ -15,7 +15,11 @@ class FileBuilder:
             self.source_filepath, self.target_directory).generate_target_filepath()
         size = p(self.source_filepath).stat().st_size
         name_clash = self.__name_clash(self.source_filepath, target_filepath)
-        File(self.source_filepath, target_filepath, size, name_clash).save()
+        File(source_filepath=self.source_filepath,
+             target_filepath=target_filepath,
+             size=size,
+             name_clash=name_clash
+             ).save()
 
     def __name_clash(self, source_filepath, target_filepath):
         source_filename = p(source_filepath).name

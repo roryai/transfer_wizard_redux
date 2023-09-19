@@ -33,6 +33,7 @@ class DBInitializer:
                  source_filepath TEXT NOT NULL,
                  target_filepath TEXT NOT NULL,
                  size INTEGER NOT NULL,
+                 copied BOOLEAN,
                  name_clash BOOLEAN
              );
          """

@@ -16,6 +16,17 @@ class FileGateway:
         values = [file.source_filepath, file.target_filepath, file.size, file.name_clash]
         return self.db_controller.execute_query(statement, values)
 
+    def update_copied(self, file):
+        statement = f"""
+            UPDATE files
+            SET 
+                copied = {file.copied}
+            WHERE
+                source_filepath = '{file.source_filepath}'
+                AND size = '{file.size}'
+        """
+        return self.db_controller.execute_query(statement, [])
+
     def sum_size(self):
         statement = f"""
             SELECT SUM(size) 
@@ -36,6 +47,15 @@ class FileGateway:
             FROM files;
         """
         return self.db_controller.execute_read_query(statement)
+
+    def select_one_file_where_copy_not_attempted(self):
+        statement = f"""
+            SELECT *
+            FROM files
+            WHERE copied IS NULL
+            LIMIT 1;
+        """
+        return self.db_controller.execute_read_query(statement)[0]
 
     def duplicate_count(self):
         statement = """

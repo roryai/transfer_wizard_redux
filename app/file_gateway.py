@@ -55,7 +55,10 @@ class FileGateway:
             WHERE copied IS NULL
             LIMIT 1;
         """
-        return self.db_controller.execute_read_query(statement)[0]
+        result = self.db_controller.execute_read_query(statement)
+        if len(result) == 0:
+            return None
+        return result[0]
 
     def duplicate_count(self):
         statement = """

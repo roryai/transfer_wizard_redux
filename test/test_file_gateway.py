@@ -53,26 +53,28 @@ def test_deletes_rows():
 
 
 def test_selects_a_file_where_copy_has_not_been_attempted():
-    copied_file = File(source_filepath='/source',
+    copied_file = File(source_filepath='/source/copied_file',
                        target_filepath='/target',
                        size=1024,
-                       copied=True,
                        name_clash=False)
 
-    file_with_copy_error = File(source_filepath='/source',
+    file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
                                 target_filepath='/target',
                                 size=1024,
-                                copied=False,
                                 name_clash=False)
 
-    no_copy_attempted_file = File(source_filepath='/source',
+    no_copy_attempted_file = File(source_filepath='/source/no_copy_attempted_file',
                                   target_filepath='/target',
                                   size=1024,
-                                  copied=None,
                                   name_clash=False)
 
     for f in [copied_file, file_with_copy_error, no_copy_attempted_file]:
         gateway.insert(f)
+
+    copied_file.copied = True
+    file_with_copy_error.copied = False
+    for f in [copied_file, file_with_copy_error]:
+        gateway.update_copied(f)
 
     selected_file = File.init_from_record(gateway.select_one_file_where_copy_not_attempted())
 
@@ -105,3 +107,18 @@ def test_default_copied_value_is_null():
     record = gateway.select_all()[0]
 
     assert record[4] is None
+
+
+def test_when_selecting_copy_not_attempted_file_it_returns_none_when_no_valid_records_exist():
+    copied_file = File(source_filepath='/source',
+                       target_filepath='/target',
+                       size=1024,
+                       name_clash=False)
+
+    gateway.insert(copied_file)
+    file.copied = True
+    gateway.update_copied(file)
+
+    record = gateway.select_one_file_where_copy_not_attempted()
+
+    assert record is None

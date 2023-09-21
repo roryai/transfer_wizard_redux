@@ -35,7 +35,7 @@ def test_creates_quarter_target_directory_if_year_directory_already_exists():
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
     filename = 'test_file.jpeg'
     source_filepath = create_file(source_directory, filename)
-    target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
+    target_directory = get_target_directory(source_filepath)
     target_filepath = target_directory + filename
 
     DirectoryManager().create_directory_if_not_exists(target_directory)

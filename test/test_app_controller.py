@@ -14,7 +14,7 @@ def test_copies_file_to_generated_directory(monkeypatch):
     create_file_with_data(source_directory, filename, 'datum')
     source_filepath = source_directory + filename
 
-    target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
+    target_directory = get_target_directory(source_filepath)
     target_filepath = target_directory + filename
 
     assert not p(target_directory).is_dir()
@@ -32,7 +32,7 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     create_file_with_data(source_directory, filename, 'datum')
     source_filepath = source_directory + filename
 
-    target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
+    target_directory = get_target_directory(source_filepath)
     target_filepath = target_directory + filename
     create_file_with_data(target_directory, filename, 'datum')
     existing_file_mtime_pre_run = p(target_filepath).stat().st_mtime
@@ -53,7 +53,7 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     create_file_with_data(source_directory, filename, 'datum')
     source_filepath = source_directory + filename
 
-    target_directory = target_root_directory + determine_year_and_quarter(source_filepath)
+    target_directory = get_target_directory(source_filepath)
     # create a file with same name but different contents
     name_clash_file = create_file_with_data(target_directory, filename, 'DATA')
 

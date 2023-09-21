@@ -7,7 +7,7 @@ class FileGateway:
         self.db_controller = DBController()
 
     def insert(self, file):
-        statement = f"""
+        statement = """
             INSERT INTO
                 files (source_filepath, target_filepath, size, name_clash)
             VALUES
@@ -28,28 +28,28 @@ class FileGateway:
         return self.db_controller.execute_query(statement, [])
 
     def sum_size(self):
-        statement = f"""
+        statement = """
             SELECT SUM(size) 
             FROM files;
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def count(self):
-        statement = f"""
+        statement = """
             SELECT COUNT(*) 
             FROM files;
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def select_all(self):
-        statement = f"""
+        statement = """
             SELECT * 
             FROM files;
         """
         return self.db_controller.execute_read_query(statement)
 
     def select_one_file_where_copy_not_attempted(self):
-        statement = f"""
+        statement = """
             SELECT *
             FROM files
             WHERE copied IS NULL
@@ -78,7 +78,7 @@ class FileGateway:
         return self.db_controller.execute_read_query(statement)[0][0]
 
     def wipe_database(self):
-        statement = f"""
+        statement = """
             DELETE FROM files;
         """
         return self.db_controller.execute_query(statement, [])

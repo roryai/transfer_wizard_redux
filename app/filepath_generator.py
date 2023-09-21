@@ -17,6 +17,24 @@ class FilepathGenerator:
 
         return self.__detect_duplicates(prospective_target_filepath)
 
+    def __sanitise_filepath(self, filepath):
+        if filepath[-1] != '/':
+            filepath += '/'
+        return filepath
+
+    def __determine_quarter(self, month):
+        match month:
+            case 1 | 2 | 3:
+                return 'Q1'
+            case 4 | 5 | 6:
+                return 'Q2'
+            case 7 | 8 | 9:
+                return 'Q3'
+            case 10 | 11 | 12:
+                return 'Q4'
+            case _:
+                raise TypeError
+
     def __detect_duplicates(self, target_filepath):
         if not self.__path_in_use(target_filepath):
             return target_filepath
@@ -24,6 +42,12 @@ class FilepathGenerator:
             return ''
         else:
             return self.__generate_next_available_path(target_filepath)
+
+    def __path_in_use(self, path):
+        return p(path).is_file()
+
+    def __target_and_source_files_are_same_size(self, target_filepath):
+        return p(self.source_filepath).stat().st_size == p(target_filepath).stat().st_size
 
     def __generate_next_available_path(self, target_filepath):
         path = p(target_filepath)
@@ -44,27 +68,3 @@ class FilepathGenerator:
         filename, existing_number_suffix = filename.rsplit('___', 1)
         number_suffix = str(int(existing_number_suffix) + 1)
         return filename.rsplit('___', 1)[0] + '___' + number_suffix
-
-    def __path_in_use(self, path):
-        return p(path).is_file()
-
-    def __target_and_source_files_are_same_size(self, target_filepath):
-        return p(self.source_filepath).stat().st_size == p(target_filepath).stat().st_size
-
-    def __determine_quarter(self, month):
-        match month:
-            case 1 | 2 | 3:
-                return 'Q1'
-            case 4 | 5 | 6:
-                return 'Q2'
-            case 7 | 8 | 9:
-                return 'Q3'
-            case 10 | 11 | 12:
-                return 'Q4'
-            case _:
-                raise TypeError
-
-    def __sanitise_filepath(self, filepath):
-        if filepath[-1] != '/':
-            filepath += '/'
-        return filepath

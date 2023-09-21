@@ -11,7 +11,7 @@ class FilepathGenerator:
 
     def generate_target_filepath(self):
         filename = p(self.source_filepath).name
-        file_birthtime = datetime.fromtimestamp(p(self.source_filepath).stat().st_birthtime)
+        file_birthtime = self.__get_file_birthtime()
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_target_filepath = f'{self.target_directory}{file_birthtime.year}/{quarter}/{filename}'
 
@@ -21,6 +21,10 @@ class FilepathGenerator:
         if filepath[-1] != '/':
             filepath += '/'
         return filepath
+
+    def __get_file_birthtime(self):
+        birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime
+        return datetime.fromtimestamp(birthtime_in_seconds)
 
     def __determine_quarter(self, month):
         match month:

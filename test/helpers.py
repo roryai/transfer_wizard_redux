@@ -6,6 +6,7 @@ import shutil
 
 from app.db_initializer import DBInitializer
 from app.file_gateway import FileGateway
+from app.filepath_generator import FilepathGenerator
 from app.scanner import VALID_PHOTO_EXTENSIONS
 
 test_directory = str(p(__file__).parent)
@@ -88,3 +89,7 @@ def determine_year_and_quarter(filepath):
         case _:
             raise TypeError
     return f'{birthtime.year}/{quarter}/'
+
+
+def get_target_path(source_filepath, target_directory):  # TODO use determine_year_and_quarter instead
+    return FilepathGenerator(source_filepath, target_directory).generate_target_filepath()

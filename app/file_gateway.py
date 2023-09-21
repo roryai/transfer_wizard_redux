@@ -53,6 +53,7 @@ class FileGateway:
             SELECT *
             FROM files
             WHERE copied IS NULL
+            AND target_filepath IS NOT ''
             LIMIT 1;
         """
         result = self.db_controller.execute_read_query(statement)

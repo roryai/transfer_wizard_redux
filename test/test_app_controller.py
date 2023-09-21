@@ -28,7 +28,6 @@ def test_copies_file_to_generated_directory(monkeypatch):
 
 def test_does_not_copy_duplicate_file(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
-
     filename = 'file.jpeg'
     create_file_with_data(source_directory, filename, 'datum')
     source_filepath = source_directory + filename

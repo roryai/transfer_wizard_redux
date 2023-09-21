@@ -1,7 +1,7 @@
 from .helpers import *
 
 from app.file import File
-from app.file_builder import FileBuilder
+from app.file_factory import FileFactory
 
 
 @pytest.fixture(autouse=True)
@@ -13,7 +13,7 @@ def teardown():
 def test_a_file_is_built_and_saved():
     filename = 'a_file.jpeg'
     source_filepath = create_file(source_directory, filename)
-    FileBuilder(source_filepath, target_root_directory).build()
+    FileFactory(source_filepath, target_root_directory).create_pre_copy_file()
     target_directory = get_target_directory(source_filepath)
 
     record = FileGateway().select_all()[0]
@@ -31,7 +31,7 @@ def test_a_file_has_name_clash_when_existing_target_file_has_same_name_and_diffe
     target_directory = get_target_directory(source_filepath)
     create_file_with_data(target_directory, filename, 'different data')
 
-    FileBuilder(source_filepath, target_root_directory).build()
+    FileFactory(source_filepath, target_root_directory).create_pre_copy_file()
 
     record = FileGateway().select_all()[0]
     file = File.init_from_record(record)

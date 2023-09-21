@@ -4,13 +4,13 @@ from app.file import File
 from app.filepath_generator import FilepathGenerator
 
 
-class FileBuilder:
+class FileFactory:
 
     def __init__(self, source_filepath, target_directory):
         self.source_filepath = source_filepath
         self.target_directory = target_directory
 
-    def build(self):
+    def create_pre_copy_file(self):
         target_filepath = FilepathGenerator(
             self.source_filepath, self.target_directory).generate_target_filepath()
         size = p(self.source_filepath).stat().st_size

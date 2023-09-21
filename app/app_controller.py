@@ -1,5 +1,5 @@
 from app.directory_manager import DirectoryManager
-from app.file_builder import FileBuilder
+from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
 from app.scanner import Scanner
 from app.stat_presenter import StatPresenter
@@ -23,7 +23,7 @@ class AppController:
     def __create_db_records_for_files_to_be_transferred(self):
         source_filepaths = Scanner().scan_directory(self.source_directory)
         for source_filepath in source_filepaths:
-            FileBuilder(source_filepath, self.target_directory).build()
+            FileFactory(source_filepath, self.target_directory).create_pre_copy_file()
 
     def __user_confirmation_of_transfer(self):
         print(f'Proceed with transfer? ( y / n )')

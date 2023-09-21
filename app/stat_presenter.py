@@ -10,7 +10,7 @@ class StatPresenter:
         duplicates = file_gateway.duplicate_count()
         name_clashes = file_gateway.name_clashes_count()
         print()
-        print(f'{count} files selected to be transferred.')
+        print(f'{count} files selected to be copied.')
         print(f'Total file size: {self.__size_calc(sum_size)}MB')
         print(f'{duplicates} files are duplicates. Duplicates will not be copied')
         print(f'{name_clashes} files had name clashes. Files will be copied with a unique suffix.')

@@ -6,13 +6,13 @@ from app.file import File
 from app.file_gateway import FileGateway
 
 
-class Transfer:
+class Copier:
 
     def __init__(self, directory_manager=DirectoryManager, file_gateway=FileGateway):
         self.directory_manager = directory_manager()
         self.file_gateway = file_gateway()
 
-    def copy_files(self):
+    def copy_source_files_to_target_directory(self):
         record = self.file_gateway.select_one_file_where_copy_not_attempted()
         while record:
             file = File.init_from_record(record)

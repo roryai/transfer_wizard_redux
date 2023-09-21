@@ -1,4 +1,4 @@
-# Transfer wizard
+# Media File Organiser
 #### A tool to organise your media files and folders
 
 ### Overview
@@ -28,7 +28,7 @@ Name clash files have the same name but are of different sizes. These files are 
 - SQL to enable:
   1. Filtering duplicates at the database level
   2. Pause and resume function
-- Status updates before, during and after transfer
+- Status updates before, during and after copy
 - Logging
 - Scheduled backup functionality- e.g. a daily backup of any new photos that have been added to your hard drive.
 - GUI

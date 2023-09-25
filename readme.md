@@ -1,34 +1,68 @@
-# Media File Organiser
-#### A tool to organise your media files and folders
+# Transfer Wizard
+#### A tool to organise your media files by date into folders structured by year and quarter
 
 ### Overview
 
-The aim of this project is to point the program at folders of unorganised photos and sort them in to folders organised by year and quarter (Q1 - Q4).
+This program will allow you to unify your disparate photo and video libraries in to an organised directory structure.
 
-Files with name clashes are sorted in to a separate folder for you to check through manually. Once you have deleted undesired files then you can point the program at this folder to sort them in to the organised directory structure.
+It scans files in the source directory, analyses them, and copies them to the new directory structure in the target directory.
 
-I made this because I have many different photo libraries and phone backups across several hard drives that contain partially duplicated photo sets and wanted to unify them in an organised structure.
+Files are organised by year and quarter based on the creation date of the files: 
+```bash
+└── target_directory
+    └── 2023
+        └── Q1
+            └── video.mov
+        └── Q2
+            └── pic.jpeg        
+        └── Q3
+            └── film.mkv        
+        └── Q4
+            └── cat.gif
+```
+
+The program handles files with the same name but different sizes (name clash files) by copying the file and adding a unique suffix to the filename.
+
+Duplicate files (files that have the same name and the same size) are identified and not copied.
+
+The program gives a summary of files to be copied before asking for user confirmation of copy:
+
+```commandline
+Source directory: /source
+Target directory: /target
+
+7 candidate photo and video files discovered in source directory.
+Total size of candidate files: 2.89MB
+
+5 files are duplicates. Duplicates will not be copied.
+0 files had name clashes. Files will be copied with a unique suffix.
+2 files will be copied.
+
+Total size of files to be copied: 0.63MB
+
+Proceed with copy? ( y / n )
+```
 
 ### Installation
 
-The project is a work in progress and is not currently ready for use.
+The project is in beta; use at your own risk.
+
+To run the project from the command line, navigate to the project root directory and run:
+
+`python main.py -s <your source directory> -t <your target directory>`
+
+You will be presented with statistics on the files you want to copy. You can then confirm the copy or cancel it.
+
 
 ### Current functionality
-- Identifies all desired media files by file extension
-- Generates a target file path including the year and quarter
-- Name clashes are handled by adding a suffix to the filename
-- Files are copied to the target directory
+- Copies photos from source directory to generated directory structure in target directory
+- Status update before copy
 - Command line interface
 
-Duplicated files are defined as having an existing file in the target directory with the same name and size as the source file. These files are skipped.
-
-Name clash files have the same name but are of different sizes. These files are copied with new filenames.
-
 ### Future functionality
-- SQL to enable:
-  1. Filtering duplicates at the database level
-  2. Pause and resume function
-- Status updates before, during and after copy
+- Add support for videos
+- Pause and resume function
+- Status updates during and after copy
 - Logging
-- Scheduled backup functionality- e.g. a daily backup of any new photos that have been added to your hard drive.
+- Scheduled backup functionality
 - GUI

@@ -140,3 +140,26 @@ def test_default_copied_value_is_null():
     record = gateway.select_all()[0]
 
     assert record[4] is None
+
+
+def test_sums_size_of_files_that_are_valid_candidates_for_copying():
+    to_be_copied_1 = File(source_filepath='/source',
+                          target_filepath='/target',
+                          size=1024,
+                          name_clash=False)
+    to_be_copied_2 = File(source_filepath='/source/file_without_copy_error',
+                          target_filepath='/target',
+                          size=2048,
+                          name_clash=True)
+    not_to_copy = File(source_filepath='/source/',
+                       target_filepath='',
+                       size=10,
+                       name_clash=False)
+
+    for f in [to_be_copied_1, to_be_copied_2, not_to_copy]:
+        gateway.insert(f)
+
+    sum = gateway.sum_size_of_files_to_be_copied()
+    size_of_files_to_be_copied = to_be_copied_1.size + to_be_copied_2.size
+
+    assert sum == size_of_files_to_be_copied

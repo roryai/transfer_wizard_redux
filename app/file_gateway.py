@@ -34,6 +34,14 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    def sum_size_of_files_to_be_copied(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE target_filepath IS NOT '';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
     def count(self):
         statement = """
             SELECT COUNT(*) 

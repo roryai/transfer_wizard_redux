@@ -1,6 +1,6 @@
 from app.file import File
 from app.file_factory import FileFactory
-from app.copier import Copier
+from app.file_copier import FileCopier
 
 from .helpers import *
 
@@ -17,7 +17,7 @@ def test_copies_file():
     target_filepath = get_target_path(source_filepath)
     FileFactory(source_filepath, target_root_directory).create_pre_copy_file()
 
-    Copier().copy_source_files_to_target_directory()
+    FileCopier().copy_source_files_to_target_directory()
 
     assert p(target_filepath).is_file()
 
@@ -35,7 +35,7 @@ def test_copies_multiple_files():
     target_filepath_2 = get_target_path(source_filepath_2)
     target_filepath_3 = get_target_path(source_filepath_3)
 
-    Copier().copy_source_files_to_target_directory()
+    FileCopier().copy_source_files_to_target_directory()
 
     assert p(target_filepath_1).is_file()
     assert p(target_filepath_2).is_file()
@@ -48,7 +48,7 @@ def test_marks_file_as_copied_upon_successful_copy():
     target_filepath = get_target_path(source_filepath)
     FileFactory(source_filepath, target_root_directory).create_pre_copy_file()
 
-    Copier().copy_source_files_to_target_directory()
+    FileCopier().copy_source_files_to_target_directory()
 
     assert p(target_filepath).is_file()
 

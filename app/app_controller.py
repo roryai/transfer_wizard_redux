@@ -3,7 +3,7 @@ from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
 from app.scanner import Scanner
 from app.stat_presenter import StatPresenter
-from app.copier import Copier
+from app.file_copier import FileCopier
 
 
 class AppController:
@@ -28,4 +28,4 @@ class AppController:
     def __user_confirmation_of_copy(self):
         print(f'Proceed with copy? ( y / n )')
         if input() == 'y':
-            Copier().copy_source_files_to_target_directory()
+            FileCopier().copy_source_files_to_target_directory()

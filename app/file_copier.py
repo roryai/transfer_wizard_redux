@@ -6,7 +6,7 @@ from app.file import File
 from app.file_gateway import FileGateway
 
 
-class Copier:
+class FileCopier:
 
     def __init__(self, directory_manager=DirectoryManager, file_gateway=FileGateway):
         self.directory_manager = directory_manager()

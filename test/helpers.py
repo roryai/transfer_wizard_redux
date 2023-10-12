@@ -98,3 +98,7 @@ def get_target_path(source_filepath):
     target_dir = get_target_directory(source_filepath)
     filename = p(source_filepath).name
     return f'{target_dir}/{filename}/'
+
+
+def insert_db_record(file):
+    FileGateway().insert(file)

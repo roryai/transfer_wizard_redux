@@ -16,7 +16,7 @@ class AppController:
         DirectoryManager().check_if_directory_exists(self.source_directory)
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied()
-        StatPresenter().present_stats_to_user(self.source_directory, self.target_directory)
+        StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.target_directory)
         self.__user_confirmation_of_copy()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
@@ -26,6 +26,7 @@ class AppController:
             FileFactory(source_filepath, self.target_directory).create_pre_copy_file()
 
     def __user_confirmation_of_copy(self):
+        print()
         print(f'Proceed with copy? ( y / n )')
         if input() == 'y':
             FileCopier().copy_source_files_to_target_directory()

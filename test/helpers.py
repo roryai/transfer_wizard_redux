@@ -74,6 +74,10 @@ def clear_database():
     FileGateway().wipe_database()
 
 
+def get_target_directory(source_filepath):
+    return target_root_directory + determine_year_and_quarter(source_filepath)
+
+
 def determine_year_and_quarter(filepath):
     birthtime = datetime.fromtimestamp(os.stat(filepath).st_birthtime)
     match birthtime.month:
@@ -88,10 +92,6 @@ def determine_year_and_quarter(filepath):
         case _:
             raise TypeError
     return f'{birthtime.year}/{quarter}/'
-
-
-def get_target_directory(source_filepath):
-    return target_root_directory + determine_year_and_quarter(source_filepath)
 
 
 def get_target_path(source_filepath):

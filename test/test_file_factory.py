@@ -41,3 +41,17 @@ def test_a_file_has_name_clash_when_existing_target_file_has_same_name_and_diffe
     assert file.target_filepath == target_directory + expected_filename
     assert file.size == 13
     assert file.name_clash is True
+
+
+def test_duplicate_files_are_marked_as_not_having_name_clash():
+    filename = 'a_file.jpeg'
+    source_filepath = create_file_with_data(source_directory, filename, 'same data')
+    target_directory = get_target_directory(source_filepath)
+    create_file_with_data(target_directory, filename, 'same data')
+
+    FileFactory(source_filepath, target_root_directory).create_pre_copy_file()
+
+    record = FileGateway().select_all()[0]
+    file = File.init_from_record(record)
+
+    assert file.name_clash is False

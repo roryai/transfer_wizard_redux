@@ -10,7 +10,7 @@ class FileFactory:
         self.source_filepath = source_filepath
         self.target_directory = target_directory
 
-    def create_pre_copy_file(self):
+    def save_pre_copy_file_record(self):
         target_filepath = FilepathGenerator(
             self.source_filepath, self.target_directory).generate_target_filepath()
         size = p(self.source_filepath).stat().st_size

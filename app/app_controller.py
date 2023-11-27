@@ -23,7 +23,7 @@ class AppController:
     def __create_db_records_for_files_to_be_copied(self):
         source_filepaths = Scanner().scan_directory(self.source_directory)
         for source_filepath in source_filepaths:
-            FileFactory(source_filepath, self.target_directory).create_pre_copy_file()
+            FileFactory(source_filepath, self.target_directory).save_pre_copy_file_record()
 
     def __user_confirmation_of_copy(self):
         print()

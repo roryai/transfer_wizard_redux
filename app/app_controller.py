@@ -17,7 +17,8 @@ class AppController:
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied()
         StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.target_directory)
-        self.__user_confirmation_of_copy()
+        if self.__user_confirmation_of_copy():
+            FileCopier().copy_source_files_to_target_directory()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self):
@@ -29,4 +30,4 @@ class AppController:
         print()
         print(f'Proceed with copy? ( y / n )')
         if input() == 'y':
-            FileCopier().copy_source_files_to_target_directory()
+            return True

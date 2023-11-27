@@ -52,7 +52,11 @@ def test_deletes_rows():
     assert gateway.count() == 0
 
 
-def test_selects_a_file_where_copy_has_not_been_attempted():
+def test_selects_only_valid_file_for_copying():
+    valid_copy_candidate_file = File(source_filepath='/source/valid_copy_candidate_file',
+                                     target_filepath='/target',
+                                     size=1024,
+                                     name_clash=False)
     copied_file = File(source_filepath='/source/copied_file',
                        target_filepath='/target',
                        size=1024,
@@ -61,18 +65,12 @@ def test_selects_a_file_where_copy_has_not_been_attempted():
                                 target_filepath='/target',
                                 size=1024,
                                 name_clash=False)
-    no_copy_attempted_file = File(source_filepath='/source/no_copy_attempted_file',
-                                  target_filepath='/target',
-                                  size=1024,
-                                  name_clash=False)
-    no_copy_attempted_blank_target_file = \
-        File(source_filepath='/source/no_copy_attempted_blank_target_file',
-             target_filepath='',
-             size=1024,
-             name_clash=False)
+    duplicate_file = File(source_filepath='/source/duplicate_file',
+                          target_filepath='',
+                          size=1024,
+                          name_clash=False)
 
-    for f in [copied_file, file_with_copy_error,
-              no_copy_attempted_file, no_copy_attempted_blank_target_file]:
+    for f in [copied_file, file_with_copy_error, valid_copy_candidate_file, duplicate_file]:
         gateway.insert(f)
 
     copied_file.copied = True
@@ -82,11 +80,11 @@ def test_selects_a_file_where_copy_has_not_been_attempted():
 
     selected_file = File.init_from_record(gateway.select_one_file_where_copy_not_attempted())
 
-    assert selected_file == no_copy_attempted_file
+    assert selected_file == valid_copy_candidate_file
 
     # confirm that it was just one record that met the criteria
-    no_copy_attempted_file.copied = True
-    gateway.update_copied(no_copy_attempted_file)
+    valid_copy_candidate_file.copied = True
+    gateway.update_copied(valid_copy_candidate_file)
     selected_record = gateway.select_one_file_where_copy_not_attempted()
 
     assert selected_record is None

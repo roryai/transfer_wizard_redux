@@ -55,3 +55,15 @@ def test_marks_file_as_copied_upon_successful_copy():
     file = File.init_from_record(gateway.select_all()[0])
 
     assert file.copied is True
+
+
+def test_copies_files_that_are_marked_as_having_name_clash():
+    shared_filename = 'a_file.jpeg'
+    source_filepath = create_file(source_directory, shared_filename)
+    target_directory = get_target_directory(source_filepath)
+    create_file_with_data(target_directory, shared_filename, 'Some data')
+    assert filenames_in_directory(target_directory) == [shared_filename]
+    FileFactory(source_filepath, target_root_directory).save_pre_copy_file_record()
+    FileCopier().copy_source_files_to_target_directory()
+
+    assert filenames_in_directory(target_directory) == [shared_filename, 'a_file___1.jpeg']

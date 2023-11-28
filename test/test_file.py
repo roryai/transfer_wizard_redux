@@ -89,3 +89,11 @@ def test_sets_copied_attribute_when_value_is_false():
     retrieved_file = File.init_from_record(record)
 
     assert retrieved_file.copied is False
+
+
+def test_determines_file_directory():
+    file = File(source_filepath='/source',
+                target_filepath='/target/filename.jpeg',
+                size=1024,
+                name_clash=False)
+    assert str(file.target_directory()) == '/target'

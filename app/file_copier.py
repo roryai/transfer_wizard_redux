@@ -16,8 +16,7 @@ class FileCopier:
         record = self.file_gateway.select_one_file_where_copy_not_attempted()
         while record:
             file = File.init_from_record(record)
-            target_directory = p(file.target_filepath).parent
-            self.directory_manager.create_directory_if_not_exists(target_directory)
+            self.directory_manager.create_directory_if_not_exists(file.target_directory())
             self.__copy_file(file)
             record = self.file_gateway.select_one_file_where_copy_not_attempted()
 

@@ -6,7 +6,7 @@ import shutil
 
 from app.db_initializer import DBInitializer
 from app.file_gateway import FileGateway
-from app.scanner import VALID_PHOTO_EXTENSIONS
+from app.scanner import VALID_EXTENSIONS
 
 test_directory = str(p(__file__).parent)
 test_media_directory = test_directory + '/media/'
@@ -29,7 +29,7 @@ def create_files_without_desired_extensions():
 
 def valid_source_filepaths():
     filepaths = []
-    for ext in VALID_PHOTO_EXTENSIONS:
+    for ext in VALID_EXTENSIONS:
         filepaths.append(source_directory + 'a_file' + ext)
     return sorted(filepaths)
 

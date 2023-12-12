@@ -6,6 +6,7 @@ gateway = FileGateway()
 
 @pytest.fixture(autouse=True)
 def teardown():
+    yield
     clear_database()
 
 

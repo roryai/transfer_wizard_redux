@@ -14,8 +14,9 @@ name_clash_file_2 = File('source', 'destination', 4096, name_clash=True)
 
 @pytest.fixture(autouse=True)
 def teardown():
-    clear_database()
+    yield
     clear_test_directories()
+    clear_database()
 
 
 def test_plural_grammar_for_all_file_categories(capsys):

@@ -6,8 +6,9 @@ from app.file_factory import FileFactory
 
 @pytest.fixture(autouse=True)
 def teardown():
-    clear_database()
+    yield
     clear_test_directories()
+    clear_database()
 
 
 def test_a_file_is_built_and_saved():

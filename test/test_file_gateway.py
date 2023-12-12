@@ -10,6 +10,7 @@ file = File(source_filepath='/source',
 
 @pytest.fixture(autouse=True)
 def teardown():
+    yield
     clear_database()
 
 

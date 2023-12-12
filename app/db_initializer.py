@@ -31,7 +31,7 @@ class DBInitializer:
              CREATE TABLE IF NOT EXISTS files (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  source_filepath TEXT NOT NULL,
-                 target_filepath TEXT NOT NULL,
+                 destination_filepath TEXT NOT NULL,
                  size INTEGER NOT NULL,
                  copied BOOLEAN,
                  name_clash BOOLEAN

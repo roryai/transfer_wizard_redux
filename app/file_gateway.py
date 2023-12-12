@@ -9,11 +9,11 @@ class FileGateway:
     def insert(self, file):
         statement = """
             INSERT INTO
-                files (source_filepath, target_filepath, size, name_clash)
+                files (source_filepath, destination_filepath, size, name_clash)
             VALUES
                 (?, ?, ?, ?);
         """
-        values = [file.source_filepath, file.target_filepath, file.size, file.name_clash]
+        values = [file.source_filepath, file.destination_filepath, file.size, file.name_clash]
         return self.db_controller.execute_query(statement, values)
 
     def update_copied(self, file):
@@ -38,7 +38,7 @@ class FileGateway:
         statement = """
             SELECT SUM(size)
             FROM files
-            WHERE target_filepath IS NOT '';
+            WHERE destination_filepath IS NOT '';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
@@ -61,7 +61,7 @@ class FileGateway:
             SELECT *
             FROM files
             WHERE copied IS NULL
-            AND target_filepath IS NOT ''
+            AND destination_filepath IS NOT ''
             LIMIT 1;
         """
         result = self.db_controller.execute_read_query(statement)
@@ -69,11 +69,23 @@ class FileGateway:
             return None
         return result[0]
 
+    def filepath_in_use(self, filepath):
+        statement = f"""
+            SELECT *
+            FROM files
+            WHERE destination_filepath IS {filepath}
+            LIMIT 1;
+        """
+        result = self.db_controller.execute_read_query(statement)
+        if len(result) == 0:
+            return False
+        return True
+
     def duplicate_count(self):
         statement = """
             SELECT COUNT(*)
             FROM files
-            WHERE target_filepath = '';
+            WHERE destination_filepath = '';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 

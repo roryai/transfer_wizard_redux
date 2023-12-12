@@ -29,7 +29,7 @@ The program gives a summary of files to be copied before asking for user confirm
 
 ```commandline
 Source directory: /source
-Target directory: /target
+Destination directory: /target
 
 7 candidate photo and video files discovered in source directory.
 Total size of candidate files: 2.89MB

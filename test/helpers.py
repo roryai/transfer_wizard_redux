@@ -11,7 +11,7 @@ from app.scanner import VALID_PHOTO_EXTENSIONS
 test_directory = str(p(__file__).parent)
 test_media_directory = test_directory + '/media/'
 source_directory = test_media_directory + 'source/'
-target_root_directory = test_media_directory + 'target/'
+destination_root_directory = test_media_directory + 'destination/'
 
 DBInitializer().init_test_database()
 
@@ -35,7 +35,7 @@ def valid_source_filepaths():
 
 
 def clear_test_directories():
-    paths = [source_directory, target_root_directory]
+    paths = [source_directory, destination_root_directory]
     for path in paths:
         for root, dirs, files in os.walk(path):
             for f in files:
@@ -74,8 +74,8 @@ def clear_database():
     FileGateway().wipe_database()
 
 
-def get_target_directory(source_filepath):
-    return target_root_directory + determine_year_and_quarter(source_filepath)
+def get_destination_directory(source_filepath):
+    return destination_root_directory + determine_year_and_quarter(source_filepath)
 
 
 def determine_year_and_quarter(filepath):
@@ -94,10 +94,10 @@ def determine_year_and_quarter(filepath):
     return f'{birthtime.year}/{quarter}/'
 
 
-def get_target_path(source_filepath):
-    target_dir = get_target_directory(source_filepath)
+def get_destination_path(source_filepath):
+    destination_dir = get_destination_directory(source_filepath)
     filename = p(source_filepath).name
-    return f'{target_dir}/{filename}/'
+    return f'{destination_dir}/{filename}/'
 
 
 def insert_db_record(file):

@@ -10,8 +10,8 @@ class StatPresenter:
         self.name_clash_file_count = self.__name_clash_file_count()
         self.to_be_copied_count = self.candidate_file_count - self.duplicate_file_count
 
-    def present_analysis_of_candidate_files(self, source_directory, target_directory):
-        self.__print_target_and_source_path_info(source_directory, target_directory)
+    def present_analysis_of_candidate_files(self, source_directory, destination_directory):
+        self.__print_destination_and_source_path_info(source_directory, destination_directory)
         print()
         self.__print_candidate_files_info()
         print()
@@ -19,9 +19,9 @@ class StatPresenter:
         self.__print_to_be_copied_info()
         self.__print_total_size_of_files_to_be_copied_info()
 
-    def __print_target_and_source_path_info(self, source_directory, target_directory):
+    def __print_destination_and_source_path_info(self, source_directory, destination_directory):
         print(f'Source directory: {source_directory}')
-        print(f'Target directory: {target_directory}')
+        print(f'Destination directory: {destination_directory}')
 
     def __print_candidate_files_info(self):
         file_or_files = self.__file_or_files(self.candidate_file_count)

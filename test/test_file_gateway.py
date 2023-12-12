@@ -3,7 +3,7 @@ from .helpers import *
 
 gateway = FileGateway()
 file = File(source_filepath='/source',
-            target_filepath='/target',
+            destination_filepath='/destination',
             size=1024,
             name_clash=False)
 
@@ -19,7 +19,7 @@ def test_can_insert_and_read_record():
     record = gateway.select_all()[0]
 
     assert file.source_filepath == record[1]
-    assert file.target_filepath == record[2]
+    assert file.destination_filepath == record[2]
     assert file.size == record[3]
     assert file.copied == record[4]
     assert file.name_clash == record[5]
@@ -52,21 +52,21 @@ def test_deletes_rows():
     assert gateway.count() == 0
 
 
-def test_selects_no_copy_attempted_file_that_has_target_path_and_no_name_clash_for_copying():
+def test_selects_no_copy_attempted_file_that_has_destination_path_and_no_name_clash_for_copying():
     simple_file = File(source_filepath='/source/valid_candidate_file',
-                       target_filepath='/target',
+                       destination_filepath='/destination',
                        size=1024,
                        name_clash=False)
     copied_file = File(source_filepath='/source/copied_file',
-                       target_filepath='/target',
+                       destination_filepath='/destination',
                        size=1024,
                        name_clash=False)
     file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                target_filepath='/target',
+                                destination_filepath='/destination',
                                 size=1024,
                                 name_clash=False)
     duplicate_file = File(source_filepath='/source/duplicate_file',
-                          target_filepath='',
+                          destination_filepath='',
                           size=1024,
                           name_clash=False)
 
@@ -90,21 +90,21 @@ def test_selects_no_copy_attempted_file_that_has_target_path_and_no_name_clash_f
     assert selected_record is None
 
 
-def test_selects_no_copy_attempted_file_that_has_target_path_and_has_name_clash_for_copying():
+def test_selects_no_copy_attempted_file_that_has_destination_path_and_has_name_clash_for_copying():
     file_with_name_clash = File(source_filepath='/source/valid_name_clash_file',
-                                target_filepath='/target',
+                                destination_filepath='/destination',
                                 size=1024,
                                 name_clash=True)
     copied_file = File(source_filepath='/source/copied_file',
-                       target_filepath='/target',
+                       destination_filepath='/destination',
                        size=1024,
                        name_clash=False)
     file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                target_filepath='/target',
+                                destination_filepath='/destination',
                                 size=1024,
                                 name_clash=False)
     duplicate_file = File(source_filepath='/source/duplicate_file',
-                          target_filepath='',
+                          destination_filepath='',
                           size=1024,
                           name_clash=False)
 
@@ -130,11 +130,11 @@ def test_selects_no_copy_attempted_file_that_has_target_path_and_has_name_clash_
 
 def test_when_selecting_copy_not_attempted_file_it_returns_none_when_no_valid_records_exist():
     copied_file = File(source_filepath='/source',
-                       target_filepath='/target',
+                       destination_filepath='/destination',
                        size=1024,
                        name_clash=False)
     file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                target_filepath='/target',
+                                destination_filepath='/destination',
                                 size=1024,
                                 name_clash=False)
 
@@ -180,15 +180,15 @@ def test_default_copied_value_is_null():
 
 def test_sums_size_of_files_that_are_valid_candidates_for_copying():
     to_be_copied_1 = File(source_filepath='/source',
-                          target_filepath='/target',
+                          destination_filepath='/destination',
                           size=1024,
                           name_clash=False)
     to_be_copied_2 = File(source_filepath='/source/file_without_copy_error',
-                          target_filepath='/target',
+                          destination_filepath='/destination',
                           size=2048,
                           name_clash=True)
     not_to_copy = File(source_filepath='/source/',
-                       target_filepath='',
+                       destination_filepath='',
                        size=10,
                        name_clash=False)
 

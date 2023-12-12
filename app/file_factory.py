@@ -6,24 +6,24 @@ from app.filepath_generator import FilepathGenerator
 
 class FileFactory:
 
-    def __init__(self, source_filepath, target_directory):
+    def __init__(self, source_filepath, destination_directory):
         self.source_filepath = source_filepath
-        self.target_directory = target_directory
+        self.destination_directory = destination_directory
 
     def save_pre_copy_file_record(self):
-        target_filepath = FilepathGenerator(
-            self.source_filepath, self.target_directory).generate_target_filepath()
+        destination_filepath = FilepathGenerator(
+            self.source_filepath, self.destination_directory).generate_destination_filepath()
         size = p(self.source_filepath).stat().st_size
-        name_clash = self.__name_clash(self.source_filepath, target_filepath)
+        name_clash = self.__name_clash(self.source_filepath, destination_filepath)
         File(source_filepath=self.source_filepath,
-             target_filepath=target_filepath,
+             destination_filepath=destination_filepath,
              size=size,
              name_clash=name_clash
              ).save()
 
-    def __name_clash(self, source_filepath, target_filepath):
-        if target_filepath == '':
+    def __name_clash(self, source_filepath, destination_filepath):
+        if destination_filepath == '':
             return False
         source_filename = p(source_filepath).name
-        target_filename = p(target_filepath).name
-        return source_filename != target_filename
+        destination_filename = p(destination_filepath).name
+        return source_filename != destination_filename

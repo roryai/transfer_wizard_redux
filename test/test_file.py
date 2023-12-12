@@ -11,7 +11,7 @@ def teardown():
 
 def test_can_insert_and_read_record():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=False)
     file.save()
@@ -24,7 +24,7 @@ def test_can_insert_and_read_record():
 
 def test_sets_name_clash_attribute_when_value_is_true():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=True)
     file.save()
@@ -37,7 +37,7 @@ def test_sets_name_clash_attribute_when_value_is_true():
 
 def test_sets_name_clash_attribute_when_value_is_false():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=False)
     file.save()
@@ -50,7 +50,7 @@ def test_sets_name_clash_attribute_when_value_is_false():
 
 def test_sets_copied_attribute_to_none_by_default():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=False)
     file.save()
@@ -63,7 +63,7 @@ def test_sets_copied_attribute_to_none_by_default():
 
 def test_sets_copied_attribute_when_value_is_true():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=False)
     file.save()
@@ -78,7 +78,7 @@ def test_sets_copied_attribute_when_value_is_true():
 
 def test_sets_copied_attribute_when_value_is_false():
     file = File(source_filepath='/source',
-                target_filepath='/target',
+                destination_filepath='/destination',
                 size=1024,
                 name_clash=False)
     file.save()
@@ -93,7 +93,7 @@ def test_sets_copied_attribute_when_value_is_false():
 
 def test_determines_file_directory():
     file = File(source_filepath='/source',
-                target_filepath='/target/filename.jpeg',
+                destination_filepath='/destination/filename.jpeg',
                 size=1024,
                 name_clash=False)
-    assert str(file.target_directory()) == '/target'
+    assert str(file.destination_directory()) == '/destination'

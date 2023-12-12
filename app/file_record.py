@@ -9,7 +9,7 @@ class FileRecord:
     def map_from_record(self, record):
         return {
             'source_filepath': record[1],
-            'target_filepath': record[2],
+            'destination_filepath': record[2],
             'size': record[3],
             'copied': record[4],
             'name_clash': record[5]

@@ -75,7 +75,7 @@ def clear_database():
 
 
 def get_destination_directory(source_filepath):
-    return destination_root_directory + determine_year_and_quarter(source_filepath)
+    return os.path.join(destination_root_directory, determine_year_and_quarter(source_filepath))
 
 
 def determine_year_and_quarter(filepath):

@@ -1,5 +1,6 @@
 from datetime import datetime
 from pathlib import Path as p
+import os
 import re
 
 
@@ -7,20 +8,15 @@ class FilepathGenerator:
 
     def __init__(self, source_filepath, destination_directory):
         self.source_filepath = source_filepath
-        self.destination_directory = self.__sanitise_filepath(destination_directory)
+        self.destination_directory = destination_directory
 
     def generate_destination_filepath(self):
         filename = p(self.source_filepath).name
         file_birthtime = self.__get_file_birthtime()
         quarter = self.__determine_quarter(file_birthtime.month)
-        prospective_destination_filepath = f'{self.destination_directory}{file_birthtime.year}/{quarter}/{filename}'
+        prospective_destination_filepath = os.path.join(self.destination_directory, str(file_birthtime.year), quarter, filename)
 
         return self.__detect_duplicates(prospective_destination_filepath)
-
-    def __sanitise_filepath(self, filepath):
-        if filepath[-1] != '/':
-            filepath += '/'
-        return filepath
 
     def __get_file_birthtime(self):
         birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime

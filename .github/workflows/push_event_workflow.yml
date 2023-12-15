@@ -4,7 +4,7 @@ on: push
 
 jobs:
   unit-testing:
-    runs-on: macOS
+    runs-on: macos-latest
 
     steps:
     - name : Checkout code

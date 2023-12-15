@@ -8,23 +8,32 @@ from app.file_copier import FileCopier
 
 class AppController:
 
-    def __init__(self, source_directory, destination_directory):
+    def __init__(self, source_directory):
+        DirectoryManager().check_if_directory_exists(source_directory)
         self.source_directory = source_directory
-        self.destination_directory = destination_directory
 
-    def run(self):
-        DirectoryManager().check_if_directory_exists(self.source_directory)
+    def copy_files_from_source_to_destination(self, destination_directory):
         FileGateway().wipe_database()  # TODO dev only, remove later
-        self.__create_db_records_for_files_to_be_copied()
-        StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.destination_directory)
+        self.__create_db_records_for_files_to_be_copied(destination_directory)
+        StatPresenter().present_analysis_of_candidate_files(self.source_directory, destination_directory)
         if self.__user_confirmation_of_copy():
             FileCopier().copy_source_files_to_destination_directory()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
-    def __create_db_records_for_files_to_be_copied(self):
-        source_filepaths = Scanner().scan_directory(self.source_directory)
+    def display_invalid_extensions(self):
+        extensions = Scanner().invalid_extensions_in(self.source_directory)
+        if len(extensions) == 0:
+            print('No invalid extensions found.')
+        else:
+            print('\nThe following file extensions are present in the source directory.\n'
+                  'Files with these extensions are invalid and will not be copied.')
+            [print(ext.replace('.', '')) for ext in sorted(extensions)]
+            print()
+
+    def __create_db_records_for_files_to_be_copied(self, destination_directory):
+        source_filepaths = Scanner().valid_filepaths_in(self.source_directory)
         for source_filepath in source_filepaths:
-            FileFactory(source_filepath, self.destination_directory).save_pre_copy_file_record()
+            FileFactory(source_filepath, destination_directory).save_pre_copy_file_record()
 
     def __user_confirmation_of_copy(self):
         print()

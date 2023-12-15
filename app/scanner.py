@@ -1,3 +1,4 @@
+from functools import partial
 import os
 
 VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
@@ -7,10 +8,28 @@ VALID_EXTENSIONS = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
 
 class Scanner:
 
-    def scan_directory(self, source_dir):
+    def valid_filepaths_in(self, source_dir):
+        return self.__scan_directory(source_dir, self.__ext_valid, self.__full_file_path)
+
+    def invalid_extensions_in(self, source_dir):
+        return set(self.__scan_directory(source_dir, self.__ext_invalid, self.__extension_only))
+
+    def __ext_valid(self, file):
+        return self.__extension(file) in VALID_EXTENSIONS
+
+    def __ext_invalid(self, file):
+        return self.__extension(file) not in VALID_EXTENSIONS
+
+    def __extension(self, file):
+        return os.path.splitext(file)[1]
+
+    def __full_file_path(self, root, file):
+        return os.path.join(root, file)
+
+    def __extension_only(self, _, file):
+        return self.__extension(file)
+
+    def __scan_directory(self, source_dir, extension_filter, path_constructor):
         file_tree = os.walk(source_dir)
         for (root, _, files) in file_tree:
-            for file in files:
-                _, extension = os.path.splitext(file)
-                if extension in VALID_EXTENSIONS:
-                    yield os.path.join(root, file)
+            yield from filter(extension_filter, map(partial(path_constructor, root), files))

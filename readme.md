@@ -57,12 +57,12 @@ You will be presented with statistics on the files you want to copy. You can the
 
 
 ### Current functionality
-- Copies photos from source directory to generated directory structure in target directory
+- Copies photos and videos from source directory to generated directory structure in target directory
 - Status update before copy
 - Command line interface
+- Has alternate mode where it lists file extensions that won't be copied from source directory
 
 ### Future functionality
-- Add support for videos
 - Pause and resume function
 - Status updates during and after copy
 - Logging

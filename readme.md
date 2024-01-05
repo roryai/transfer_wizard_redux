@@ -1,6 +1,8 @@
 # Transfer Wizard
 #### A tool to organise your media files by date into folders structured by year and quarter
 
+Note: my background is in Ruby and wanted to learn Python so that's the language I settled on for this project. As such my coding style will not align with Pythonic conventions.
+
 ### Overview
 
 This program will allow you to unify your disparate photo and video libraries in to an organised directory structure.
@@ -55,12 +57,12 @@ You will be presented with statistics on the files you want to copy. You can the
 
 
 ### Current functionality
-- Copies photos from source directory to generated directory structure in target directory
+- Copies photos and videos from source directory to generated directory structure in target directory
 - Status update before copy
 - Command line interface
+- Has alternate mode where it lists file extensions that won't be copied from source directory
 
 ### Future functionality
-- Add support for videos
 - Pause and resume function
 - Status updates during and after copy
 - Logging

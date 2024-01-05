@@ -29,7 +29,8 @@ class FileCopier:
                 file.source_filepath, file.destination_filepath)
         else:
             file.copied = False
-
+            Logger(file.destination_directory()).log_unsuccessful_copy(
+                file.source_filepath, file.destination_filepath)
         self.file_gateway.update_copied(file)
 
     def __file_copied(self, file):

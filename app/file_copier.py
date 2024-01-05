@@ -4,6 +4,7 @@ import shutil
 from app.directory_manager import DirectoryManager
 from app.file import File
 from app.file_gateway import FileGateway
+from app.logger import Logger
 
 
 class FileCopier:
@@ -24,8 +25,11 @@ class FileCopier:
         shutil.copy2(file.source_filepath, file.destination_filepath)
         if self.__file_copied(file):
             file.copied = True
+            Logger(file.destination_directory()).log_successful_copy(
+                file.source_filepath, file.destination_filepath)
         else:
             file.copied = False
+
         self.file_gateway.update_copied(file)
 
     def __file_copied(self, file):

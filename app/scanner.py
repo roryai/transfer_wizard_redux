@@ -17,8 +17,8 @@ class Scanner:
     def __ext_valid(self, file):
         return self.__extension(file) in VALID_EXTENSIONS
 
-    def __ext_invalid(self, file):
-        return self.__extension(file) not in VALID_EXTENSIONS
+    def __ext_invalid(self, ext):
+        return ext not in VALID_EXTENSIONS
 
     def __extension(self, file):
         return os.path.splitext(file)[1]

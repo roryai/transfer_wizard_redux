@@ -36,6 +36,13 @@ def test_copies_file_when_provided_source_path_does_not_have_trailing_backslash(
     assert list(files_to_copy) == [source_filepath]
 
 
+def test_does_not_provide_valid_extensions_when_scanning_for_invalid_extensions():
+    create_file(source_directory, 'a_file.jpg')
+    result = scanner.invalid_extensions_in(source_directory)
+
+    assert list(result) == []
+
+
 def test_provides_a_set_of_invalid_file_extensions():
     create_file(source_directory, 'a_file.non')
     create_file(source_directory, 'a_file_2.non')

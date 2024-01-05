@@ -1,7 +1,7 @@
 # Transfer Wizard
 #### A tool to organise your media files by date into folders structured by year and quarter
 
-Note: my background is in Ruby and wanted to learn Python so that's the language I settled on for this project. As such my coding style will not align with Pythonic conventions.
+Note: my main language is Ruby. I wanted to learn Python so that's the language I chose for this project. As such my coding style will not align with Pythonic conventions.
 
 ### Overview
 

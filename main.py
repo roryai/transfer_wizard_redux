@@ -19,9 +19,10 @@ if __name__ == '__main__':
     DBInitializer().init_prod_database()
 
     if args.extensions:
-        AppController(args.source).display_invalid_extensions()
+        AppController(source_directory=args.source).display_invalid_extensions()
     elif args.destination:
-        AppController(args.source, args.destination).copy_files_from_source_to_destination()
+        AppController(source_directory=args.source, destination_directory=args.destination
+                      ).copy_files_from_source_to_destination()
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>"

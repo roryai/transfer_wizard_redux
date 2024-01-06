@@ -9,6 +9,19 @@ def teardown():
     clear_database()
 
 
+def copy_files():
+    AppController(destination_directory=destination_root_directory,
+                  source_directory=source_directory,
+                  logger=mock_logger()
+                  ).copy_files_from_source_to_destination()
+
+
+def display_invalid_extensions():
+    AppController(source_directory=source_directory,
+                  logger=mock_logger()
+                  ).display_invalid_extensions()
+
+
 def test_copies_file_to_generated_directory(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
     filename = 'file.jpeg'
@@ -21,7 +34,7 @@ def test_copies_file_to_generated_directory(monkeypatch):
     assert not p(destination_directory).is_dir()
     assert not p(destination_filepath).is_file()
 
-    AppController(destination_root_directory, source_directory, mock_logger()).copy_files_from_source_to_destination()
+    copy_files()
 
     assert p(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
@@ -38,7 +51,7 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     create_file_with_data(destination_directory, filename, 'datum')
     existing_file_mtime_pre_run = p(destination_filepath).stat().st_mtime
 
-    AppController(destination_root_directory, source_directory, mock_logger()).copy_files_from_source_to_destination()
+    copy_files()
 
     existing_file_mtime_post_run = p(destination_filepath).stat().st_mtime
 
@@ -61,7 +74,7 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     destination_filename = 'file___1.jpeg'
     destination_filepath = destination_directory + destination_filename
 
-    AppController(destination_root_directory, source_directory, mock_logger()).copy_files_from_source_to_destination()
+    copy_files()
 
     assert p(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
@@ -72,7 +85,9 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
 def test_displays_invalid_extension_information_when_invalid_extensions_are_present(capsys):
     create_file_with_data(source_directory, 'filename.non')
     create_file_with_data(source_directory, 'filename.err')
-    AppController(None, source_directory, mock_logger()).display_invalid_extensions()  # TODO sort None
+
+    display_invalid_extensions()
+
     result = capsys.readouterr().out
     expected = """
 The following file extensions are present in the source directory.
@@ -86,7 +101,8 @@ non
 
 
 def test_displays_invalid_extension_information_when_no_invalid_extensions_are_present(capsys):
-    AppController(None, source_directory, mock_logger()).display_invalid_extensions()  # TODO sort None
+    display_invalid_extensions()
+
     result = capsys.readouterr().out
     expected = 'No invalid extensions found.\n'
 

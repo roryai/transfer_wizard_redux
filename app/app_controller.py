@@ -9,7 +9,7 @@ from app.logger import Logger
 
 class AppController:
 
-    def __init__(self, destination_directory, source_directory, logger=Logger):
+    def __init__(self, source_directory, destination_directory=None, logger=Logger):
         DirectoryManager().check_if_directory_exists(source_directory)
         self.destination_directory = destination_directory
         self.source_directory = source_directory

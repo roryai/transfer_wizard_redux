@@ -21,7 +21,7 @@ if __name__ == '__main__':
     if args.extensions:
         AppController(args.source).display_invalid_extensions()
     elif args.destination:
-        AppController(args.source).copy_files_from_source_to_destination(args.destination)
+        AppController(args.source, args.destination).copy_files_from_source_to_destination()
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>"

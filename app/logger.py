@@ -2,16 +2,7 @@ from datetime import datetime
 import os
 
 
-class LoggerMeta(type):
-    _instance = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instance:
-            cls._instance[cls] = super(LoggerMeta, cls).__call__(*args, **kwargs)
-        return cls._instance[cls]
-
-
-class Logger(metaclass=LoggerMeta):
+class Logger:
 
     def __init__(self, destination_directory):
         self.log_file_path = self.__init_log_file(destination_directory)

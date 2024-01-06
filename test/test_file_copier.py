@@ -12,13 +12,17 @@ def teardown():
     clear_database()
 
 
+def copy_files():
+    FileCopier(mock_logger()(None)).copy_source_files_to_destination_directory()
+
+
 def test_copies_file():
     assert filenames_in_directory(destination_root_directory) == []
     source_filepath = create_file(source_directory, 'a_file.jpeg')
     destination_filepath = get_destination_path(source_filepath)
     FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
 
-    FileCopier().copy_source_files_to_destination_directory()
+    copy_files()
 
     assert p(destination_filepath).is_file()
 
@@ -36,7 +40,7 @@ def test_copies_multiple_files():
     destination_filepath_2 = get_destination_path(source_filepath_2)
     destination_filepath_3 = get_destination_path(source_filepath_3)
 
-    FileCopier().copy_source_files_to_destination_directory()
+    copy_files()
 
     assert p(destination_filepath_1).is_file()
     assert p(destination_filepath_2).is_file()
@@ -49,7 +53,7 @@ def test_marks_file_as_copied_upon_successful_copy():
     destination_filepath = get_destination_path(source_filepath)
     FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
 
-    FileCopier().copy_source_files_to_destination_directory()
+    copy_files()
 
     assert p(destination_filepath).is_file()
 
@@ -65,6 +69,7 @@ def test_copies_files_that_are_marked_as_having_name_clash():
     create_file_with_data(destination_directory, shared_filename, 'Some data')
     assert filenames_in_directory(destination_directory) == [shared_filename]
     FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
-    FileCopier().copy_source_files_to_destination_directory()
+
+    copy_files()
 
     assert filenames_in_directory(destination_directory) == [shared_filename, 'a_file___1.jpeg']

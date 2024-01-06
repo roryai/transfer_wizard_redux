@@ -102,3 +102,17 @@ def get_destination_path(source_filepath):
 
 def insert_db_record(file):
     FileGateway().insert(file)
+
+
+def mock_logger():
+    class MockLogger:
+        def __init__(self, _):
+            pass
+
+        def log_successful_copy(self, _, __):
+            pass
+
+        def log_unsuccessful_copy(self, _, __):
+            pass
+
+    return MockLogger

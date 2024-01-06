@@ -13,14 +13,14 @@ class AppController:
         DirectoryManager().check_if_directory_exists(source_directory)
         self.destination_directory = destination_directory
         self.source_directory = source_directory
-        self.logger = logger(destination_directory)
+        self.logger = logger
 
     def copy_files_from_source_to_destination(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied(self.destination_directory)
         StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.destination_directory)
         if self.__user_confirmation_of_copy():
-            FileCopier(self.logger).copy_source_files_to_destination_directory()
+            FileCopier(self.logger(self.destination_directory)).copy_source_files_to_destination_directory()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def display_invalid_extensions(self):

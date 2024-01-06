@@ -67,7 +67,7 @@ class StatPresenter:
     def __size_calc(self, sum_size):
         if sum_size is None:
             return 0.0
-        return round(sum_size / 1024, 2)
+        return round(sum_size / 1048576, 2)
 
     def __single_or_plural_grammar(self, count, single_statement, plural_statement):
         if count == 1:

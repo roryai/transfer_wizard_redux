@@ -1,4 +1,4 @@
-from app.scanner import Scanner
+from app.scanner import Scanner, VALID_EXTENSIONS
 
 from .helpers import *
 
@@ -60,3 +60,11 @@ def test_provides_multiple_invalid_extensions():
     extensions = sorted(['.non', '.hlp'])
 
     assert sorted(list(result)) == extensions
+
+
+def test_valid_extensions_includes_upper_and_lower_case_extensions():
+    valid_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff',
+     '.BMP', '.GIF', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF',
+     '.mp4', '.mov', '.avi', '.wmv', '.mkv',
+     '.MP4', '.MOV', '.AVI', '.WMV', '.MKV']
+    assert sorted(VALID_EXTENSIONS) == sorted(valid_exts)

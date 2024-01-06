@@ -3,7 +3,8 @@ import os
 
 VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
 VALID_VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.wmv', '.mkv']
-VALID_EXTENSIONS = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
+upper_case_extensions = [ext.upper() for extensions in [VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS] for ext in extensions]
+VALID_EXTENSIONS = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS + upper_case_extensions
 
 
 class Scanner:

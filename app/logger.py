@@ -35,4 +35,4 @@ class Logger(metaclass=LoggerMeta):
 
     def __write_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:
-            file.write(log_entry)
+            file.write(f'{log_entry}\n')

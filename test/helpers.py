@@ -98,7 +98,7 @@ def determine_year_and_quarter(filepath):
 def get_destination_path(source_filepath):
     destination_dir = get_destination_directory(source_filepath)
     filename = p(source_filepath).name
-    return f'{destination_dir}/{filename}/'
+    return f'{destination_dir}{filename}'
 
 
 def insert_db_record(file):

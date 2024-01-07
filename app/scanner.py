@@ -1,9 +1,10 @@
 from functools import partial
 import os
 
-VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff']
-VALID_VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.wmv', '.mkv']
-upper_case_extensions = [ext.upper() for extensions in [VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS] for ext in extensions]
+VALID_PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic']
+VALID_VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc']
+upper_case_extensions = \
+    [ext.upper() for extensions in [VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS] for ext in extensions]
 VALID_EXTENSIONS = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS + upper_case_extensions
 
 

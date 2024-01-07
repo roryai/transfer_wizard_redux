@@ -63,8 +63,8 @@ def test_provides_multiple_invalid_extensions():
 
 
 def test_valid_extensions_includes_upper_and_lower_case_extensions():
-    valid_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff',
-     '.BMP', '.GIF', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF',
-     '.mp4', '.mov', '.avi', '.wmv', '.mkv',
-     '.MP4', '.MOV', '.AVI', '.WMV', '.MKV']
+    valid_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic',
+     '.BMP', '.GIF', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.HEIC',
+     '.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc',
+     '.MP4', '.MOV', '.AVI', '.WMV', '.MKV', '.HEVC']
     assert sorted(VALID_EXTENSIONS) == sorted(valid_exts)

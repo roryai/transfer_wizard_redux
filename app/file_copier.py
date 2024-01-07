@@ -13,7 +13,7 @@ class FileCopier:
         self.file_gateway = file_gateway()
         self.logger = logger
 
-    def copy_source_files_to_destination_directory(self):
+    def copy_source_files_to_destination(self):
         record = self.file_gateway.select_one_file_where_copy_not_attempted()
         while record:
             file = File.init_from_record(record)

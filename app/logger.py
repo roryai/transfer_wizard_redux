@@ -17,7 +17,9 @@ class Logger:
 
     def __init_log_file(self, destination_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
-        log_file_path = os.path.join(destination_directory, timestamp + '.txt')
+        suffix = 'media_transfer_logfile.txt'
+        filename = timestamp + suffix
+        log_file_path = os.path.join(destination_directory, filename)
 
         with open(log_file_path, 'w'):
             pass

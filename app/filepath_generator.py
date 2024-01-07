@@ -12,15 +12,17 @@ class FilepathGenerator:
 
     def generate_destination_filepath(self):
         filename = p(self.source_filepath).name
-        file_birthtime = self.__get_file_birthtime()
+        file_birthtime = self.__earliest_approximation_of_file_creation_time()
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_destination_filepath = os.path.join(self.destination_directory, str(file_birthtime.year), quarter, filename)
 
         return self.__detect_duplicates(prospective_destination_filepath)
 
-    def __get_file_birthtime(self):
+    def __earliest_approximation_of_file_creation_time(self):
         birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime
-        return datetime.fromtimestamp(birthtime_in_seconds)
+        modified_time_in_seconds = p(self.source_filepath).stat().st_mtime
+
+        return datetime.fromtimestamp(min(birthtime_in_seconds, modified_time_in_seconds))
 
     def __determine_quarter(self, month):
         match month:

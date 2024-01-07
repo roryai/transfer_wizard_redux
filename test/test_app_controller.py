@@ -10,16 +10,8 @@ def teardown():
 
 
 def copy_files():
-    AppController(destination_directory=destination_root_directory,
-                  source_directory=source_directory,
-                  logger=mock_logger()
-                  ).copy_files_from_source_to_destination()
-
-
-def display_invalid_extensions():
-    AppController(source_directory=source_directory,
-                  logger=mock_logger()
-                  ).display_invalid_extensions()
+    AppController(source_directory, logger=mock_logger()
+                  ).copy_files_from_source_to(destination_root_directory)
 
 
 def test_copies_file_to_generated_directory(monkeypatch):
@@ -80,30 +72,3 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     assert open(destination_filepath).read() == 'datum'
     assert p(name_clash_file).is_file()
     assert open(name_clash_file).read() == 'DATA'
-
-
-def test_displays_invalid_extension_information_when_invalid_extensions_are_present(capsys):
-    create_file_with_data(source_directory, 'filename.non')
-    create_file_with_data(source_directory, 'filename.err')
-
-    display_invalid_extensions()
-
-    result = capsys.readouterr().out
-    expected = """
-The following file extensions are present in the source directory.
-Files with these extensions are invalid and will not be copied.
-err
-non
-
-"""
-
-    assert result == expected
-
-
-def test_displays_invalid_extension_information_when_no_invalid_extensions_are_present(capsys):
-    display_invalid_extensions()
-
-    result = capsys.readouterr().out
-    expected = 'No invalid extensions found.\n'
-
-    assert result == expected

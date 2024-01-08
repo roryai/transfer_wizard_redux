@@ -30,8 +30,8 @@ class DBInitializer:
         create_files_table = """
              CREATE TABLE IF NOT EXISTS files (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 source_filepath TEXT NOT NULL,
-                 destination_filepath TEXT NOT NULL,
+                 source_filepath TEXT NOT NULL UNIQUE,
+                 destination_filepath TEXT UNIQUE,
                  size INTEGER NOT NULL,
                  copied BOOLEAN,
                  name_clash BOOLEAN

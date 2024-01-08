@@ -4,12 +4,12 @@ from app.stat_presenter import StatPresenter
 from .helpers import *
 
 
-simple_file_1 = File('source', 'destination', 102400, name_clash=False)
-simple_file_2 = File('source', 'destination', 3276800, name_clash=False)
-duplicate_file_1 = File('source', '', 204800, name_clash=False)
-duplicate_file_2 = File('source', '', 819200, name_clash=False)
-name_clash_file_1 = File('source', 'destination', 1638400, name_clash=True)
-name_clash_file_2 = File('source', 'destination', 409600, name_clash=True)
+simple_file_1 = File('source/simple_file_1', 'destination/simple_file_1', 102400, name_clash=False)
+simple_file_2 = File('source/simple_file_2', 'destination/simple_file_2', 3276800, name_clash=False)
+duplicate_file_1 = File('source/duplicate_file_1', None, 204800, name_clash=False)
+duplicate_file_2 = File('source/duplicate_file_2', None, 819200, name_clash=False)
+name_clash_file_1 = File('source/name_clash_file_1', 'destination/name_clash_file_1', 1638400, name_clash=True)
+name_clash_file_2 = File('source/name_clash_file_2', 'destination/name_clash_file_2', 409600, name_clash=True)
 
 
 @pytest.fixture(autouse=True)

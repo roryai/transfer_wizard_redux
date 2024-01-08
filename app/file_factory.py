@@ -22,7 +22,7 @@ class FileFactory:
              ).save()
 
     def __name_clash(self, source_filepath, destination_filepath):
-        if destination_filepath == '':
+        if destination_filepath is None:
             return False
         source_filename = p(source_filepath).name
         destination_filename = p(destination_filepath).name

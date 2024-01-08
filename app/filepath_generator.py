@@ -41,7 +41,7 @@ class FilepathGenerator:
         if not self.__path_in_use(destination_filepath):
             return destination_filepath
         if self.__destination_and_source_files_are_same_size(destination_filepath):
-            return ''
+            return None
         else:
             return self.__generate_next_available_path(destination_filepath)
 

@@ -38,7 +38,7 @@ class FileGateway:
         statement = """
             SELECT SUM(size)
             FROM files
-            WHERE destination_filepath IS NOT '';
+            WHERE destination_filepath IS NOT NULL;
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
@@ -61,7 +61,7 @@ class FileGateway:
             SELECT *
             FROM files
             WHERE copied IS NULL
-            AND destination_filepath IS NOT ''
+            AND destination_filepath IS NOT NULL
             LIMIT 1;
         """
         result = self.db_controller.execute_read_query(statement)
@@ -85,7 +85,7 @@ class FileGateway:
         statement = """
             SELECT COUNT(*)
             FROM files
-            WHERE destination_filepath = '';
+            WHERE destination_filepath IS NULL
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 

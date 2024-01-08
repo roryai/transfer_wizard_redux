@@ -51,4 +51,4 @@ def test_returns_empty_path_if_generated_path_points_to_file_with_identical_name
 
     path = FilepathGenerator(source_filepath, destination_root_directory).generate_destination_filepath()
 
-    assert path == ''
+    assert path is None

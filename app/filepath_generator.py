@@ -14,9 +14,10 @@ class FilepathGenerator:
         filename = p(self.source_filepath).name
         file_birthtime = self.__earliest_approximation_of_file_creation_time()
         quarter = self.__determine_quarter(file_birthtime.month)
-        prospective_destination_filepath = os.path.join(self.destination_directory, str(file_birthtime.year), quarter, filename)
+        prospective_destination_filepath = os.path.join(
+            self.destination_directory, str(file_birthtime.year), quarter, filename)
 
-        return self.__detect_duplicates(prospective_destination_filepath)
+        return self.__resolve_path(prospective_destination_filepath)
 
     def __earliest_approximation_of_file_creation_time(self):
         birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime
@@ -37,7 +38,7 @@ class FilepathGenerator:
             case _:
                 raise TypeError
 
-    def __detect_duplicates(self, destination_filepath):
+    def __resolve_path(self, destination_filepath):
         if not self.__path_in_use(destination_filepath):
             return destination_filepath
         if self.__destination_and_source_files_are_same_size(destination_filepath):
@@ -56,7 +57,7 @@ class FilepathGenerator:
         filename = self.__add_suffix(path.stem)
         incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.__path_in_use(incremented_path):
-            return self.__detect_duplicates(incremented_path)
+            return self.__resolve_path(incremented_path)
         else:
             return incremented_path
 

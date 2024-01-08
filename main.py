@@ -3,6 +3,7 @@ import argparse
 from app.app_controller import AppController
 from app.db_initializer import DBInitializer
 from app.extension_scanner import ExtensionScanner
+from app.logger import Logger
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
@@ -23,7 +24,9 @@ python main.py -s path/to/source -ext  <-- To discover invalid extensions.""")
     if args.extensions:
         ExtensionScanner(args.source).display_invalid_extensions()
     elif args.destination:
-        AppController(args.source).copy_files_from_source_to(args.destination)
+        Logger().init_log_file(args.destination)
+        AppController(destination_directory=args.destination,
+                      source_directory=args.source).copy_files_from_source_to_destination()
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>"

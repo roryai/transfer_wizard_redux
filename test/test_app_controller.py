@@ -10,8 +10,8 @@ def teardown():
 
 
 def copy_files():
-    AppController(source_directory, logger=mock_logger()
-                  ).copy_files_from_source_to(destination_root_directory)
+    AppController(destination_directory=destination_root_directory,
+                  source_directory=source_directory).copy_files_from_source_to_destination()
 
 
 def test_copies_file_to_generated_directory(monkeypatch):

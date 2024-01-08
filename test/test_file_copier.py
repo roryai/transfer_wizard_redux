@@ -13,7 +13,7 @@ def teardown():
 
 
 def copy_files():
-    FileCopier(mock_logger()(None)).copy_source_files_to_destination()
+    FileCopier().copy_source_files_to_destination()
 
 
 def test_copies_file():

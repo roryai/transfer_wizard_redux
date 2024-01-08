@@ -9,17 +9,17 @@ from app.logger import Logger
 
 class AppController:
 
-    def __init__(self, source_directory, logger=Logger):
+    def __init__(self, destination_directory, source_directory):
         DirectoryManager().check_if_directory_exists(source_directory)
         self.source_directory = source_directory
-        self.logger = logger
+        self.destination_directory = destination_directory
 
-    def copy_files_from_source_to(self, destination_directory):
+    def copy_files_from_source_to_destination(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
-        self.__create_db_records_for_files_to_be_copied(destination_directory)
-        StatPresenter().present_analysis_of_candidate_files(self.source_directory, destination_directory)
+        self.__create_db_records_for_files_to_be_copied(self.destination_directory)
+        StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.destination_directory)
         if self.__user_confirmation_of_copy():
-            FileCopier(self.logger(destination_directory)).copy_source_files_to_destination()
+            FileCopier().copy_source_files_to_destination()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_directory):

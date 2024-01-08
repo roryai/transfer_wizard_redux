@@ -22,7 +22,7 @@ class FilepathGenerator:
         birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime
         modified_time_in_seconds = p(self.source_filepath).stat().st_mtime
 
-        return datetime.fromtimestamp(min(birthtime_in_seconds, modified_time_in_seconds))
+        return datetime.fromtimestamp(min(birthtime_in_seconds, int(modified_time_in_seconds)))
 
     def __determine_quarter(self, month):
         match month:

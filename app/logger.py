@@ -15,6 +15,8 @@ class Logger(metaclass=LoggerMeta):
 
     def __init__(self):
         self.log_file_path = None
+        self.error_messages = []
+        self.combined_error_messages = ''
 
     def init_log_file(self, destination_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
@@ -34,6 +36,15 @@ class Logger(metaclass=LoggerMeta):
     def log_unsuccessful_copy(self, source_file_path, destination_filepath):
         log_entry = f'Copy failed:    {source_file_path} not copied to {destination_filepath}'
         self.__write_to_logfile(log_entry)
+
+    def log_error(self, error, values):
+        message = f'Error: {error}. Values: {values}'
+        self.error_messages.append(message)
+
+    def write_errors_to_logfile(self):
+        heading = '\nErrors:\n'
+        self.combined_error_messages = '\n'.join(self.error_messages)
+        self.__write_to_logfile(heading + self.combined_error_messages)
 
     def __write_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:

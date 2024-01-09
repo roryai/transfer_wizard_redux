@@ -1,4 +1,7 @@
+import sqlite3
 from sqlite3 import Error
+
+from app.logger import Logger
 
 
 class DBControllerMeta(type):
@@ -25,8 +28,7 @@ class DBController(metaclass=DBControllerMeta):
             cursor.execute(query, values)
             self.connection.commit()
         except Error as e:
-            print(f"Error '{e}' occurred with \nQuery {query}\nValues: {values}")
-            raise Error
+            Logger().log_error(e, values)
 
     def execute_read_query(self, query):
         cursor = self.connection.cursor()

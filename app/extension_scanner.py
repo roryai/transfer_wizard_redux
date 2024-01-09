@@ -8,12 +8,13 @@ class ExtensionScanner:
         DirectoryManager().check_if_directory_exists(source_directory)
         self.source_directory = source_directory
 
-    def display_invalid_extensions(self):
-        extensions = Scanner().invalid_extensions_in(self.source_directory)
+    def display_misc_extensions(self):
+        extensions = Scanner().misc_extensions_in(self.source_directory)
         if len(extensions) == 0:
-            print('No invalid extensions found.')
+            print('No miscellaneous extensions found.')
         else:
-            print('\nThe following file extensions are present in the source directory.\n'
-                  'Files with these extensions are invalid and will not be copied.')
+            print('\nThe following miscellaneous file extensions are present in the source directory.\n'
+                  'By default these files are not copied.\n'
+                  'Consult the documentation to discover how to copy these files.')
             [print(ext.replace('.', '')) for ext in sorted(extensions)]
             print()

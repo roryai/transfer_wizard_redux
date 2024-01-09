@@ -11,15 +11,15 @@ VALID_EXTENSIONS = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS + upper_case_
 class Scanner:
 
     def valid_filepaths_in(self, source_dir):
-        return self.__scan_directory(source_dir, self.__ext_valid, self.__full_file_path)
+        return self.__scan_directory(source_dir, self.__media_extension, self.__full_file_path)
 
-    def invalid_extensions_in(self, source_dir):
-        return set(self.__scan_directory(source_dir, self.__ext_invalid, self.__extension_only))
+    def misc_extensions_in(self, source_dir):
+        return set(self.__scan_directory(source_dir, self.__misc_extension, self.__extension_only))
 
-    def __ext_valid(self, file):
+    def __media_extension(self, file):
         return self.__extension(file) in VALID_EXTENSIONS
 
-    def __ext_invalid(self, ext):
+    def __misc_extension(self, ext):
         return ext not in VALID_EXTENSIONS
 
     def __extension(self, file):

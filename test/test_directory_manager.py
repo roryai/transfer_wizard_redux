@@ -10,26 +10,26 @@ def teardown():
 
 def test_creates_year_and_quarter_destination_directories():
     destination_directory = destination_root_directory + '2023/Q2/'
-    assert not p(destination_directory).is_dir()
+    assert not Path(destination_directory).is_dir()
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)
 
-    assert p(destination_directory).is_dir()
+    assert Path(destination_directory).is_dir()
 
 
 def test_creates_quarter_destination_directory_if_year_directory_already_exists():
     destination_directory_year = destination_root_directory + '2023/'
     destination_directory_quarter = destination_directory_year + 'Q2/'
 
-    assert not p(destination_directory_year).is_dir()
+    assert not Path(destination_directory_year).is_dir()
 
     create_directory(destination_directory_year)
 
-    assert not p(destination_directory_quarter).is_dir()
+    assert not Path(destination_directory_quarter).is_dir()
 
     DirectoryManager().create_directory_if_not_exists(destination_directory_quarter)
 
-    assert p(destination_directory_quarter).is_dir()
+    assert Path(destination_directory_quarter).is_dir()
 
 
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
@@ -42,7 +42,7 @@ def test_files_in_existing_directory_persist_after_second_call_to_create_directo
     shutil.copy2(source_filepath, destination_filepath)
     DirectoryManager().create_directory_if_not_exists(destination_directory)
 
-    assert p(destination_directory + filename).is_file()
+    assert Path(destination_directory + filename).is_file()
 
 
 def test_raises_error_if_directory_does_not_exist():

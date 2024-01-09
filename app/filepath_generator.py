@@ -1,5 +1,5 @@
 from datetime import datetime
-from pathlib import Path as p
+from pathlib import Path
 import os
 import re
 
@@ -11,7 +11,7 @@ class FilepathGenerator:
         self.destination_directory = destination_directory
 
     def generate_destination_filepath(self):
-        filename = p(self.source_filepath).name
+        filename = Path(self.source_filepath).name
         file_birthtime = self.__earliest_approximation_of_file_creation_time()
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_destination_filepath = os.path.join(
@@ -20,8 +20,8 @@ class FilepathGenerator:
         return self.__resolve_path(prospective_destination_filepath)
 
     def __earliest_approximation_of_file_creation_time(self):
-        birthtime_in_seconds = p(self.source_filepath).stat().st_birthtime
-        modified_time_in_seconds = p(self.source_filepath).stat().st_mtime
+        birthtime_in_seconds = Path(self.source_filepath).stat().st_birthtime
+        modified_time_in_seconds = Path(self.source_filepath).stat().st_mtime
 
         return datetime.fromtimestamp(min(birthtime_in_seconds, int(modified_time_in_seconds)))
 
@@ -47,13 +47,13 @@ class FilepathGenerator:
             return self.__generate_next_available_path(destination_filepath)
 
     def __path_in_use(self, path):
-        return p(path).is_file()
+        return Path(path).is_file()
 
     def __destination_and_source_files_are_same_size(self, destination_filepath):
-        return p(self.source_filepath).stat().st_size == p(destination_filepath).stat().st_size
+        return Path(self.source_filepath).stat().st_size == Path(destination_filepath).stat().st_size
 
     def __generate_next_available_path(self, destination_filepath):
-        path = p(destination_filepath)
+        path = Path(destination_filepath)
         filename = self.__add_suffix(path.stem)
         incremented_path = f'{path.parent}/{filename}{path.suffix}'
         if self.__path_in_use(incremented_path):

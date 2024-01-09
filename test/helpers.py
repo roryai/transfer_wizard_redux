@@ -1,6 +1,6 @@
 from datetime import datetime
 import os
-from pathlib import Path as p
+from pathlib import Path
 import pytest
 import shutil
 
@@ -9,7 +9,7 @@ from app.file_gateway import FileGateway
 from app.logger import Logger
 from app.scanner import VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS
 
-test_directory = str(p(__file__).parent)
+test_directory = str(Path(__file__).parent)
 test_media_directory = test_directory + '/media/'
 source_directory = test_media_directory + 'source/'
 logfile_directory = test_directory + '/logs'
@@ -71,7 +71,7 @@ def create_file(directory, filename):
 
 
 def create_directory(directory_path):
-    p(directory_path).mkdir(parents=True, exist_ok=True)
+    Path(directory_path).mkdir(parents=True, exist_ok=True)
 
 
 def clear_database():
@@ -100,7 +100,7 @@ def determine_year_and_quarter(filepath):
 
 def get_destination_path(source_filepath):
     destination_dir = get_destination_directory(source_filepath)
-    filename = p(source_filepath).name
+    filename = Path(source_filepath).name
     return f'{destination_dir}{filename}'
 
 

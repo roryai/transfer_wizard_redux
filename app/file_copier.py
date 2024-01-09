@@ -1,4 +1,4 @@
-from pathlib import Path as p
+from pathlib import Path
 import shutil
 
 from app.directory_manager import DirectoryManager
@@ -32,4 +32,4 @@ class FileCopier:
         self.file_gateway.update_copied(file)
 
     def __file_copied(self, file):
-        return p(file.destination_filepath).is_file()
+        return Path(file.destination_filepath).is_file()

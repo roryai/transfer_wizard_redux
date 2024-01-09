@@ -23,12 +23,12 @@ def test_copies_file_to_generated_directory(monkeypatch):
     destination_directory = get_destination_directory(source_filepath)
     destination_filepath = destination_directory + filename
 
-    assert not p(destination_directory).is_dir()
-    assert not p(destination_filepath).is_file()
+    assert not Path(destination_directory).is_dir()
+    assert not Path(destination_filepath).is_file()
 
     copy_files()
 
-    assert p(destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
 
 
@@ -41,13 +41,13 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     destination_directory = get_destination_directory(source_filepath)
     destination_filepath = destination_directory + filename
     create_file_with_data(destination_directory, filename, 'datum')
-    existing_file_mtime_pre_run = p(destination_filepath).stat().st_mtime
+    existing_file_mtime_pre_run = Path(destination_filepath).stat().st_mtime
 
     copy_files()
 
-    existing_file_mtime_post_run = p(destination_filepath).stat().st_mtime
+    existing_file_mtime_post_run = Path(destination_filepath).stat().st_mtime
 
-    assert p(destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
     assert existing_file_mtime_post_run == existing_file_mtime_pre_run
 
@@ -68,7 +68,7 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
 
     copy_files()
 
-    assert p(destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
-    assert p(name_clash_file).is_file()
+    assert Path(name_clash_file).is_file()
     assert open(name_clash_file).read() == 'DATA'

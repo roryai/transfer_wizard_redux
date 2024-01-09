@@ -1,4 +1,4 @@
-from pathlib import Path as p
+from pathlib import Path
 
 from app.file_record import FileRecord
 
@@ -25,7 +25,7 @@ class File:
         FileRecord().insert(self)
 
     def destination_directory(self):
-        return p(self.destination_filepath).parent
+        return Path(self.destination_filepath).parent
 
     @classmethod
     def init_from_record(cls, record):

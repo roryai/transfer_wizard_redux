@@ -24,7 +24,7 @@ def test_copies_file():
 
     copy_files()
 
-    assert p(destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
 
 
 def test_copies_multiple_files():
@@ -42,9 +42,9 @@ def test_copies_multiple_files():
 
     copy_files()
 
-    assert p(destination_filepath_1).is_file()
-    assert p(destination_filepath_2).is_file()
-    assert p(destination_filepath_3).is_file()
+    assert Path(destination_filepath_1).is_file()
+    assert Path(destination_filepath_2).is_file()
+    assert Path(destination_filepath_3).is_file()
 
 
 def test_marks_file_as_copied_upon_successful_copy():
@@ -55,7 +55,7 @@ def test_marks_file_as_copied_upon_successful_copy():
 
     copy_files()
 
-    assert p(destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
 
     file = File.init_from_record(gateway.select_all()[0])
 

@@ -1,4 +1,3 @@
-from app.directory_manager import DirectoryManager
 from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
 from app.scanner import Scanner
@@ -10,7 +9,6 @@ from app.logger import Logger
 class AppController:
 
     def __init__(self, destination_directory, source_directory):
-        DirectoryManager().check_if_directory_exists(source_directory)
         self.source_directory = source_directory
         self.destination_directory = destination_directory
 

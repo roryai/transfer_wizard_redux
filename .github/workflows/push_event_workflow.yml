@@ -3,16 +3,6 @@ name: Push Event Workflow
 on: push
 
 jobs:
-  unit-testing-mac:
-    name : MacOS tests
-    runs-on: macos-latest
-    steps:
-    - name : Checkout code
-      uses : actions/checkout@v2
-    - name : Install Packages
-      run : pip install -r requirements.txt
-    - name : Run MacOS tests
-      run : pytest test/
   unit-testing-windows:
     name : Windows tests
     runs-on: windows-latest

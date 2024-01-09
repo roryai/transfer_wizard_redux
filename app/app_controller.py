@@ -24,7 +24,7 @@ class AppController:
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_directory):
-        source_filepaths = Scanner().valid_filepaths_in(self.source_directory)
+        source_filepaths = Scanner().media_filepaths_in(self.source_directory)
         for source_filepath in source_filepaths:
             FileFactory(source_filepath, destination_directory).save_pre_copy_file_record()
 

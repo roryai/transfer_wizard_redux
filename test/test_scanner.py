@@ -1,4 +1,4 @@
-from app.scanner import Scanner, VALID_EXTENSIONS
+from app.scanner import Scanner, MEDIA_EXTENSIONS
 
 from .helpers import *
 
@@ -13,30 +13,30 @@ def teardown():
 def test_scanner_discovers_files_to_be_copied():
     create_files_with_desired_extensions()
 
-    files_to_copy = scanner.valid_filepaths_in(source_directory)
+    files_to_copy = scanner.media_filepaths_in(source_directory)
 
-    assert sorted(list(files_to_copy)) == valid_source_filepaths()
+    assert sorted(list(files_to_copy)) == media_source_filepaths()
 
 
 def test_scanner_ignores_files_without_desired_extensions():
     create_files_with_desired_extensions()
     create_files_without_desired_extensions()
 
-    files_to_copy = scanner.valid_filepaths_in(source_directory)
+    files_to_copy = scanner.media_filepaths_in(source_directory)
 
-    assert sorted(list(files_to_copy)) == valid_source_filepaths()
+    assert sorted(list(files_to_copy)) == media_source_filepaths()
 
 
 def test_copies_file_when_provided_source_path_does_not_have_trailing_backslash():
     filename = 'a_file.jpeg'
     source_filepath = create_file(source_directory, filename)
     source_directory_without_trailing_backslash = source_directory[0:-1]
-    files_to_copy = scanner.valid_filepaths_in(source_directory_without_trailing_backslash)
+    files_to_copy = scanner.media_filepaths_in(source_directory_without_trailing_backslash)
 
     assert list(files_to_copy) == [source_filepath]
 
 
-def test_does_not_provide_valid_extensions_when_scanning_for_misc_extensions():
+def test_does_not_provide_media_extensions_when_scanning_for_misc_extensions():
     create_file(source_directory, 'a_file.jpg')
     result = scanner.misc_extensions_in(source_directory)
 
@@ -62,9 +62,9 @@ def test_provides_multiple_misc_extensions():
     assert sorted(list(result)) == extensions
 
 
-def test_valid_extensions_includes_upper_and_lower_case_extensions():
-    valid_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic',
+def test_media_extensions_includes_upper_and_lower_case_extensions():
+    media_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic',
      '.BMP', '.GIF', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.HEIC',
      '.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc',
      '.MP4', '.MOV', '.AVI', '.WMV', '.MKV', '.HEVC']
-    assert sorted(VALID_EXTENSIONS) == sorted(valid_exts)
+    assert sorted(MEDIA_EXTENSIONS) == sorted(media_exts)

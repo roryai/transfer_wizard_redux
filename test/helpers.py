@@ -20,7 +20,7 @@ Logger().init_log_file(logfile_directory)
 
 
 def create_files_with_desired_extensions():
-    for file_path in valid_source_filepaths():
+    for file_path in media_source_filepaths():
         open(file_path, 'x').close()
 
 
@@ -30,10 +30,10 @@ def create_files_without_desired_extensions():
         create_file(source_directory, filename)
 
 
-def valid_source_filepaths():
+def media_source_filepaths():
     filepaths = []
-    valid_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
-    for ext in valid_exts:
+    media_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
+    for ext in media_exts:
         filepaths.append(source_directory + 'a_file' + ext)
     return sorted(filepaths)
 

@@ -69,18 +69,6 @@ class FileGateway:
             return None
         return result[0]
 
-    def filepath_in_use(self, filepath):
-        statement = f"""
-            SELECT *
-            FROM files
-            WHERE destination_filepath IS {filepath}
-            LIMIT 1;
-        """
-        result = self.db_controller.execute_read_query(statement)
-        if len(result) == 0:
-            return False
-        return True
-
     def duplicate_count(self):
         statement = """
             SELECT COUNT(*)

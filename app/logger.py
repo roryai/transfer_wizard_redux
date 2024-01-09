@@ -46,6 +46,9 @@ class Logger(metaclass=LoggerMeta):
         self.combined_error_messages = '\n'.join(self.error_messages)
         self.__write_to_logfile(heading + self.combined_error_messages)
 
+    def log_to_file(self, log_entry):
+        self.__write_to_logfile(log_entry)
+
     def __write_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:
             file.write(f'{log_entry}\n')

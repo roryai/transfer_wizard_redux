@@ -11,14 +11,16 @@ class AppController:
     def __init__(self, destination_directory, source_directory):
         self.source_directory = source_directory
         self.destination_directory = destination_directory
+        self.stat_presenter = StatPresenter(source_directory, destination_directory)
 
     def copy_files_from_source_to_destination(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied(self.destination_directory)
-        StatPresenter().present_analysis_of_candidate_files(self.source_directory, self.destination_directory)
-        if self.__user_confirmation_of_copy():
+        self.stat_presenter.print_stats_summary()
+        if self.__user_confirms_copy():
+            self.stat_presenter.log_pre_copy_stats()
             FileCopier().copy_source_files_to_destination()
-        self.__display_errors()
+            self.__display_errors()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_directory):
@@ -26,8 +28,7 @@ class AppController:
         for source_filepath in source_filepaths:
             FileFactory(source_filepath, destination_directory).save_pre_copy_file_record()
 
-    def __user_confirmation_of_copy(self):
-        print()
+    def __user_confirms_copy(self):
         print(f'Proceed with copy? ( y / n )')
         if input() == 'y':
             return True

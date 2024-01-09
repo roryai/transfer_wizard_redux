@@ -20,7 +20,7 @@ def teardown():
     
     
 def present_stats():
-    StatPresenter('source/', 'destination/').present_analysis_of_candidate_files()
+    return StatPresenter('source/', 'destination/').print_stats_summary()
 
 
 def test_plural_grammar_for_all_file_categories(capsys):
@@ -34,9 +34,10 @@ Total size of candidate files: 6.15MB
 2 files have name clashes and will be copied with a unique suffix.
 
 4 files will be copied.
-Total size of files to be copied: 5.18MB\n"""
+Total size of files to be copied: 5.18MB\n\n"""
     for f in [simple_file_1, simple_file_2, duplicate_file_1, duplicate_file_2, name_clash_file_1, name_clash_file_2]:
         insert_db_record(f)
+
     present_stats()
     captured = capsys.readouterr()
 
@@ -54,9 +55,10 @@ Total size of candidate files: 1.76MB
 1 file has a name clash and will be copied with a unique suffix.
 
 1 file will be copied.
-Total size of file to be copied: 1.56MB\n"""
+Total size of file to be copied: 1.56MB\n\n"""
     for f in [duplicate_file_1, name_clash_file_1]:
         insert_db_record(f)
+
     present_stats()
     captured = capsys.readouterr()
 
@@ -71,8 +73,9 @@ Destination directory: destination/
 Total size of candidate file: 0.1MB
 
 1 file will be copied.
-Total size of file to be copied: 0.1MB\n"""
+Total size of file to be copied: 0.1MB\n\n"""
     insert_db_record(simple_file_1)
+
     present_stats()
     captured = capsys.readouterr()
 
@@ -87,9 +90,10 @@ Destination directory: destination/
 Total size of candidate files: 3.22MB
 
 2 files will be copied.
-Total size of files to be copied: 3.22MB\n"""
+Total size of files to be copied: 3.22MB\n\n"""
     for f in [simple_file_1, simple_file_2]:
         insert_db_record(f)
+
     present_stats()
     captured = capsys.readouterr()
 

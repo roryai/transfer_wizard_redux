@@ -6,16 +6,16 @@ import re
 
 class FilepathGenerator:
 
-    def __init__(self, source_filepath, destination_directory):
+    def __init__(self, source_filepath, destination_root_directory):
         self.source_filepath = source_filepath
-        self.destination_directory = destination_directory
+        self.destination_root_directory = destination_root_directory
 
     def generate_destination_filepath(self):
         filename = Path(self.source_filepath).name
         file_birthtime = self.__earliest_approximation_of_file_creation_time()
         quarter = self.__determine_quarter(file_birthtime.month)
         prospective_destination_filepath = os.path.join(
-            self.destination_directory, str(file_birthtime.year), quarter, filename)
+            self.destination_root_directory, str(file_birthtime.year), quarter, filename)
 
         return self.__resolve_path(prospective_destination_filepath)
 

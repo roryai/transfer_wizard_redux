@@ -3,15 +3,17 @@ from app.file_gateway import FileGateway
 
 class StatPresenter:
 
-    def __init__(self):
+    def __init__(self, source_directory, destination_directory):
+        self.source_directory = source_directory
+        self.destination_directory = destination_directory
         self.file_gateway = FileGateway()
         self.candidate_file_count = self.__candidate_file_count()
         self.duplicate_file_count = self.__duplicate_file_count()
         self.name_clash_file_count = self.__name_clash_file_count()
         self.to_be_copied_count = self.candidate_file_count - self.duplicate_file_count
 
-    def present_analysis_of_candidate_files(self, source_directory, destination_directory):
-        self.__print_destination_and_source_path_info(source_directory, destination_directory)
+    def present_analysis_of_candidate_files(self):
+        self.__print_destination_and_source_path_info()
         print()
         self.__print_candidate_files_info()
         print()
@@ -19,9 +21,9 @@ class StatPresenter:
         self.__print_to_be_copied_info()
         self.__print_total_size_of_files_to_be_copied_info()
 
-    def __print_destination_and_source_path_info(self, source_directory, destination_directory):
-        print(f'Source directory: {source_directory}')
-        print(f'Destination directory: {destination_directory}')
+    def __print_destination_and_source_path_info(self):
+        print(f'Source directory: {self.source_directory}')
+        print(f'Destination directory: {self.destination_directory}')
 
     def __print_candidate_files_info(self):
         file_or_files = self.__file_or_files(self.candidate_file_count)

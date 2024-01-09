@@ -17,6 +17,10 @@ def teardown():
     yield
     clear_test_directories()
     clear_database()
+    
+    
+def present_stats():
+    StatPresenter('source/', 'destination/').present_analysis_of_candidate_files()
 
 
 def test_plural_grammar_for_all_file_categories(capsys):
@@ -33,7 +37,7 @@ Total size of candidate files: 6.15MB
 Total size of files to be copied: 5.18MB\n"""
     for f in [simple_file_1, simple_file_2, duplicate_file_1, duplicate_file_2, name_clash_file_1, name_clash_file_2]:
         insert_db_record(f)
-    StatPresenter().present_analysis_of_candidate_files('source/', 'destination/')
+    present_stats()
     captured = capsys.readouterr()
 
     assert captured.out == expected_output
@@ -53,7 +57,7 @@ Total size of candidate files: 1.76MB
 Total size of file to be copied: 1.56MB\n"""
     for f in [duplicate_file_1, name_clash_file_1]:
         insert_db_record(f)
-    StatPresenter().present_analysis_of_candidate_files('source/', 'destination/')
+    present_stats()
     captured = capsys.readouterr()
 
     assert captured.out == expected_output
@@ -69,7 +73,7 @@ Total size of candidate file: 0.1MB
 1 file will be copied.
 Total size of file to be copied: 0.1MB\n"""
     insert_db_record(simple_file_1)
-    StatPresenter().present_analysis_of_candidate_files('source/', 'destination/')
+    present_stats()
     captured = capsys.readouterr()
 
     assert captured.out == expected_output
@@ -86,7 +90,7 @@ Total size of candidate files: 3.22MB
 Total size of files to be copied: 3.22MB\n"""
     for f in [simple_file_1, simple_file_2]:
         insert_db_record(f)
-    StatPresenter().present_analysis_of_candidate_files('source/', 'destination/')
+    present_stats()
     captured = capsys.readouterr()
 
     assert captured.out == expected_output

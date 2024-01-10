@@ -29,7 +29,7 @@ class AppController:
             FileFactory(source_filepath, destination_directory).save_pre_copy_file_record()
 
     def __user_confirms_copy(self):
-        print(f'Proceed with copy? ( y / n )')
+        print(f'\nProceed with copy? ( y / n )')
         if input() == 'y':
             return True
 

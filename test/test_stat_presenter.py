@@ -39,7 +39,7 @@ Total size of candidate files: 6.15MB
 2 files have name clashes and will be copied with a unique suffix.
 
 4 files will be copied.
-Total size of files to be copied: 5.18MB\n\n"""
+Total size of files to be copied: 5.18MB\n"""
     for f in [simple_file_1, simple_file_2, duplicate_file_1, duplicate_file_2, name_clash_file_1, name_clash_file_2]:
         insert_db_record(f)
 
@@ -60,7 +60,7 @@ Total size of candidate files: 1.76MB
 1 file has a name clash and will be copied with a unique suffix.
 
 1 file will be copied.
-Total size of file to be copied: 1.56MB\n\n"""
+Total size of file to be copied: 1.56MB\n"""
     for f in [duplicate_file_1, name_clash_file_1]:
         insert_db_record(f)
 
@@ -78,7 +78,7 @@ Destination directory: destination/
 Total size of candidate file: 0.1MB
 
 1 file will be copied.
-Total size of file to be copied: 0.1MB\n\n"""
+Total size of file to be copied: 0.1MB\n"""
     insert_db_record(simple_file_1)
 
     present_stats()
@@ -95,7 +95,7 @@ Destination directory: destination/
 Total size of candidate files: 3.22MB
 
 2 files will be copied.
-Total size of files to be copied: 3.22MB\n\n"""
+Total size of files to be copied: 3.22MB\n"""
     for f in [simple_file_1, simple_file_2]:
         insert_db_record(f)
 

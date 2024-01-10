@@ -17,6 +17,7 @@ class FileGateway:
         return self.db_controller.execute_query(statement, values)
 
     def update_copied(self, file):
+        # TODO size can be removed from the query now that source_filepath is unique
         statement = f"""
             UPDATE files
             SET 
@@ -57,6 +58,7 @@ class FileGateway:
         return self.db_controller.execute_read_query(statement)
 
     def select_one_file_where_copy_not_attempted(self):
+        # TODO change copied IS NULL to is false after copy set to not null. Keep destination_filepath IS NOT NULL
         statement = """
             SELECT *
             FROM files

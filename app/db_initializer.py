@@ -24,6 +24,7 @@ class DBInitializer:
         self.connection = sqlite3.connect(db_filepath)
 
     def __db_path(self, db_name):
+        # TODO set ROOT_DIR in main.py and import, use os.path.join
         return str(Path(__file__).parent.parent) + f'/{db_name}.db'
 
     def __create_table(self):

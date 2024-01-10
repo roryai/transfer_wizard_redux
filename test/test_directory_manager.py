@@ -8,8 +8,8 @@ def teardown():
     clear_test_directories()
 
 
-def test_creates_year_and_quarter_destination_directories():
-    destination_directory = destination_root_directory + '2023/Q2/'
+def test_creates_a_directory():
+    destination_directory = destination_root_directory + '2023'
     assert not Path(destination_directory).is_dir()
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)
@@ -25,6 +25,7 @@ def test_creates_quarter_destination_directory_if_year_directory_already_exists(
 
     create_directory(destination_directory_year)
 
+    assert Path(destination_directory_year).is_dir()
     assert not Path(destination_directory_quarter).is_dir()
 
     DirectoryManager().create_directory_if_not_exists(destination_directory_quarter)

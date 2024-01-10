@@ -1,4 +1,3 @@
-from app.file import File
 from app.stat_presenter import StatPresenter
 
 from .helpers import *

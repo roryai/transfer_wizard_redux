@@ -20,7 +20,8 @@ DBInitializer().init_test_database()
 Logger().init_log_file(logfile_directory)
 
 
-def file_instance(source_filepath='/source/filename.jpg', destination_filepath='/destination/filename.jpg',
+def file_instance(source_filepath=source_directory+'filename.jpg',
+                  destination_filepath=destination_root_directory+'filename.jpg',
                   size=1024, copied=None, name_clash=False, media=True):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
                 size=size, copied=copied, name_clash=name_clash, media=media)

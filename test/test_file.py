@@ -19,4 +19,7 @@ def test_inserted_and_retrieved_files_are_identical():
 
 
 def test_determines_file_directory():
-    assert str(file_instance().destination_directory()) == '/destination'
+    destination_directory = '/destination'
+    destination_filepath = destination_directory + '/filename.jpg'
+    assert str(file_instance(destination_filepath=destination_filepath
+                             ).destination_directory()) == destination_directory

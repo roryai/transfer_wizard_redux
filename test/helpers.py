@@ -71,8 +71,7 @@ def filenames_in(directory):
 
 
 def create_file_with_data(directory_path, filename, data=''):
-    if not os.path.isdir(directory_path):
-        create_directory(directory_path)
+    Path(directory_path).mkdir(parents=True, exist_ok=True)
     file_path = directory_path + filename
     file = open(file_path, 'x')
     file.write(data)
@@ -82,10 +81,6 @@ def create_file_with_data(directory_path, filename, data=''):
 
 def create_file(directory, filename):
     return create_file_with_data(directory, filename)
-
-
-def create_directory(directory_path):
-    Path(directory_path).mkdir(parents=True, exist_ok=True)
 
 
 def clear_database():
@@ -110,12 +105,6 @@ def determine_year_and_quarter(filepath):
         case _:
             raise TypeError
     return f'{birthtime.year}/{quarter}/'
-
-
-def get_destination_path(source_filepath):
-    destination_dir = get_destination_directory(source_filepath)
-    filename = Path(source_filepath).name
-    return f'{destination_dir}{filename}'
 
 
 def insert_db_record(file):

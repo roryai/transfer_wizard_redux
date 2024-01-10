@@ -1,4 +1,4 @@
-from app.file import File
+from app.file_record import FileRecord
 from .helpers import *
 
 gateway = FileGateway()
@@ -10,6 +10,10 @@ file2 = file_instance(source_filepath='/source/file2.jpg', destination_filepath=
 def teardown():
     yield
     clear_database()
+
+
+def select_and_map_record():
+    return FileRecord().map_from_record(gateway.select_all()[0])
 
 
 def test_can_insert_and_read_record():
@@ -70,6 +74,51 @@ def test_destination_filepath_must_be_unique():
     gateway.insert(that_file)
 
     assert gateway.count() == 1
+
+
+def test_updates_copied_field_to_true():
+    gateway.insert(file)
+    file.copied = True
+    gateway.update_copied(file)
+
+    record = select_and_map_record()
+
+    assert record['copied'] is 1
+
+
+def test_updates_copied_field_to_false():
+    gateway.insert(file)
+    file.copied = False
+    gateway.update_copied(file)
+
+    record = select_and_map_record()
+
+    assert record['copied'] is 0
+
+
+def test_default_copied_value_is_null():  # TODO update this when updating copied field to non null
+    gateway.insert(file)
+
+    record = gateway.select_all()[0]
+
+    assert record[4] is None
+
+
+def test_counts_duplicate_files():
+    duplicate_file = file_instance(source_filepath='/source/file1.jpg',
+                                   destination_filepath=None)
+    gateway.insert(duplicate_file)
+
+    assert gateway.duplicate_count() == 1
+
+
+def test_counts_name_clashes():
+    name_clash_file = file_instance(source_filepath='/source/file1.jpg',
+                                    destination_filepath='/destination/file1.jpg',
+                                    name_clash=True)
+    gateway.insert(name_clash_file)
+
+    assert gateway.name_clash_count() == 1
 
 
 def test_selects_no_copy_attempted_file_that_has_destination_path_and_no_name_clash_for_copying():
@@ -148,34 +197,6 @@ def test_when_selecting_copy_not_attempted_file_it_returns_none_when_no_valid_re
     record = gateway.select_one_file_where_copy_not_attempted()
 
     assert record is None
-
-
-def test_updates_copied_field_to_true():
-    gateway.insert(file)
-    file.copied = True
-    gateway.update_copied(file)
-
-    record = gateway.select_all()[0]
-
-    assert record[4] is 1
-
-
-def test_updates_copied_field_to_false():
-    gateway.insert(file)
-    file.copied = False
-    gateway.update_copied(file)
-
-    record = gateway.select_all()[0]
-
-    assert record[4] is 0
-
-
-def test_default_copied_value_is_null():  # TODO review
-    gateway.insert(file)
-
-    record = gateway.select_all()[0]
-
-    assert record[4] is None
 
 
 def test_sums_size_of_files_that_are_valid_candidates_for_copying():

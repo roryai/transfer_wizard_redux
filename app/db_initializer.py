@@ -35,7 +35,8 @@ class DBInitializer:
                  destination_filepath TEXT UNIQUE,
                  size INTEGER NOT NULL,
                  copied BOOLEAN,
-                 name_clash BOOLEAN
+                 name_clash BOOLEAN,
+                 media BOOLEAN NOT NULL
              );
          """
         DBController().set_connection(self.connection).execute_query(create_files_table, [])

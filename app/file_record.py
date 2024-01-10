@@ -12,5 +12,6 @@ class FileRecord:
             'destination_filepath': record[2],
             'size': record[3],
             'copied': record[4],
-            'name_clash': record[5]
+            'name_clash': record[5],
+            'media': record[6]
         }

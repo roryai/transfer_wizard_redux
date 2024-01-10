@@ -9,11 +9,12 @@ class FileGateway:
     def insert(self, file):
         statement = """
             INSERT INTO
-                files (source_filepath, destination_filepath, size, name_clash)
+                files (source_filepath, destination_filepath, size, name_clash, media)
             VALUES
-                (?, ?, ?, ?);
+                (?, ?, ?, ?, ?);
         """
-        values = [file.source_filepath, file.destination_filepath, file.size, file.name_clash]
+        values = [file.source_filepath, file.destination_filepath, file.size,
+                  file.name_clash, file.media]
         return self.db_controller.execute_query(statement, values)
 
     def update_copied(self, file):

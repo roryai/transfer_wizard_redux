@@ -10,7 +10,7 @@ class FileFactory:
         self.source_filepath = source_filepath
         self.destination_directory = destination_directory
 
-    def save_pre_copy_file_record(self):
+    def save_pre_copy_file_record(self, media=True):  # TODO remove default val when adding misc file functionality
         destination_filepath = FilepathGenerator(
             self.source_filepath, self.destination_directory).generate_destination_filepath()
         size = Path(self.source_filepath).stat().st_size
@@ -18,8 +18,8 @@ class FileFactory:
         File(source_filepath=self.source_filepath,
              destination_filepath=destination_filepath,
              size=size,
-             name_clash=name_clash
-             ).save()
+             name_clash=name_clash,
+             media=media).save()
 
     def __name_clash(self, source_filepath, destination_filepath):
         if destination_filepath is None:

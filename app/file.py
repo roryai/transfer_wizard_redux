@@ -18,9 +18,9 @@ class File:
                 self.source_filepath == other.source_filepath and
                 self.destination_filepath == other.destination_filepath and
                 self.size == other.size and
-                self.copied == other.copied and
-                self.name_clash == other.name_clash and
-                self.media == other.media
+                self.copied is other.copied and
+                self.name_clash is other.name_clash and
+                self.media is other.media
         )
 
     def save(self):
@@ -38,7 +38,7 @@ class File:
             size=vals['size'],
             copied=cls.__set_copied(vals['copied']),
             name_clash=True if vals['name_clash'] == 1 else False,
-            media=vals['media']
+            media=True if vals['media'] == 1 else False
         )
 
     @classmethod

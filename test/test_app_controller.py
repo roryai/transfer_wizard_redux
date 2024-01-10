@@ -40,6 +40,8 @@ def test_does_not_copy_duplicate_file(monkeypatch):
 
     destination_directory = get_destination_directory(source_filepath)
     destination_filepath = destination_directory + filename
+    # create an identical file in the destination directory:
+    # the candidate file will not be copied; the existing file will not be overwritten
     create_file_with_data(destination_directory, filename, 'datum')
     existing_file_mtime_pre_run = Path(destination_filepath).stat().st_mtime
 
@@ -60,15 +62,21 @@ def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file
     source_filepath = source_directory + filename
 
     destination_directory = get_destination_directory(source_filepath)
-    # create a file with same name but different contents
+    # create a file with same name as candidate file but with different data
     name_clash_file = create_file_with_data(destination_directory, filename, 'DATA')
 
-    destination_filename = 'file___1.jpeg'
-    destination_filepath = destination_directory + destination_filename
+    # the candidate file will have a suffix added because of the name clash
+    filename_with_suffix = 'file___1.jpeg'
+    destination_filepath = destination_directory + filename_with_suffix
+
+    existing_file_mtime_pre_run = Path(name_clash_file).stat().st_mtime
 
     copy_files()
+
+    existing_file_mtime_post_run = Path(name_clash_file).stat().st_mtime
 
     assert Path(destination_filepath).is_file()
     assert open(destination_filepath).read() == 'datum'
     assert Path(name_clash_file).is_file()
     assert open(name_clash_file).read() == 'DATA'
+    assert existing_file_mtime_post_run == existing_file_mtime_pre_run

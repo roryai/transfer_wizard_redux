@@ -10,7 +10,7 @@ def teardown():
     clear_database()
 
 
-def copy_files():
+def copy_source_files_to_destination():
     FileCopier().copy_source_files_to_destination()
 
 
@@ -27,7 +27,7 @@ def test_copies_file():
 
     file = create_file_and_save_file_record('filename.jpg')
 
-    copy_files()
+    copy_source_files_to_destination()
 
     assert Path(file.destination_filepath).is_file()
 
@@ -39,7 +39,7 @@ def test_copies_multiple_files():
     file_2 = create_file_and_save_file_record('a_file2.jpeg')
     file_3 = create_file_and_save_file_record('a_file3.jpeg')
 
-    copy_files()
+    copy_source_files_to_destination()
 
     assert Path(file_1.destination_filepath).is_file()
     assert Path(file_2.destination_filepath).is_file()
@@ -49,7 +49,7 @@ def test_copies_multiple_files():
 def test_marks_file_as_copied_upon_successful_copy():
     gateway = FileGateway()
     file = create_file_and_save_file_record('filename.jpg')
-    copy_files()
+    copy_source_files_to_destination()
 
     assert Path(file.destination_filepath).is_file()
 
@@ -61,6 +61,6 @@ def test_marks_file_as_copied_upon_successful_copy():
 def test_copies_file_that_is_marked_as_having_name_clash():
     file = create_file_and_save_file_record('filename.jpg', name_clash=True)
 
-    copy_files()
+    copy_source_files_to_destination()
 
     assert Path(file.destination_filepath).is_file()

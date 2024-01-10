@@ -80,7 +80,7 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
-    def name_clashes_count(self):
+    def name_clash_count(self):
         statement = """
             SELECT COUNT(*)
             FROM files

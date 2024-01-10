@@ -87,4 +87,4 @@ class StatPresenter:
         return self.file_gateway.duplicate_count()
 
     def __name_clash_file_count(self):
-        return self.file_gateway.name_clashes_count()
+        return self.file_gateway.name_clash_count()

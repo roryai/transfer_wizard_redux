@@ -83,6 +83,14 @@ def create_file(directory, filename):
     return create_file_with_data(directory, filename)
 
 
+def set_creation_time_of_source_file(source_filepath):
+    time_in_past = 1701639908  # 03/12/23
+    # setting mtime in past also sets birthtime to that time
+    os.utime(source_filepath, (time_in_past, time_in_past))
+    # destination directory is now predictable
+    return os.path.join(destination_root_directory, '2023/Q4/')
+
+
 def clear_database():
     FileGateway().wipe_database()
 

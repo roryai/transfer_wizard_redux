@@ -55,7 +55,7 @@ def clear_test_directories():
                 shutil.rmtree(os.path.join(root, d))
 
 
-def filenames_in_directory(directory):
+def filenames_in(directory):
     files = []
     for (_, _, filenames) in os.walk(directory):
         files.extend(filenames)

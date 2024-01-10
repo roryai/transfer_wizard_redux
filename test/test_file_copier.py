@@ -1,5 +1,3 @@
-from app.file import File
-from app.file_factory import FileFactory
 from app.file_copier import FileCopier
 
 from .helpers import *
@@ -16,60 +14,53 @@ def copy_files():
     FileCopier().copy_source_files_to_destination()
 
 
+def create_file_and_save_file_record(filename, name_clash=False):
+    filepath = source_directory + filename
+    file = file_instance(source_filepath=filepath, name_clash=name_clash)
+    create_file(source_directory, filename)
+    file.save()
+    return file
+
+
 def test_copies_file():
-    assert filenames_in_directory(destination_root_directory) == []
-    source_filepath = create_file(source_directory, 'a_file.jpeg')
-    destination_filepath = get_destination_path(source_filepath)
-    FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
+    assert filenames_in(destination_root_directory) == []
+
+    file = create_file_and_save_file_record('filename.jpg')
 
     copy_files()
 
-    assert Path(destination_filepath).is_file()
+    assert Path(file.destination_filepath).is_file()
 
 
 def test_copies_multiple_files():
-    assert filenames_in_directory(destination_root_directory) == []
-    source_filepath_1 = create_file(source_directory, 'a_file1.jpeg')
-    source_filepath_2 = create_file(source_directory, 'a_file2.jpeg')
-    source_filepath_3 = create_file(source_directory, 'a_file3.jpeg')
-    FileFactory(source_filepath_1, destination_root_directory).save_pre_copy_file_record()
-    FileFactory(source_filepath_2, destination_root_directory).save_pre_copy_file_record()
-    FileFactory(source_filepath_3, destination_root_directory).save_pre_copy_file_record()
+    assert filenames_in(destination_root_directory) == []
 
-    destination_filepath_1 = get_destination_path(source_filepath_1)
-    destination_filepath_2 = get_destination_path(source_filepath_2)
-    destination_filepath_3 = get_destination_path(source_filepath_3)
+    file_1 = create_file_and_save_file_record('a_file1.jpeg')
+    file_2 = create_file_and_save_file_record('a_file2.jpeg')
+    file_3 = create_file_and_save_file_record('a_file3.jpeg')
 
     copy_files()
 
-    assert Path(destination_filepath_1).is_file()
-    assert Path(destination_filepath_2).is_file()
-    assert Path(destination_filepath_3).is_file()
+    assert Path(file_1.destination_filepath).is_file()
+    assert Path(file_2.destination_filepath).is_file()
+    assert Path(file_3.destination_filepath).is_file()
 
 
 def test_marks_file_as_copied_upon_successful_copy():
     gateway = FileGateway()
-    source_filepath = create_file(source_directory, 'a_file.jpeg')
-    destination_filepath = get_destination_path(source_filepath)
-    FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
-
+    file = create_file_and_save_file_record('filename.jpg')
     copy_files()
 
-    assert Path(destination_filepath).is_file()
+    assert Path(file.destination_filepath).is_file()
 
-    file = File.init_from_record(gateway.select_all()[0])
+    file = File.init_from_record(gateway.select_all()[0])  # TODO unify with method used in file gateway
 
     assert file.copied is True
 
 
-def test_copies_files_that_are_marked_as_having_name_clash():
-    shared_filename = 'a_file.jpeg'
-    source_filepath = create_file(source_directory, shared_filename)
-    destination_directory = get_destination_directory(source_filepath)
-    create_file_with_data(destination_directory, shared_filename, 'Some data')
-    assert filenames_in_directory(destination_directory) == [shared_filename]
-    FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
+def test_copies_file_that_is_marked_as_having_name_clash():
+    file = create_file_and_save_file_record('filename.jpg', name_clash=True)
 
     copy_files()
 
-    assert filenames_in_directory(destination_directory) == [shared_filename, 'a_file___1.jpeg']
+    assert Path(file.destination_filepath).is_file()

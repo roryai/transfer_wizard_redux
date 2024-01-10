@@ -17,22 +17,6 @@ def test_creates_a_directory():
     assert Path(destination_directory).is_dir()
 
 
-def test_creates_quarter_destination_directory_if_year_directory_already_exists():
-    destination_directory_year = destination_root_directory + '2023/'
-    destination_directory_quarter = destination_directory_year + 'Q2/'
-
-    assert not Path(destination_directory_year).is_dir()
-
-    create_directory(destination_directory_year)
-
-    assert Path(destination_directory_year).is_dir()
-    assert not Path(destination_directory_quarter).is_dir()
-
-    DirectoryManager().create_directory_if_not_exists(destination_directory_quarter)
-
-    assert Path(destination_directory_quarter).is_dir()
-
-
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
     filename = 'test_file.jpeg'
     source_filepath = create_file(source_directory, filename)

@@ -5,8 +5,7 @@ from app.file_record import FileRecord
 
 class File:
 
-    def __init__(self, source_filepath, destination_filepath, size,
-                 copied=None, name_clash=False, media=True):
+    def __init__(self, source_filepath, destination_filepath, size, copied, name_clash, media):
         self.source_filepath = source_filepath
         self.destination_filepath = destination_filepath
         self.size = size

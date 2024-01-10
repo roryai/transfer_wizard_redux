@@ -5,6 +5,7 @@ import pytest
 import shutil
 
 from app.db_initializer import DBInitializer
+from app.file import File
 from app.file_gateway import FileGateway
 from app.logger import Logger
 from app.scanner import VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS
@@ -17,6 +18,12 @@ destination_root_directory = test_media_directory + 'destination/'
 
 DBInitializer().init_test_database()
 Logger().init_log_file(logfile_directory)
+
+
+def file_instance(source_filepath='/source/filename.jpg', destination_filepath='/destination/filename.jpg',
+                  size=1024, copied=None, name_clash=False, media=True):
+    return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
+                size=size, copied=copied, name_clash=name_clash, media=media)
 
 
 def create_files_with_desired_extensions():

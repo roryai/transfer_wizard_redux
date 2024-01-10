@@ -3,13 +3,18 @@ from app.stat_presenter import StatPresenter
 
 from .helpers import *
 
-
-simple_file_1 = File('source/simple_file_1', 'destination/simple_file_1', 102400, name_clash=False)
-simple_file_2 = File('source/simple_file_2', 'destination/simple_file_2', 3276800, name_clash=False)
-duplicate_file_1 = File('source/duplicate_file_1', None, 204800, name_clash=False)
-duplicate_file_2 = File('source/duplicate_file_2', None, 819200, name_clash=False)
-name_clash_file_1 = File('source/name_clash_file_1', 'destination/name_clash_file_1', 1638400, name_clash=True)
-name_clash_file_2 = File('source/name_clash_file_2', 'destination/name_clash_file_2', 409600, name_clash=True)
+simple_file_1 = file_instance(source_filepath='source/simple_file_1',
+                              destination_filepath='destination/simple_file_1', size=102400, name_clash=False)
+simple_file_2 = file_instance(source_filepath='source/simple_file_2',
+                              destination_filepath='destination/simple_file_2', size=3276800, name_clash=False)
+duplicate_file_1 = file_instance(source_filepath='source/duplicate_file_1',
+                                 destination_filepath=None, size=204800, name_clash=False)
+duplicate_file_2 = file_instance(source_filepath='source/duplicate_file_2',
+                                 destination_filepath=None, size=819200, name_clash=False)
+name_clash_file_1 = file_instance(source_filepath='source/name_clash_file_1',
+                                  destination_filepath='destination/name_clash_file_1', size=1638400, name_clash=True)
+name_clash_file_2 = file_instance(source_filepath='source/name_clash_file_2',
+                                  destination_filepath='destination/name_clash_file_2', size=409600, name_clash=True)
 
 
 @pytest.fixture(autouse=True)

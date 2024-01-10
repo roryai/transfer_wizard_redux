@@ -2,14 +2,8 @@ from app.file import File
 from .helpers import *
 
 gateway = FileGateway()
-file = File(source_filepath='/source/file1.jpg',
-            destination_filepath='/destination/file1.jpg',
-            size=1024,
-            name_clash=False)
-file2 = File(source_filepath='/source/file2.jpg',
-             destination_filepath='/destination/file2.jpg',
-             size=1024,
-             name_clash=False)
+file = file_instance(source_filepath='/source/file1.jpg', destination_filepath='/destination/file1.jpg')
+file2 = file_instance(source_filepath='/source/file2.jpg', destination_filepath='/destination/file2.jpg')
 
 
 @pytest.fixture(autouse=True)
@@ -57,8 +51,10 @@ def test_deletes_rows():
 
 
 def test_source_filepath_must_be_unique():
-    this_file = File('same_source', 'this_dest', 1024, False)
-    that_file = File('same_source', 'that_dest', 1024, False)
+    this_file = file_instance(source_filepath='/source/same_source.jpg',
+                              destination_filepath='/destination/this_dest.jpg')
+    that_file = file_instance(source_filepath='/source/same_source.jpg',
+                              destination_filepath='/destination/that_dest.jpg')
     gateway.insert(this_file)
     gateway.insert(that_file)
 
@@ -66,8 +62,10 @@ def test_source_filepath_must_be_unique():
 
 
 def test_destination_filepath_must_be_unique():
-    this_file = File('this_source', 'same_dest', 1024, False)
-    that_file = File('that_source', 'same_dest', 1024, False)
+    this_file = file_instance(source_filepath='/source/this_source.jpg',
+                              destination_filepath='/destination/same_dest.jpg')
+    that_file = file_instance(source_filepath='/source/that_source.jpg',
+                              destination_filepath='/destination/same_dest.jpg')
     gateway.insert(this_file)
     gateway.insert(that_file)
 
@@ -75,22 +73,14 @@ def test_destination_filepath_must_be_unique():
 
 
 def test_selects_no_copy_attempted_file_that_has_destination_path_and_no_name_clash_for_copying():
-    simple_file = File(source_filepath='/source/valid_candidate_file',
-                       destination_filepath='/destination/valid_candidate_file',
-                       size=1024,
-                       name_clash=False)
-    copied_file = File(source_filepath='/source/copied_file',
-                       destination_filepath='/destination/copied_file',
-                       size=1024,
-                       name_clash=False)
-    file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                destination_filepath='/destination/file_with_copy_error',
-                                size=1024,
-                                name_clash=False)
-    duplicate_file = File(source_filepath='/source/duplicate_file',
-                          destination_filepath=None,
-                          size=1024,
-                          name_clash=False)
+    simple_file = file_instance(source_filepath='/source/valid_candidate_file',
+                                destination_filepath='/destination/valid_candidate_file')
+    copied_file = file_instance(source_filepath='/source/copied_file',
+                                destination_filepath='/destination/copied_file')
+    file_with_copy_error = file_instance(source_filepath='/source/file_with_copy_error',
+                                         destination_filepath='/destination/file_with_copy_error')
+    duplicate_file = file_instance(source_filepath='/source/duplicate_file',
+                                   destination_filepath=None)
 
     for f in [copied_file, file_with_copy_error, simple_file, duplicate_file]:
         gateway.insert(f)
@@ -113,22 +103,14 @@ def test_selects_no_copy_attempted_file_that_has_destination_path_and_no_name_cl
 
 
 def test_selects_no_copy_attempted_file_that_has_destination_path_and_has_name_clash_for_copying():
-    file_with_name_clash = File(source_filepath='/source/valid_name_clash_file',
-                                destination_filepath='/destination/valid_name_clash_file',
-                                size=1024,
-                                name_clash=True)
-    copied_file = File(source_filepath='/source/copied_file',
-                       destination_filepath='/destination/copied_file',
-                       size=1024,
-                       name_clash=False)
-    file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                destination_filepath='/destination/file_with_copy_error',
-                                size=1024,
-                                name_clash=False)
-    duplicate_file = File(source_filepath='/source/duplicate_file',
-                          destination_filepath=None,
-                          size=1024,
-                          name_clash=False)
+    file_with_name_clash = file_instance(source_filepath='/source/valid_name_clash_file',
+                                         destination_filepath='/destination/valid_name_clash_file', name_clash=True)
+    copied_file = file_instance(source_filepath='/source/copied_file',
+                                destination_filepath='/destination/copied_file')
+    file_with_copy_error = file_instance(source_filepath='/source/file_with_copy_error',
+                                         destination_filepath='/destination/file_with_copy_error')
+    duplicate_file = file_instance(source_filepath='/source/duplicate_file',
+                                   destination_filepath=None)
 
     for f in [copied_file, file_with_copy_error, file_with_name_clash, duplicate_file]:
         gateway.insert(f)
@@ -151,14 +133,10 @@ def test_selects_no_copy_attempted_file_that_has_destination_path_and_has_name_c
 
 
 def test_when_selecting_copy_not_attempted_file_it_returns_none_when_no_valid_records_exist():
-    copied_file = File(source_filepath='/source',
-                       destination_filepath='/destination',
-                       size=1024,
-                       name_clash=False)
-    file_with_copy_error = File(source_filepath='/source/file_with_copy_error',
-                                destination_filepath='/destination/file_with_copy_error',
-                                size=1024,
-                                name_clash=False)
+    copied_file = file_instance(source_filepath='/source/copied_file',
+                                destination_filepath='/destination/copied_file')
+    file_with_copy_error = file_instance(source_filepath='/source/file_with_copy_error',
+                                         destination_filepath='/destination/file_with_copy_error')
 
     gateway.insert(copied_file)
     gateway.insert(file_with_copy_error)
@@ -192,7 +170,7 @@ def test_updates_copied_field_to_false():
     assert record[4] is 0
 
 
-def test_default_copied_value_is_null():
+def test_default_copied_value_is_null():  # TODO review
     gateway.insert(file)
 
     record = gateway.select_all()[0]
@@ -201,18 +179,12 @@ def test_default_copied_value_is_null():
 
 
 def test_sums_size_of_files_that_are_valid_candidates_for_copying():
-    to_be_copied_1 = File(source_filepath='/source',
-                          destination_filepath='/destination',
-                          size=1024,
-                          name_clash=False)
-    to_be_copied_2 = File(source_filepath='/source/file_without_copy_error',
-                          destination_filepath='/destination/file_without_copy_error',
-                          size=2048,
-                          name_clash=True)
-    not_to_copy = File(source_filepath='/source/',
-                       destination_filepath=None,
-                       size=10,
-                       name_clash=False)
+    to_be_copied_1 = file_instance(source_filepath='/source/copy_candidate',
+                                   destination_filepath='/destination/copy_candidate')
+    to_be_copied_2 = file_instance(source_filepath='/source/copy_candidate2',
+                                   destination_filepath='/destination/copy_candidate2', size=2048)
+    not_to_copy = file_instance(source_filepath='/source/file_with_copy_error',
+                                destination_filepath=None, size=10)
 
     for f in [to_be_copied_1, to_be_copied_2, not_to_copy]:
         gateway.insert(f)

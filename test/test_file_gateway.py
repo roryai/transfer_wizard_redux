@@ -12,20 +12,12 @@ def teardown():
     clear_database()
 
 
-def select_and_map_record():
-    return FileRecord().map_from_record(gateway.select_all()[0])
-
-
-def test_can_insert_and_read_record():
+def test_can_read_and_write_file():
     gateway.insert(file)
 
-    record = gateway.select_all()[0]
+    retrieved_file = instantiate_file_from_db_record()
 
-    assert file.source_filepath == record[1]
-    assert file.destination_filepath == record[2]
-    assert file.size == record[3]
-    assert file.copied == record[4]
-    assert file.name_clash == record[5]
+    assert file == retrieved_file
 
 
 def test_sums_size_of_all_files():
@@ -81,9 +73,9 @@ def test_updates_copied_field_to_true():
     file.copied = True
     gateway.update_copied(file)
 
-    record = select_and_map_record()
+    record = instantiate_file_from_db_record()
 
-    assert record['copied'] is 1
+    assert record.copied is True
 
 
 def test_updates_copied_field_to_false():
@@ -91,9 +83,9 @@ def test_updates_copied_field_to_false():
     file.copied = False
     gateway.update_copied(file)
 
-    record = select_and_map_record()
+    record = instantiate_file_from_db_record()
 
-    assert record['copied'] is 0
+    assert record.copied is False
 
 
 def test_default_copied_value_is_null():  # TODO update this when updating copied field to non null

@@ -53,7 +53,7 @@ def test_marks_file_as_copied_upon_successful_copy():
 
     assert Path(file.destination_filepath).is_file()
 
-    file = File.init_from_record(gateway.select_all()[0])  # TODO unify with method used in file gateway
+    file = instantiate_file_from_db_record()
 
     assert file.copied is True
 

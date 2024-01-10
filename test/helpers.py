@@ -37,6 +37,12 @@ def create_files_without_desired_extensions():
         create_file(source_directory, filename)
 
 
+def instantiate_file_from_db_record():
+    gateway = FileGateway()
+    assert gateway.count() == 1
+    return File.init_from_record(gateway.select_all()[0])
+
+
 def media_source_filepaths():
     filepaths = []
     media_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS

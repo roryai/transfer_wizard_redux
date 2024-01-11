@@ -14,20 +14,12 @@ def save_pre_copy_file_record(source_filepath):
     FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
 
 
-def setup_and_run_test_class(filename='test_file.jpeg', run_func=True,
-                             source_data='default_source_data', dest_data='default_dest_data'):
-    func = create_file_with_data
-    source_filepath = func(source_directory, filename, source_data)
-    destination_directory = static_destination_path(source_filepath)
-    func(destination_directory, filename, dest_data) if run_func else None
-    save_pre_copy_file_record(source_filepath)
-    return filename, source_filepath, destination_directory
-
-
 def test_a_file_is_built_and_saved():
     source_data = 'this_string_is_23_bytes'
-    filename, source_filepath, destination_directory = setup_and_run_test_class(
-        source_data=source_data, run_func=False)
+    filename, source_filepath, destination_directory = create_test_files(
+        source_data=source_data, create_dest_file=False)
+
+    save_pre_copy_file_record(source_filepath)
 
     file = instantiate_file_from_db_record()
 
@@ -40,8 +32,10 @@ def test_a_file_is_built_and_saved():
 
 
 def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_has_same_name_and_different_size():
-    _, source_filepath, destination_directory = setup_and_run_test_class(
+    _, source_filepath, destination_directory = create_test_files(
         source_data='original data', dest_data='different data')
+
+    save_pre_copy_file_record(source_filepath)
 
     file = instantiate_file_from_db_record()
     expected_filename = 'test_file___1.jpeg'
@@ -54,8 +48,10 @@ def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_h
 
 def test_duplicate_files_are_marked_as_having_no_destination_filepath_and_not_having_name_clash():
     data = 'same data'
-    _, source_filepath, destination_directory = setup_and_run_test_class(
+    _, source_filepath, destination_directory = create_test_files(
         source_data=data, dest_data=data)
+
+    save_pre_copy_file_record(source_filepath)
 
     file = instantiate_file_from_db_record()
 

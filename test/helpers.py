@@ -26,6 +26,14 @@ def file_instance(source_filepath=source_directory + 'filename.jpg',
                 size=size, copied=copied, name_clash=name_clash, media=media)
 
 
+def create_test_files(filename='test_file.jpeg', create_dest_file=True,
+                      source_data='default_source_data', dest_data='default_dest_data'):
+    source_filepath = create_file_with_data(source_directory, filename, source_data)
+    destination_directory = static_destination_path(source_filepath)
+    create_file_with_data(destination_directory, filename, dest_data) if create_dest_file else None
+    return filename, source_filepath, destination_directory
+
+
 def create_files_with_desired_extensions():
     for file_path in media_source_filepaths():
         open(file_path, 'x').close()

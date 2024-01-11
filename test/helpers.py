@@ -7,7 +7,6 @@ from app.db_initializer import DBInitializer
 from app.file import File
 from app.file_gateway import FileGateway
 from app.logger import Logger, LoggerMeta
-from app.scanner import VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS
 
 test_directory = str(Path(__file__).parent)
 test_media_directory = test_directory + '/media/'
@@ -42,17 +41,6 @@ def static_destination_path(source_filepath):
     return os.path.join(destination_root_directory, '2023/Q4/')
 
 
-def create_files_with_desired_extensions():
-    for file_path in media_source_filepaths():
-        open(file_path, 'x').close()
-
-
-def create_files_without_desired_extensions():
-    undesired_filenames = ["sales.zip", "sales.rar", "sales.bin"]
-    for filename in undesired_filenames:
-        create_file(source_directory, filename)
-
-
 def create_file_with_data(directory_path, filename, data=''):
     Path(directory_path).mkdir(parents=True, exist_ok=True)
     file_path = os.path.join(directory_path, filename)
@@ -64,14 +52,6 @@ def create_file_with_data(directory_path, filename, data=''):
 
 def create_file(directory, filename):
     return create_file_with_data(directory, filename)
-
-
-def media_source_filepaths():
-    filepaths = []
-    media_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
-    for ext in media_exts:
-        filepaths.append(source_directory + 'a_file' + ext)
-    return sorted(filepaths)
 
 
 def filenames_in(directory):

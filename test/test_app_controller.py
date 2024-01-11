@@ -14,14 +14,16 @@ def copy_files():
                   source_directory=source_directory).copy_files_from_source_to_destination()
 
 
-def test_copies_file_to_generated_directory(monkeypatch):
-    monkeypatch.setattr('builtins.input', lambda: 'y')
-    filename = 'file.jpeg'
-    create_file_with_data(source_directory, filename, 'datum')
-    source_filepath = source_directory + filename
-
-    destination_directory = get_destination_directory(source_filepath)
+def create_source_file(filename='file.jpeg'):
+    source_filepath = create_file_with_data(source_directory, filename, 'datum')
+    destination_directory = static_destination_path(source_filepath)
     destination_filepath = destination_directory + filename
+    return filename, destination_directory, destination_filepath
+
+
+def test_copies_file_to_destination_directory(monkeypatch):
+    monkeypatch.setattr('builtins.input', lambda: 'y')
+    filename, destination_directory, destination_filepath = create_source_file()
 
     assert not Path(destination_directory).is_dir()
     assert not Path(destination_filepath).is_file()
@@ -34,12 +36,7 @@ def test_copies_file_to_generated_directory(monkeypatch):
 
 def test_does_not_copy_duplicate_file(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
-    filename = 'file.jpeg'
-    create_file_with_data(source_directory, filename, 'datum')
-    source_filepath = source_directory + filename
-
-    destination_directory = get_destination_directory(source_filepath)
-    destination_filepath = destination_directory + filename
+    filename, destination_directory, destination_filepath = create_source_file()
     # create an identical file in the destination directory:
     # the candidate file will not be copied; the existing file will not be overwritten
     create_file_with_data(destination_directory, filename, 'datum')
@@ -54,29 +51,24 @@ def test_does_not_copy_duplicate_file(monkeypatch):
     assert existing_file_mtime_post_run == existing_file_mtime_pre_run
 
 
-def test_copies_file_to_generated_directory_when_name_clashes_with_existing_file(monkeypatch):
+def test_copies_file_with_suffix_added_when_name_clashes_with_existing_file(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'y')
+    filename, destination_directory, _ = create_source_file()
+    # create a file with same name as source file but with different data
+    existing_file_with_identical_name = create_file_with_data(destination_directory, filename, 'DATA')
 
-    filename = 'file.jpeg'
-    create_file_with_data(source_directory, filename, 'datum')
-    source_filepath = source_directory + filename
+    # the source file will have a suffix added because of the name clash
+    generated_filename_for_source_file = 'file___1.jpeg'
+    expected_sourcefile_destination_path = destination_directory + generated_filename_for_source_file
 
-    destination_directory = get_destination_directory(source_filepath)
-    # create a file with same name as candidate file but with different data
-    name_clash_file = create_file_with_data(destination_directory, filename, 'DATA')
-
-    # the candidate file will have a suffix added because of the name clash
-    filename_with_suffix = 'file___1.jpeg'
-    destination_filepath = destination_directory + filename_with_suffix
-
-    existing_file_mtime_pre_run = Path(name_clash_file).stat().st_mtime
+    existing_file_mtime_pre_run = Path(existing_file_with_identical_name).stat().st_mtime
 
     copy_files()
 
-    existing_file_mtime_post_run = Path(name_clash_file).stat().st_mtime
+    existing_file_mtime_post_run = Path(existing_file_with_identical_name).stat().st_mtime
 
-    assert Path(destination_filepath).is_file()
-    assert open(destination_filepath).read() == 'datum'
-    assert Path(name_clash_file).is_file()
-    assert open(name_clash_file).read() == 'DATA'
-    assert existing_file_mtime_post_run == existing_file_mtime_pre_run
+    assert Path(expected_sourcefile_destination_path).is_file()
+    assert open(expected_sourcefile_destination_path).read() == 'datum'
+    assert Path(existing_file_with_identical_name).is_file()
+    assert open(existing_file_with_identical_name).read() == 'DATA'
+    assert existing_file_mtime_pre_run == existing_file_mtime_post_run

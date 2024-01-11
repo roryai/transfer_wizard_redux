@@ -20,7 +20,7 @@ def test_creates_a_directory():
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
     filename = 'test_file.jpeg'
     source_filepath = create_file(source_directory, filename)
-    destination_directory = get_destination_directory(source_filepath)
+    destination_directory = static_destination_path(source_filepath)
     destination_filepath = destination_directory + filename
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)

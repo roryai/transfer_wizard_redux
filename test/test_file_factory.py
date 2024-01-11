@@ -17,10 +17,9 @@ def save_pre_copy_file_record(source_filepath):
 def test_a_file_is_built_and_saved():
     filename = 'a_file.jpeg'
     source_filepath = create_file(source_directory, filename)
-
+    destination_directory = static_destination_path(source_filepath)
     save_pre_copy_file_record(source_filepath)
 
-    destination_directory = get_destination_directory(source_filepath)
     file = instantiate_file_from_db_record()
 
     assert file.source_filepath == source_filepath
@@ -34,7 +33,7 @@ def test_a_file_is_built_and_saved():
 def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_has_same_name_and_different_size():
     filename = 'a_file.jpeg'
     source_filepath = create_file_with_data(source_directory, filename, 'original data')
-    destination_directory = get_destination_directory(source_filepath)
+    destination_directory = static_destination_path(source_filepath)
     create_file_with_data(destination_directory, filename, 'different data')
 
     save_pre_copy_file_record(source_filepath)
@@ -51,7 +50,7 @@ def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_h
 def test_duplicate_files_are_marked_as_having_no_destination_filepath_and_not_having_name_clash():
     filename = 'a_file.jpeg'
     source_filepath = create_file_with_data(source_directory, filename, 'same data')
-    destination_directory = get_destination_directory(source_filepath)
+    destination_directory = static_destination_path(source_filepath)
     create_file_with_data(destination_directory, filename, 'same data')
 
     save_pre_copy_file_record(source_filepath)

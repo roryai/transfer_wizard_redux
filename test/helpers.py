@@ -1,4 +1,3 @@
-from datetime import datetime
 import os
 from pathlib import Path
 import pytest
@@ -20,8 +19,8 @@ DBInitializer().init_test_database()
 Logger().init_log_file(logfile_directory)
 
 
-def file_instance(source_filepath=source_directory+'filename.jpg',
-                  destination_filepath=destination_root_directory+'filename.jpg',
+def file_instance(source_filepath=source_directory + 'filename.jpg',
+                  destination_filepath=destination_root_directory + 'filename.jpg',
                   size=1024, copied=None, name_clash=False, media=True):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
                 size=size, copied=copied, name_clash=name_clash, media=media)
@@ -92,26 +91,6 @@ def static_destination_path(source_filepath):
 
 def clear_database():
     FileGateway().wipe_database()
-
-
-def get_destination_directory(source_filepath):
-    return os.path.join(destination_root_directory, determine_year_and_quarter(source_filepath))
-
-
-def determine_year_and_quarter(filepath):
-    birthtime = datetime.fromtimestamp(os.stat(filepath).st_birthtime)
-    match birthtime.month:
-        case 1 | 2 | 3:
-            quarter = 'Q1'
-        case 4 | 5 | 6:
-            quarter = 'Q2'
-        case 7 | 8 | 9:
-            quarter = 'Q3'
-        case 10 | 11 | 12:
-            quarter = 'Q4'
-        case _:
-            raise TypeError
-    return f'{birthtime.year}/{quarter}/'
 
 
 def insert_db_record(file):

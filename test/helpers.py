@@ -7,7 +7,7 @@ import shutil
 from app.db_initializer import DBInitializer
 from app.file import File
 from app.file_gateway import FileGateway
-from app.logger import Logger
+from app.logger import Logger, LoggerMeta
 from app.scanner import VALID_PHOTO_EXTENSIONS, VALID_VIDEO_EXTENSIONS
 
 test_directory = str(Path(__file__).parent)
@@ -117,3 +117,8 @@ def determine_year_and_quarter(filepath):
 
 def insert_db_record(file):
     FileGateway().insert(file)
+
+
+def reset_logger():
+    LoggerMeta._instance = {}
+    Logger().init_log_file(logfile_directory)

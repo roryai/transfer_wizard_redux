@@ -20,7 +20,7 @@ class Logger(metaclass=LoggerMeta):
 
     def init_log_file(self, destination_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
-        suffix = 'media_transfer_logfile.txt'
+        suffix = '_media_transfer_logfile.txt'
         filename = timestamp + suffix
         log_file_path = os.path.join(destination_directory, filename)
 

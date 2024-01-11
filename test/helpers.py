@@ -35,6 +35,13 @@ def create_test_files(filename='test_file.jpeg', create_destination_file=False,
     return filename, source_filepath, destination_directory, destination_filepath
 
 
+def static_destination_path(source_filepath):
+    time_in_past = 1701639908  # 03/12/23
+    # setting mtime to before creation time sets both to that time
+    os.utime(source_filepath, (time_in_past, time_in_past))
+    return os.path.join(destination_root_directory, '2023/Q4/')
+
+
 def create_files_with_desired_extensions():
     for file_path in media_source_filepaths():
         open(file_path, 'x').close()
@@ -44,38 +51,6 @@ def create_files_without_desired_extensions():
     undesired_filenames = ["sales.zip", "sales.rar", "sales.bin"]
     for filename in undesired_filenames:
         create_file(source_directory, filename)
-
-
-def instantiate_file_from_db_record():
-    gateway = FileGateway()
-    assert gateway.count() == 1
-    return File.init_from_record(gateway.select_all()[0])
-
-
-def media_source_filepaths():
-    filepaths = []
-    media_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
-    for ext in media_exts:
-        filepaths.append(source_directory + 'a_file' + ext)
-    return sorted(filepaths)
-
-
-def clear_test_directories():
-    paths = [source_directory, destination_root_directory, logfile_directory]
-    for path in paths:
-        for root, dirs, files in os.walk(path):
-            for f in files:
-                os.unlink(os.path.join(root, f))
-            for d in dirs:
-                shutil.rmtree(os.path.join(root, d))
-
-
-def filenames_in(directory):
-    files = []
-    for (_, _, filenames) in os.walk(directory):
-        files.extend(filenames)
-        break
-    return sorted(files)
 
 
 def create_file_with_data(directory_path, filename, data=''):
@@ -91,19 +66,44 @@ def create_file(directory, filename):
     return create_file_with_data(directory, filename)
 
 
-def static_destination_path(source_filepath):
-    time_in_past = 1701639908  # 03/12/23
-    # setting mtime to before creation time sets both to that time
-    os.utime(source_filepath, (time_in_past, time_in_past))
-    return os.path.join(destination_root_directory, '2023/Q4/')
+def media_source_filepaths():
+    filepaths = []
+    media_exts = VALID_PHOTO_EXTENSIONS + VALID_VIDEO_EXTENSIONS
+    for ext in media_exts:
+        filepaths.append(source_directory + 'a_file' + ext)
+    return sorted(filepaths)
+
+
+def filenames_in(directory):
+    files = []
+    for (_, _, filenames) in os.walk(directory):
+        files.extend(filenames)
+        break
+    return sorted(files)
+
+
+def insert_db_record(file):
+    FileGateway().insert(file)
+
+
+def instantiate_file_from_db_record():
+    gateway = FileGateway()
+    assert gateway.count() == 1
+    return File.init_from_record(gateway.select_all()[0])
 
 
 def clear_database():
     FileGateway().wipe_database()
 
 
-def insert_db_record(file):
-    FileGateway().insert(file)
+def clear_test_directories():
+    paths = [source_directory, destination_root_directory, logfile_directory]
+    for path in paths:
+        for root, dirs, files in os.walk(path):
+            for f in files:
+                os.unlink(os.path.join(root, f))
+            for d in dirs:
+                shutil.rmtree(os.path.join(root, d))
 
 
 def reset_logger():

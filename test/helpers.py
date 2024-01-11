@@ -72,7 +72,7 @@ def filenames_in(directory):
 
 def create_file_with_data(directory_path, filename, data=''):
     Path(directory_path).mkdir(parents=True, exist_ok=True)
-    file_path = directory_path + filename
+    file_path = os.path.join(directory_path, filename)
     file = open(file_path, 'x')
     file.write(data)
     file.close()
@@ -87,7 +87,6 @@ def static_destination_path(source_filepath):
     time_in_past = 1701639908  # 03/12/23
     # setting mtime to before creation time sets both to that time
     os.utime(source_filepath, (time_in_past, time_in_past))
-    # destination directory path is now predictable
     return os.path.join(destination_root_directory, '2023/Q4/')
 
 

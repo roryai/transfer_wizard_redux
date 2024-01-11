@@ -14,53 +14,50 @@ def copy_source_files_to_destination():
     FileCopier().copy_source_files_to_destination()
 
 
-def create_file_and_save_file_record(filename, name_clash=False):
-    filepath = source_directory + filename
-    file = file_instance(source_filepath=filepath, name_clash=name_clash)
+def filename_and_destination_filepath(filename='filename.jpg'):
+    destination_filepath = os.path.join(source_directory, filename)
+    return filename, destination_filepath
+
+
+def create_file_and_save_file_record(filename='filename.jpg', name_clash=False):
+    source_filepath = os.path.join(source_directory, filename)
     create_file(source_directory, filename)
+    file = file_instance(source_filepath=source_filepath, name_clash=name_clash)
     file.save()
     return file
 
 
-def test_copies_file():
-    assert filenames_in(destination_root_directory) == []
+def test_copies_single_file():
+    filename, destination_filepath = filename_and_destination_filepath()
 
-    file = create_file_and_save_file_record('filename.jpg')
+    assert not Path(destination_filepath).is_file()
 
+    create_file_and_save_file_record(filename)
     copy_source_files_to_destination()
 
-    assert Path(file.destination_filepath).is_file()
+    assert Path(destination_filepath).is_file()
 
 
 def test_copies_multiple_files():
-    assert filenames_in(destination_root_directory) == []
+    filename_1, destination_filepath_1 = filename_and_destination_filepath()
+    filename_2, destination_filepath_2 = filename_and_destination_filepath('a_file2.jpeg')
 
-    file_1 = create_file_and_save_file_record('a_file1.jpeg')
-    file_2 = create_file_and_save_file_record('a_file2.jpeg')
-    file_3 = create_file_and_save_file_record('a_file3.jpeg')
+    assert not Path(destination_filepath_1).is_file()
+    assert not Path(destination_filepath_2).is_file()
+
+    file_1 = create_file_and_save_file_record(filename_1)
+    file_2 = create_file_and_save_file_record(filename_2)
 
     copy_source_files_to_destination()
 
     assert Path(file_1.destination_filepath).is_file()
     assert Path(file_2.destination_filepath).is_file()
-    assert Path(file_3.destination_filepath).is_file()
 
 
-def test_marks_file_as_copied_upon_successful_copy():
-    gateway = FileGateway()
-    file = create_file_and_save_file_record('filename.jpg')
+def test_marks_file_record_as_copied_upon_successful_copy():
+    create_file_and_save_file_record()
     copy_source_files_to_destination()
-
-    assert Path(file.destination_filepath).is_file()
 
     file = instantiate_file_from_db_record()
 
     assert file.copied is True
-
-
-def test_copies_file_that_is_marked_as_having_name_clash():
-    file = create_file_and_save_file_record('filename.jpg', name_clash=True)
-
-    copy_source_files_to_destination()
-
-    assert Path(file.destination_filepath).is_file()

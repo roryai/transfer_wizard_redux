@@ -54,14 +54,6 @@ def create_file(directory, filename):
     return create_file_with_data(directory, filename)
 
 
-def filenames_in(directory):
-    files = []
-    for (_, _, filenames) in os.walk(directory):
-        files.extend(filenames)
-        break
-    return sorted(files)
-
-
 def insert_db_record(file):
     FileGateway().insert(file)
 

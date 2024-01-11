@@ -16,8 +16,8 @@ def save_pre_copy_file_record(source_filepath):
 
 def test_a_file_is_built_and_saved():
     source_data = 'this_string_is_23_bytes'
-    filename, source_filepath, destination_directory = create_test_files(
-        source_data=source_data, create_dest_file=False)
+    filename, source_filepath, destination_directory, _ = create_test_files(
+        source_data=source_data)
 
     save_pre_copy_file_record(source_filepath)
 
@@ -32,8 +32,8 @@ def test_a_file_is_built_and_saved():
 
 
 def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_has_same_name_and_different_size():
-    _, source_filepath, destination_directory = create_test_files(
-        source_data='original data', dest_data='different data')
+    _, source_filepath, destination_directory, _ = create_test_files(
+        source_data='original data', dest_data='different data', create_destination_file=True)
 
     save_pre_copy_file_record(source_filepath)
 
@@ -48,8 +48,8 @@ def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_h
 
 def test_duplicate_files_are_marked_as_having_no_destination_filepath_and_not_having_name_clash():
     data = 'same data'
-    _, source_filepath, destination_directory = create_test_files(
-        source_data=data, dest_data=data)
+    _, source_filepath, destination_directory, _ = create_test_files(
+        source_data=data, dest_data=data, create_destination_file=True)
 
     save_pre_copy_file_record(source_filepath)
 

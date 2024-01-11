@@ -1,10 +1,14 @@
+from datetime import datetime
 from .helpers import *
+
+from app.logger import LoggerMeta
 
 
 @pytest.fixture(autouse=True)
 def teardown():
+    LoggerMeta._instance = {}
+    Logger().init_log_file(logfile_directory)
     yield
-    reset_logger()
     clear_test_directories()
 
 
@@ -20,8 +24,6 @@ destination_filepath = '/destination' + source_file_path
 
 
 def test_init_log_file_creates_file():
-    Logger().init_log_file(logfile_directory)
-
     assert os.path.exists(Logger().log_file_path)
 
     timestamp_format = '%Y-%m-%d-%H%M.%S'

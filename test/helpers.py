@@ -6,7 +6,7 @@ import shutil
 from app.db_initializer import DBInitializer
 from app.file import File
 from app.file_gateway import FileGateway
-from app.logger import Logger, LoggerMeta
+from app.logger import Logger
 
 test_directory = str(Path(__file__).parent)
 test_media_directory = test_directory + '/media/'
@@ -84,8 +84,3 @@ def clear_test_directories():
                 os.unlink(os.path.join(root, f))
             for d in dirs:
                 shutil.rmtree(os.path.join(root, d))
-
-
-def reset_logger():
-    LoggerMeta._instance = {}
-    Logger().init_log_file(logfile_directory)

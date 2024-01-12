@@ -16,7 +16,7 @@ def save_pre_copy_file_record(source_filepath):
 
 def test_a_file_is_built_and_saved():
     source_data = 'this_string_is_23_bytes'
-    filename, source_filepath, destination_directory, destination_filepath = create_test_files(
+    _, source_filepath, _, destination_filepath = create_test_files(
         source_data=source_data)
 
     save_pre_copy_file_record(source_filepath)

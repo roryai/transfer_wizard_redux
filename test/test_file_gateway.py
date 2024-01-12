@@ -18,6 +18,19 @@ def test_can_read_and_write_file(file):
     assert file == retrieved_file
 
 
+def test_deletes_file(file, file_2):
+    gateway.insert(file)
+    gateway.insert(file_2)
+
+    assert gateway.count() == 2
+
+    gateway.delete(file.source_filepath)
+    retrieved_file = instantiate_file_from_db_record(file_2.source_filepath)
+
+    assert gateway.count() == 1
+    assert file_2 == retrieved_file
+
+
 def test_sums_size_of_all_files(file, file_2):
     gateway.insert(file)
     gateway.insert(file_2)

@@ -60,6 +60,13 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0]
 
+    def delete(self, source_filepath):
+        statement = f"""
+            DELETE FROM files
+            WHERE source_filepath = '{source_filepath}';
+        """
+        return self.db_controller.execute_query(statement, [])
+
     def select_one_where_copy_not_attempted(self):
         statement = """
             SELECT *

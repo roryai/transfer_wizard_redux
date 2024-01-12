@@ -11,8 +11,11 @@ class FileRecord:
             'source_filepath': record[1],
             'destination_filepath': record[2],
             'size': record[3],
-            'copied': record[4],
-            'name_clash': record[5],
-            'media': record[6],
-            'copy_attempted': record[7]
+            'copied': self.__convert_boolean(record[4]),
+            'name_clash': self.__convert_boolean(record[5]),
+            'media': self.__convert_boolean(record[6]),
+            'copy_attempted': self.__convert_boolean(record[7])
         }
+
+    def __convert_boolean(self, val):
+        return val == 1

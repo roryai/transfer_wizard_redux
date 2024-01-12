@@ -39,8 +39,8 @@ class File:
             source_filepath=vals['source_filepath'],
             destination_filepath=vals['destination_filepath'],
             size=vals['size'],
-            copied=True if vals['copied'] == 1 else False,
-            name_clash=True if vals['name_clash'] == 1 else False,
-            media=True if vals['media'] == 1 else False,
-            copy_attempted=True if vals['copy_attempted'] == 1 else False
+            copied=vals['copied'],
+            name_clash=vals['name_clash'],
+            media=vals['media'],
+            copy_attempted=vals['copy_attempted']
         )

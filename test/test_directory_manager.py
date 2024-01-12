@@ -10,7 +10,7 @@ def teardown():
 
 
 def test_creates_a_directory():
-    destination_directory = destination_root_directory + '2023'
+    destination_directory = construct_path(destination_root_directory, '2023')
     assert not Path(destination_directory).is_dir()
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)

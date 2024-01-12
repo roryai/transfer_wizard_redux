@@ -14,13 +14,13 @@ def copy_source_files_to_destination():
     FileCopier().copy_source_files_to_destination()
 
 
-def filename_and_destination_filepath(filename='filename.jpg'):
-    destination_filepath = os.path.join(source_directory, filename)
+def filename_and_destination_filepath(filename='filename.jpeg'):
+    destination_filepath = construct_path(source_directory, filename)
     return filename, destination_filepath
 
 
-def create_file_and_save_file_record(filename='filename.jpg', name_clash=False):
-    source_filepath = os.path.join(source_directory, filename)
+def create_file_and_save_file_record(filename='filename.jpeg', name_clash=False):
+    source_filepath = construct_path(source_directory, filename)
     create_file(source_directory, filename)
     file = file_instance(source_filepath=source_filepath, name_clash=name_clash)
     file.save()

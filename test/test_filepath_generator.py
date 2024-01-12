@@ -18,7 +18,7 @@ def test_generates_path_including_year_and_quarter():
     filename, source_filepath, destination_directory, _ = create_test_files()
 
     generated_destination_path = run_test_class(source_filepath, destination_root_directory)
-    expected_destination_path = os.path.join(destination_directory, filename)
+    expected_destination_path = construct_path(destination_directory, filename)
 
     assert generated_destination_path == expected_destination_path
 
@@ -28,7 +28,7 @@ def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():
         create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath, destination_root_directory)
-    expected_destination_path = os.path.join(destination_directory, Path(filename).stem + '___1.jpeg')
+    expected_destination_path = construct_path(destination_directory, Path(filename).stem + '___1.jpeg')
 
     assert generated_destination_path == expected_destination_path
 
@@ -38,7 +38,7 @@ def test_increments_number_suffix_if_name_clashes_with_file_that_already_has_suf
         filename='a_file___1.jpeg', create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath, destination_root_directory)
-    expected_destination_path = os.path.join(destination_directory, 'a_file___2.jpeg')
+    expected_destination_path = construct_path(destination_directory, 'a_file___2.jpeg')
 
     assert generated_destination_path == expected_destination_path
 

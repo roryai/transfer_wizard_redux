@@ -24,14 +24,20 @@ class FileCopier:
     def __copy_file(self, file):
         shutil.copy2(file.source_filepath, file.destination_filepath)
         if self.__file_copied(file):
-            file.copied = True
-            file.copy_attempted = True
-            Logger().log_successful_copy(file.source_filepath, file.destination_filepath)
+            self.__set_copy_success_and_log(file)
         else:
-            file.copied = False
-            file.copy_attempted = True
-            Logger().log_unsuccessful_copy(file.source_filepath, file.destination_filepath)
+            self.__set_copy_failure_and_log(file)
         self.file_gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
+
+    def __set_copy_failure_and_log(self, file):
+        file.copied = False
+        file.copy_attempted = True
+        Logger().log_unsuccessful_copy(file.source_filepath, file.destination_filepath)
+
+    def __set_copy_success_and_log(self, file):
+        file.copied = True
+        file.copy_attempted = True
+        Logger().log_successful_copy(file.source_filepath, file.destination_filepath)
 
     def __file_copied(self, file):
         return Path(file.destination_filepath).is_file()

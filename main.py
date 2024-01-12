@@ -28,7 +28,7 @@ if __name__ == '__main__':
         DirectoryManager().check_if_directory_exists(args.source)
         DirectoryManager().check_if_directory_exists(args.destination)
         Logger().init_log_file(args.destination)
-        AppController(destination_directory=args.destination,
+        AppController(destination_root_directory=args.destination,
                       source_directory=args.source).copy_files_from_source_to_destination()
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \

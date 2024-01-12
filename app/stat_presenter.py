@@ -4,9 +4,9 @@ from app.logger import Logger
 
 class StatPresenter:
 
-    def __init__(self, source_directory, destination_directory):
+    def __init__(self, source_directory, destination_root_directory):
         self.source_directory = source_directory
-        self.destination_directory = destination_directory
+        self.destination_root_directory = destination_root_directory
         self.file_gateway = FileGateway()
         self.candidate_file_count = self.__candidate_file_count()
         self.duplicate_file_count = self.__duplicate_file_count()
@@ -31,7 +31,7 @@ class StatPresenter:
 
     def __destination_and_source_path_info(self):
         source = f'Source directory: {self.source_directory}'
-        destination = f'Destination directory: {self.destination_directory}'
+        destination = f'Destination root directory: {self.destination_root_directory}'
         return f'{source}\n{destination}\n'
 
     def __candidate_files_info(self):

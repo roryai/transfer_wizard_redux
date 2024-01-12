@@ -6,13 +6,13 @@ from app.filepath_generator import FilepathGenerator
 
 class FileFactory:
 
-    def __init__(self, source_filepath, destination_directory):
+    def __init__(self, source_filepath, destination_root_directory):
         self.source_filepath = source_filepath
-        self.destination_directory = destination_directory
+        self.destination_root_directory = destination_root_directory
 
     def save_pre_copy_file_record(self, media=True):  # TODO remove default val when adding misc file functionality
         destination_filepath = FilepathGenerator(
-            self.source_filepath, self.destination_directory).generate_destination_filepath()
+            self.source_filepath, self.destination_root_directory).generate_destination_filepath()
         size = Path(self.source_filepath).stat().st_size
         name_clash = self.__name_clash(self.source_filepath, destination_filepath)
         File(source_filepath=self.source_filepath,

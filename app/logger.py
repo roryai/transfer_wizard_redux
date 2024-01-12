@@ -18,11 +18,11 @@ class Logger(metaclass=LoggerMeta):
         self.error_messages = []
         self.combined_error_messages = ''
 
-    def init_log_file(self, destination_directory):
+    def init_log_file(self, destination_root_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
         suffix = '_media_transfer_logfile.txt'
         filename = timestamp + suffix
-        log_file_path = os.path.join(destination_directory, filename)
+        log_file_path = os.path.join(destination_root_directory, filename)
 
         with open(log_file_path, 'w'):
             pass

@@ -10,7 +10,7 @@ def teardown():
 
 
 def copy_files():
-    AppController(destination_directory=destination_root_directory,
+    AppController(destination_root_directory=destination_root_directory,
                   source_directory=source_directory).copy_files_from_source_to_destination()
 
 

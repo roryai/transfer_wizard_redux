@@ -34,7 +34,7 @@ class DBInitializer:
                  source_filepath TEXT NOT NULL UNIQUE,
                  destination_filepath TEXT UNIQUE,
                  size INTEGER NOT NULL,
-                 copied BOOLEAN,
+                 copied BOOLEAN NOT NULL,
                  name_clash BOOLEAN,
                  media BOOLEAN NOT NULL,
                  copy_attempted BOOLEAN NOT NULL

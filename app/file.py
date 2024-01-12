@@ -39,14 +39,8 @@ class File:
             source_filepath=vals['source_filepath'],
             destination_filepath=vals['destination_filepath'],
             size=vals['size'],
-            copied=cls.__set_copied(vals['copied']),  # TODO sort this
+            copied=True if vals['copied'] == 1 else False,
             name_clash=True if vals['name_clash'] == 1 else False,
             media=True if vals['media'] == 1 else False,
             copy_attempted=True if vals['copy_attempted'] == 1 else False
         )
-
-    @classmethod
-    def __set_copied(cls, record_val):
-        if record_val is None:
-            return None
-        return True if record_val == 1 else False

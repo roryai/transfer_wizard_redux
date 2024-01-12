@@ -27,7 +27,7 @@ def test_a_file_is_built_and_saved():
     assert file.destination_filepath == destination_filepath
     assert file.size == 23
     assert file.name_clash is False
-    assert file.copied is None  # TODO this will be represented differently
+    assert file.copied is False
     assert file.media is True
 
 
@@ -58,3 +58,15 @@ def test_duplicate_files_are_marked_as_having_no_destination_filepath_and_not_ha
     assert file.source_filepath == source_filepath
     assert file.name_clash is False
     assert file.destination_filepath is None
+
+
+def test_denotes_copy_not_yet_attempted_by_setting_copied_and_copy_attempted_to_false():
+    _, source_filepath, _, _ = create_test_files()
+
+    save_pre_copy_file_record(source_filepath)
+
+    file = instantiate_file_from_db_record()
+
+    assert file.source_filepath == source_filepath
+    assert file.copied is False
+    assert file.copy_attempted is False

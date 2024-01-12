@@ -3,24 +3,44 @@ from test.helpers import *
 
 @pytest.fixture
 def file():
-    return file_instance(source_filepath='/source/file1.jpg', destination_filepath='/destination/file1.jpg')
+    return file_instance(source_filepath='/source/file1.jpg',
+                         destination_filepath='/destination/file1.jpg',
+                         size=11)
 
 
 @pytest.fixture
 def file_2():
-    return file_instance(source_filepath='/source/file2.jpg', destination_filepath='/destination/file2.jpg')
+    return file_instance(source_filepath='/source/file2.jpg',
+                         destination_filepath='/destination/file2.jpg',
+                         size=5)
+
+
+@pytest.fixture
+def uncopied_file():
+    return file_instance(source_filepath='/source/file1.jpg',
+                         destination_filepath='/destination/file1.jpg',
+                         copied=False, copy_attempted=False, size=3)
+
+
+@pytest.fixture
+def uncopied_file_2():
+    return file_instance(source_filepath='/source/file2.jpg',
+                         destination_filepath='/destination/file2.jpg',
+                         copied=False, copy_attempted=False, size=5)
 
 
 @pytest.fixture
 def copied_file():
     return file_instance(source_filepath='/source/copied_file',
-                         destination_filepath='/destination/copied_file')
+                         destination_filepath='/destination/copied_file',
+                         copied=True, copy_attempted=True)
 
 
 @pytest.fixture
 def file_with_copy_error():
     return file_instance(source_filepath='/source/file_with_copy_error',
-                         destination_filepath='/destination/file_with_copy_error')
+                         destination_filepath='/destination/file_with_copy_error',
+                         copied=False, copy_attempted=True)
 
 
 @pytest.fixture
@@ -37,22 +57,9 @@ def duplicate_file():
 
 
 @pytest.fixture
-def to_be_copied_1():
-    return file_instance(source_filepath='/source/copy_candidate',
-                         destination_filepath='/destination/copy_candidate',
-                         size=1024)
-
-
-@pytest.fixture
-def to_be_copied_2():
-    return file_instance(source_filepath='/source/copy_candidate2',
-                         destination_filepath='/destination/copy_candidate2', size=2048)
-
-
-@pytest.fixture
 def not_to_copy():
     return file_instance(source_filepath='/source/file_with_copy_error',
-                         destination_filepath=None, size=10)
+                         destination_filepath=None, size=7)
 
 
 @pytest.fixture

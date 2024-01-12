@@ -22,7 +22,7 @@ def test_sums_size_of_all_files(file, file_2):
     gateway.insert(file)
     gateway.insert(file_2)
 
-    assert gateway.sum_size() == 2048
+    assert gateway.sum_size() == 16
 
 
 def test_counts_file_rows(file, file_2):
@@ -60,42 +60,28 @@ def test_destination_filepath_must_be_unique(
     assert gateway.count() == 1
 
 
-def test_updates_copied_field_to_true(file):
+def test_updates_copied_and_copy_attempted_fields_to_denote_copy_success(file):
     gateway.insert(file)
-
-    file = instantiate_file_from_db_record()
-
-    assert file.copied is None
-
     file.copied = True
+    file.copy_attempted = True
     gateway.update_copied(file)
 
     file = instantiate_file_from_db_record()
 
     assert file.copied is True
+    assert file.copy_attempted is True
 
 
-def test_updates_copied_field_to_false(file):
+def test_updates_copied_and_copy_attempted_fields_to_denote_copy_failure(file):
     gateway.insert(file)
-
-    file = instantiate_file_from_db_record()
-
-    assert file.copied is None
-
     file.copied = False
+    file.copy_attempted = True
     gateway.update_copied(file)
 
     file = instantiate_file_from_db_record()
 
     assert file.copied is False
-
-
-def test_default_copied_value_is_null(file):  # TODO delete this when updating copied field to non null
-    gateway.insert(file)
-
-    record = gateway.select_all()[0]
-
-    assert record[4] is None
+    assert file.copy_attempted is True
 
 
 def test_counts_duplicate_files(duplicate_file):
@@ -110,47 +96,22 @@ def test_counts_name_clashes(file_with_name_clash):
     assert gateway.name_clash_count() == 1
 
 
-def test_selects_uncopied_file_with_no_name_clash_for_copying(
-        copied_file, file_with_copy_error, file, duplicate_file):
-    for f in [copied_file, file_with_copy_error, file, duplicate_file]:
+def test_selects_file_where_copy_not_attempted(
+        copied_file, file_with_copy_error, uncopied_file, duplicate_file):
+    for f in [copied_file, file_with_copy_error, uncopied_file, duplicate_file]:
         gateway.insert(f)
 
-    copied_file.copied = True
-    file_with_copy_error.copied = False
-    for f in [copied_file, file_with_copy_error]:
-        gateway.update_copied(f)
+    record = gateway.select_one_file_where_copy_not_attempted()
+    selected_file = File.init_from_record(record)
 
-    selected_file = File.init_from_record(gateway.select_one_file_where_copy_not_attempted())
+    assert selected_file == uncopied_file
 
-    assert selected_file == file
-
-    file.copied = True
-    gateway.update_copied(file)
+    # confirm that it was just one record that met the criteria by denoting copy success
+    uncopied_file.copied = True
+    uncopied_file.copy_attempted = True
+    gateway.update_copied(uncopied_file)
     selected_record = gateway.select_one_file_where_copy_not_attempted()
 
-    # confirm that it was just one record that met the criteria
-    assert selected_record is None
-
-
-def test_selects_uncopied_file_with_name_clash_for_copying(
-        copied_file, file_with_copy_error, file_with_name_clash, duplicate_file):
-    for f in [copied_file, file_with_copy_error, file_with_name_clash, duplicate_file]:
-        gateway.insert(f)
-
-    copied_file.copied = True
-    file_with_copy_error.copied = False
-    for f in [copied_file, file_with_copy_error]:
-        gateway.update_copied(f)
-
-    selected_file = File.init_from_record(gateway.select_one_file_where_copy_not_attempted())
-
-    assert selected_file == file_with_name_clash
-
-    file_with_name_clash.copied = True
-    gateway.update_copied(file_with_name_clash)
-    selected_record = gateway.select_one_file_where_copy_not_attempted()
-
-    # confirm that it was just one record that met the criteria
     assert selected_record is None
 
 
@@ -158,10 +119,6 @@ def test_when_attempting_to_select_uncopied_file_it_returns_none_when_no_valid_r
         copied_file, file_with_copy_error):
     gateway.insert(copied_file)
     gateway.insert(file_with_copy_error)
-    copied_file.copied = True
-    file_with_copy_error.copied = False
-    for f in [copied_file, file_with_copy_error]:
-        gateway.update_copied(f)
 
     record = gateway.select_one_file_where_copy_not_attempted()
 
@@ -169,11 +126,11 @@ def test_when_attempting_to_select_uncopied_file_it_returns_none_when_no_valid_r
 
 
 def test_sums_size_of_files_that_are_valid_candidates_for_copying(
-        to_be_copied_1, to_be_copied_2, not_to_copy):
-    for f in [to_be_copied_1, to_be_copied_2, not_to_copy]:
+        uncopied_file, uncopied_file_2, not_to_copy):
+    for f in [uncopied_file, uncopied_file_2, not_to_copy]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_files_to_be_copied()
-    size_of_files_to_be_copied = to_be_copied_1.size + to_be_copied_2.size
+    size_of_files_to_be_copied = uncopied_file.size + uncopied_file_2.size
 
     assert sum_of_file_sizes == size_of_files_to_be_copied

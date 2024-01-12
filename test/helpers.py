@@ -27,7 +27,7 @@ Logger().init_log_file(logfile_directory)
 
 def file_instance(source_filepath=default_source_filepath,
                   destination_filepath=default_destination_filepath,
-                  size=1024, copied=None, name_clash=False, media=True,
+                  size=1024, copied=False, name_clash=False, media=True,
                   copy_attempted=False):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
                 size=size, copied=copied, name_clash=name_clash, media=media,

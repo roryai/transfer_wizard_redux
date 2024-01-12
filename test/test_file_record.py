@@ -20,7 +20,7 @@ def test_inserts_and_maps_a_file():
     assert result['destination_filepath'] == default_destination_filepath
     assert result['size'] == 1024
     assert result['name_clash'] is 0
-    assert result['copied'] is None
+    assert result['copied'] is 0
     assert result['media'] is 1
     assert result['copy_attempted'] is 0
     assert len(result) == 7

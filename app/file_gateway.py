@@ -9,12 +9,12 @@ class FileGateway:
     def insert(self, file):
         statement = """
             INSERT INTO
-                files (source_filepath, destination_filepath, size, name_clash, media, copy_attempted)
+                files (source_filepath, destination_filepath, size, copied, name_clash, media, copy_attempted)
             VALUES
-                (?, ?, ?, ?, ?, ?);
+                (?, ?, ?, ?, ?, ?, ?);
         """
         values = [file.source_filepath, file.destination_filepath, file.size,
-                  file.name_clash, file.media, file.copy_attempted]
+                  file.copied, file.name_clash, file.media, file.copy_attempted]
         return self.db_controller.execute_query(statement, values)
 
     def update_copied(self, file):
@@ -22,7 +22,8 @@ class FileGateway:
         statement = f"""
             UPDATE files
             SET 
-                copied = {file.copied}
+                copied = {file.copied},
+                copy_attempted = {file.copy_attempted}
             WHERE
                 source_filepath = '{file.source_filepath}'
                 AND size = '{file.size}'
@@ -40,7 +41,9 @@ class FileGateway:
         statement = """
             SELECT SUM(size)
             FROM files
-            WHERE destination_filepath IS NOT NULL;
+            WHERE destination_filepath IS NOT NULL
+            AND copied == '0'
+            AND copy_attempted == '0';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
@@ -59,11 +62,11 @@ class FileGateway:
         return self.db_controller.execute_read_query(statement)
 
     def select_one_file_where_copy_not_attempted(self):
-        # TODO change copied IS NULL to is false after copy set to not null. Keep destination_filepath IS NOT NULL
         statement = """
             SELECT *
             FROM files
-            WHERE copied IS NULL
+            WHERE copied == '0'
+            AND copy_attempted == '0'
             AND destination_filepath IS NOT NULL
             LIMIT 1;
         """

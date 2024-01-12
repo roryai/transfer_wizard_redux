@@ -19,7 +19,7 @@ class FileFactory:
              destination_filepath=destination_filepath,
              size=size,
              name_clash=name_clash,
-             copied=None,  # TODO set to false after making column not null
+             copied=False,
              media=media,
              copy_attempted=False).save()
 

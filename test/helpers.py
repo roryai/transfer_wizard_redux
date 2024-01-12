@@ -48,17 +48,16 @@ def static_destination_path(source_filepath):
     return construct_path(destination_root_directory, '2023/Q4/')
 
 
+def create_file(directory, filename):
+    return create_file_with_data(directory, filename)
+
+
 def create_file_with_data(directory_path, filename, data=''):
     Path(directory_path).mkdir(parents=True, exist_ok=True)
     file_path = construct_path(directory_path, filename)
-    file = open(file_path, 'x')
-    file.write(data)
-    file.close()
+    with open(file_path, 'x') as file:
+        file.write(data)
     return file_path
-
-
-def create_file(directory, filename):
-    return create_file_with_data(directory, filename)
 
 
 def insert_db_record(file):

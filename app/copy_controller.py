@@ -11,14 +11,13 @@ class CopyController:
     def __init__(self, destination_root_directory, source_root_directory):
         self.source_root_directory = source_root_directory
         self.destination_root_directory = destination_root_directory
-        self.stat_presenter = StatPresenter(source_root_directory, destination_root_directory)
 
     def copy_media_files(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied(self.destination_root_directory)
-        self.stat_presenter.print_stats_summary()
+        stats = StatPresenter(self.source_root_directory, self.destination_root_directory).print_stats_summary()
         if self.__user_confirms_copy():
-            self.__perform_copy()
+            self.__perform_copy(stats)
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_root_directory):
@@ -31,9 +30,9 @@ class CopyController:
         if input() == 'y':
             return True
 
-    def __perform_copy(self):
+    def __perform_copy(self, stats):
         Logger().init_log_file(self.destination_root_directory)
-        self.stat_presenter.log_pre_copy_stats()
+        Logger().log_to_file(stats)
         FileCopier().copy_source_files_to_destination()
         self.__display_errors()
 

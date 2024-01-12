@@ -1,5 +1,4 @@
 from app.file_gateway import FileGateway
-from app.logger import Logger
 
 
 class StatPresenter:
@@ -16,9 +15,7 @@ class StatPresenter:
 
     def print_stats_summary(self):
         print(self.stats_summary)
-
-    def log_pre_copy_stats(self):
-        Logger().log_to_file(self.stats_summary)
+        return self.stats_summary
 
     def __build_stats_summary(self):
         return '\n'.join([

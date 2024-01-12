@@ -4,7 +4,6 @@ from app.app_controller import AppController
 from app.db_initializer import DBInitializer
 from app.directory_manager import DirectoryManager
 from app.extension_scanner import ExtensionScanner
-from app.logger import Logger
 
 if __name__ == '__main__':
     program_description = """This program copies media files to an organised directory structure.
@@ -27,7 +26,6 @@ if __name__ == '__main__':
     elif args.destination:
         DirectoryManager().check_if_directory_exists(args.source)
         DirectoryManager().check_if_directory_exists(args.destination)
-        Logger().init_log_file(args.destination)
         AppController(destination_root_directory=args.destination,
                       source_root_directory=args.source).copy_files_from_source_to_destination()
     else:

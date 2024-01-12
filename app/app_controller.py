@@ -18,6 +18,7 @@ class AppController:
         self.__create_db_records_for_files_to_be_copied(self.destination_root_directory)
         self.stat_presenter.print_stats_summary()
         if self.__user_confirms_copy():
+            Logger().init_log_file(self.destination_root_directory)
             self.stat_presenter.log_pre_copy_stats()
             FileCopier().copy_source_files_to_destination()
             self.__display_errors()

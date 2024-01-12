@@ -16,7 +16,7 @@ def save_pre_copy_file_record(source_filepath):
 
 def test_a_file_is_built_and_saved():
     source_data = 'this_string_is_23_bytes'
-    filename, source_filepath, destination_directory, _ = create_test_files(
+    filename, source_filepath, destination_directory, destination_filepath = create_test_files(
         source_data=source_data)
 
     save_pre_copy_file_record(source_filepath)
@@ -24,7 +24,7 @@ def test_a_file_is_built_and_saved():
     file = instantiate_file_from_db_record()
 
     assert file.source_filepath == source_filepath
-    assert file.destination_filepath == destination_directory + filename
+    assert file.destination_filepath == destination_filepath
     assert file.size == 23
     assert file.name_clash is False
     assert file.copied is None

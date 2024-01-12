@@ -62,22 +62,32 @@ def test_destination_filepath_must_be_unique(
 
 def test_updates_copied_field_to_true(file):
     gateway.insert(file)
+
+    file = instantiate_file_from_db_record()
+
+    assert file.copied is None
+
     file.copied = True
     gateway.update_copied(file)
 
-    record = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record()
 
-    assert record.copied is True
+    assert file.copied is True
 
 
 def test_updates_copied_field_to_false(file):
     gateway.insert(file)
+
+    file = instantiate_file_from_db_record()
+
+    assert file.copied is None
+
     file.copied = False
     gateway.update_copied(file)
 
-    record = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record()
 
-    assert record.copied is False
+    assert file.copied is False
 
 
 def test_default_copied_value_is_null(file):  # TODO delete this when updating copied field to non null

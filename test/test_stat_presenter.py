@@ -1,19 +1,7 @@
 from app.stat_presenter import StatPresenter
+from test.fixtures.stat_presenter_fixtures import *
 
 from .helpers import *
-
-simple_file_1 = file_instance(source_filepath='source/simple_file_1',
-                              destination_filepath='destination/simple_file_1', size=102400, name_clash=False)
-simple_file_2 = file_instance(source_filepath='source/simple_file_2',
-                              destination_filepath='destination/simple_file_2', size=3276800, name_clash=False)
-duplicate_file_1 = file_instance(source_filepath='source/duplicate_file_1',
-                                 destination_filepath=None, size=204800, name_clash=False)
-duplicate_file_2 = file_instance(source_filepath='source/duplicate_file_2',
-                                 destination_filepath=None, size=819200, name_clash=False)
-name_clash_file_1 = file_instance(source_filepath='source/name_clash_file_1',
-                                  destination_filepath='destination/name_clash_file_1', size=1638400, name_clash=True)
-name_clash_file_2 = file_instance(source_filepath='source/name_clash_file_2',
-                                  destination_filepath='destination/name_clash_file_2', size=409600, name_clash=True)
 
 
 @pytest.fixture(autouse=True)
@@ -21,13 +9,15 @@ def teardown():
     yield
     clear_test_directories()
     clear_database()
-    
-    
+
+
 def present_stats():
     return StatPresenter('source/', 'destination/').print_stats_summary()
 
 
-def test_plural_grammar_for_all_file_categories(capsys):
+def test_plural_grammar_for_all_file_categories(capsys, simple_file_1, simple_file_2,
+                                                duplicate_file_1, duplicate_file_2,
+                                                name_clash_file_1, name_clash_file_2):
     expected_output = """Source directory: source/
 Destination directory: destination/
 
@@ -48,7 +38,7 @@ Total size of files to be copied: 5.18MB\n"""
     assert captured.out == expected_output
 
 
-def test_singular_grammar_for_duplicate_and_name_clash_files(capsys):
+def test_singular_grammar_for_duplicate_and_name_clash_files(capsys, duplicate_file_1, name_clash_file_1):
     expected_output = """Source directory: source/
 Destination directory: destination/
 
@@ -69,7 +59,7 @@ Total size of file to be copied: 1.56MB\n"""
     assert captured.out == expected_output
 
 
-def test_singular_grammar_for_candidate_files_and_files_to_be_copied(capsys):
+def test_singular_grammar_for_candidate_files_and_files_to_be_copied(capsys, simple_file_1):
     expected_output = """Source directory: source/
 Destination directory: destination/
 
@@ -86,7 +76,8 @@ Total size of file to be copied: 0.1MB\n"""
     assert captured.out == expected_output
 
 
-def test_does_not_display_name_clash_or_duplicate_info_when_no_files_in_these_categories_are_present(capsys):
+def test_does_not_display_name_clash_or_duplicate_info_when_no_files_in_these_categories_are_present(
+        capsys, simple_file_1, simple_file_2):
     expected_output = """Source directory: source/
 Destination directory: destination/
 

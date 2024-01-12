@@ -8,15 +8,28 @@ gateway = FileGateway()
 def teardown():
     yield
     clear_database()
+    clear_test_directories()
 
 
-def test_inserted_and_retrieved_files_are_identical():
+def test_files_can_be_compared():
     file = file_instance()
-    file.save()
+    file_2 = file_instance()
+
+    assert file == file_2
+
+
+def test_file_instantiated_from_db_has_expected_attributes():
+    file_instance().save()
 
     retrieved_file = instantiate_file_from_db_record()
 
-    assert file == retrieved_file
+    assert retrieved_file.source_filepath == default_source_filepath
+    assert retrieved_file.destination_filepath == default_destination_filepath
+    assert retrieved_file.size == 1024
+    assert retrieved_file.name_clash is False
+    assert retrieved_file.copied is None
+    assert retrieved_file.media is True
+    assert len(retrieved_file.__dict__) == 6
 
 
 def test_determines_file_directory():

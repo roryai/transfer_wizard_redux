@@ -56,6 +56,11 @@ def test_copies_multiple_files():
 
 def test_marks_file_record_as_copied_upon_successful_copy():
     create_file_and_save_file_record()
+
+    file = instantiate_file_from_db_record()
+
+    assert file.copied is None
+
     copy_source_files_to_destination()
 
     file = instantiate_file_from_db_record()

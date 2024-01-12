@@ -6,22 +6,19 @@ from app.file_copier import FileCopier
 from app.logger import Logger
 
 
-class AppController:
+class CopyController:
 
     def __init__(self, destination_root_directory, source_root_directory):
         self.source_root_directory = source_root_directory
         self.destination_root_directory = destination_root_directory
         self.stat_presenter = StatPresenter(source_root_directory, destination_root_directory)
 
-    def copy_files_from_source_to_destination(self):
+    def copy_media_files(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied(self.destination_root_directory)
         self.stat_presenter.print_stats_summary()
         if self.__user_confirms_copy():
-            Logger().init_log_file(self.destination_root_directory)
-            self.stat_presenter.log_pre_copy_stats()
-            FileCopier().copy_source_files_to_destination()
-            self.__display_errors()
+            self.__perform_copy()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_root_directory):
@@ -33,6 +30,12 @@ class AppController:
         print(f'\nProceed with copy? ( y / n )')
         if input() == 'y':
             return True
+
+    def __perform_copy(self):
+        Logger().init_log_file(self.destination_root_directory)
+        self.stat_presenter.log_pre_copy_stats()
+        FileCopier().copy_source_files_to_destination()
+        self.__display_errors()
 
     def __display_errors(self):
         error_messages = Logger().write_errors_to_logfile()

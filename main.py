@@ -1,7 +1,7 @@
 import argparse
 import pathlib
 
-from app.app_controller import AppController
+from app.copy_controller import CopyController
 from app.db_initializer import DBInitializer
 from app.directory_manager import DirectoryManager
 from app.extension_scanner import ExtensionScanner
@@ -29,8 +29,8 @@ if __name__ == '__main__':
     elif args.destination:
         DirectoryManager().check_if_directory_exists(args.source)
         DirectoryManager().check_if_directory_exists(args.destination)
-        AppController(destination_root_directory=args.destination,
-                      source_root_directory=args.source).copy_files_from_source_to_destination()
+        CopyController(destination_root_directory=args.destination,
+                       source_root_directory=args.source).copy_media_files()
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>"

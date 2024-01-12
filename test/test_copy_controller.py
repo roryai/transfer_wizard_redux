@@ -1,4 +1,4 @@
-from app.app_controller import AppController
+from app.copy_controller import CopyController
 from .helpers import *
 
 
@@ -10,8 +10,8 @@ def teardown():
 
 
 def copy_files():
-    AppController(destination_root_directory=destination_root_directory,
-                  source_root_directory=source_directory).copy_files_from_source_to_destination()
+    CopyController(destination_root_directory=destination_root_directory,
+                   source_root_directory=source_directory).copy_media_files()
 
 
 def test_copies_file_to_destination_directory(monkeypatch):

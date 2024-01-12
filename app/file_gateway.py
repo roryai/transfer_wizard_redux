@@ -17,14 +17,14 @@ class FileGateway:
                   file.copied, file.name_clash, file.media, file.copy_attempted]
         return self.db_controller.execute_query(statement, values)
 
-    def update_copied(self, file):
+    def update_copied(self, copied, copy_attempted, source_filepath):
         statement = f"""
             UPDATE files
             SET 
-                copied = {file.copied},
-                copy_attempted = {file.copy_attempted}
+                copied = {copied},
+                copy_attempted = {copy_attempted}
             WHERE
-                source_filepath = '{file.source_filepath}'
+                source_filepath = '{source_filepath}'
         """
         return self.db_controller.execute_query(statement, [])
 

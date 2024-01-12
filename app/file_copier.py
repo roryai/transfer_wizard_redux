@@ -31,7 +31,7 @@ class FileCopier:
             file.copied = False
             file.copy_attempted = True
             Logger().log_unsuccessful_copy(file.source_filepath, file.destination_filepath)
-        self.file_gateway.update_copied(file)
+        self.file_gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
 
     def __file_copied(self, file):
         return Path(file.destination_filepath).is_file()

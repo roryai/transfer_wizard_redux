@@ -64,7 +64,7 @@ def test_updates_copied_and_copy_attempted_fields_to_denote_copy_success(file):
     gateway.insert(file)
     file.copied = True
     file.copy_attempted = True
-    gateway.update_copied(file)
+    gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
 
     file = instantiate_file_from_db_record()
 
@@ -76,7 +76,7 @@ def test_updates_copied_and_copy_attempted_fields_to_denote_copy_failure(file):
     gateway.insert(file)
     file.copied = False
     file.copy_attempted = True
-    gateway.update_copied(file)
+    gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
 
     file = instantiate_file_from_db_record()
 
@@ -109,7 +109,8 @@ def test_selects_file_where_copy_not_attempted(
     # confirm that it was just one record that met the criteria by denoting copy success
     uncopied_file.copied = True
     uncopied_file.copy_attempted = True
-    gateway.update_copied(uncopied_file)
+    gateway.update_copied(uncopied_file.copied, uncopied_file.copy_attempted,
+                          uncopied_file.source_filepath)
     selected_record = gateway.select_one_file_where_copy_not_attempted()
 
     assert selected_record is None

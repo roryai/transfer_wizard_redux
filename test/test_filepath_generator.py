@@ -28,7 +28,8 @@ def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():
         create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath, destination_root_directory)
-    expected_destination_path = construct_path(destination_directory, Path(filename).stem + '___1.jpeg')
+    expected_filename = Path(filename).stem + '___1.jpeg'
+    expected_destination_path = construct_path(destination_directory, expected_filename)
 
     assert generated_destination_path == expected_destination_path
 

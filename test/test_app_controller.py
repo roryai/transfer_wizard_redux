@@ -50,7 +50,7 @@ def test_copies_file_with_suffix_added_when_name_clashes_with_existing_file(monk
         create_destination_file=True)
 
     generated_filename_for_source_file = 'test_file___1.jpeg'
-    expected_sourcefile_destination_path = destination_directory + generated_filename_for_source_file
+    expected_sourcefile_destination_path = construct_path(destination_directory, generated_filename_for_source_file)
 
     existing_file_mtime_pre_run = Path(existing_file_with_identical_name).stat().st_mtime
 

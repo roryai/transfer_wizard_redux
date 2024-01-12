@@ -41,7 +41,7 @@ def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_h
     expected_filename = 'test_file___1.jpeg'
 
     assert file.source_filepath == source_filepath
-    assert file.destination_filepath == destination_directory + expected_filename
+    assert file.destination_filepath == construct_path(destination_directory, expected_filename)
     assert file.size == 13
     assert file.name_clash is True
 

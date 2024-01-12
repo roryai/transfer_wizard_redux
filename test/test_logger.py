@@ -20,7 +20,7 @@ def file_content():
 values = ['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]
 error = 'UNIQUE constraint failed: files.source_filepath'
 source_file_path = 'source/test_source.txt'
-destination_filepath = '/destination' + source_file_path
+destination_filepath = construct_path('/destination', source_file_path)
 
 
 def test_init_log_file_creates_file():

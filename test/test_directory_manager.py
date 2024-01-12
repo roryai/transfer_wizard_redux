@@ -22,13 +22,13 @@ def test_files_in_existing_directory_persist_after_second_call_to_create_directo
     filename = 'test_file.jpeg'
     source_filepath = create_file(source_directory, filename)
     destination_directory = static_destination_path(source_filepath)
-    destination_filepath = destination_directory + filename
+    destination_filepath = construct_path(destination_directory, filename)
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)
     shutil.copy2(source_filepath, destination_filepath)
     DirectoryManager().create_directory_if_not_exists(destination_directory)
 
-    assert Path(destination_directory + filename).is_file()
+    assert Path(destination_filepath).is_file()
 
 
 def test_raises_error_if_directory_does_not_exist():

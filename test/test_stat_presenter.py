@@ -18,7 +18,7 @@ def present_stats():
 def test_plural_grammar_for_all_file_categories(capsys, simple_file_1, simple_file_2,
                                                 duplicate_file_1, duplicate_file_2,
                                                 name_clash_file_1, name_clash_file_2):
-    expected_output = """Source directory: source/
+    expected_output = """Source root directory: source/
 Destination root directory: destination/
 
 6 candidate files discovered in source directory.
@@ -39,7 +39,7 @@ Total size of files to be copied: 5.18MB\n"""
 
 
 def test_singular_grammar_for_duplicate_and_name_clash_files(capsys, duplicate_file_1, name_clash_file_1):
-    expected_output = """Source directory: source/
+    expected_output = """Source root directory: source/
 Destination root directory: destination/
 
 2 candidate files discovered in source directory.
@@ -60,7 +60,7 @@ Total size of file to be copied: 1.56MB\n"""
 
 
 def test_singular_grammar_for_candidate_files_and_files_to_be_copied(capsys, simple_file_1):
-    expected_output = """Source directory: source/
+    expected_output = """Source root directory: source/
 Destination root directory: destination/
 
 1 candidate file discovered in source directory.
@@ -78,7 +78,7 @@ Total size of file to be copied: 0.1MB\n"""
 
 def test_does_not_display_name_clash_or_duplicate_info_when_no_files_in_these_categories_are_present(
         capsys, simple_file_1, simple_file_2):
-    expected_output = """Source directory: source/
+    expected_output = """Source root directory: source/
 Destination root directory: destination/
 
 2 candidate files discovered in source directory.

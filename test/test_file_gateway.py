@@ -119,11 +119,8 @@ def test_selects_file_where_copy_not_attempted(
 
     assert selected_file == uncopied_file
 
-    # confirm that it was just one record that met the criteria by denoting copy success
-    uncopied_file.copied = True
-    uncopied_file.copy_attempted = True
-    gateway.update_copied(uncopied_file.copied, uncopied_file.copy_attempted,
-                          uncopied_file.source_filepath)
+    # confirm that it was just one record that met the criteria
+    gateway.delete(uncopied_file.source_filepath)
     selected_record = gateway.select_one_where_copy_not_attempted()
 
     assert selected_record is None

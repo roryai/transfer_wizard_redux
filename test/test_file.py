@@ -18,7 +18,7 @@ def test_files_can_be_compared():
     assert file == file_2
 
 
-def test_file_instantiated_from_db_has_expected_attributes():
+def test_file_instantiated_from_record_has_expected_attributes():
     file_instance().save()
 
     retrieved_file = instantiate_file_from_db_record()

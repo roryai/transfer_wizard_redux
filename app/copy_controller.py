@@ -13,17 +13,19 @@ class CopyController:
         self.destination_root_directory = destination_root_directory
 
     def copy_media_files(self):
+        self.__prepare_database_records()
+        stats = StatPresenter(self.source_root_directory,
+                              self.destination_root_directory).print_stats_summary()
+        self.__perform_copy(stats) if self.__user_confirms_copy() else None
+
+    def __prepare_database_records(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
         self.__create_db_records_for_files_to_be_copied(self.destination_root_directory)
-        stats = StatPresenter(self.source_root_directory, self.destination_root_directory).print_stats_summary()
-        if self.__user_confirms_copy():
-            self.__perform_copy(stats)
-        FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __create_db_records_for_files_to_be_copied(self, destination_root_directory):
         source_filepaths = Scanner().media_filepaths_in(self.source_root_directory)
-        for source_filepath in source_filepaths:
-            FileFactory(source_filepath, destination_root_directory).save_pre_copy_file_record()
+        [FileFactory(src, destination_root_directory).save_pre_copy_file_record()
+         for src in source_filepaths]
 
     def __user_confirms_copy(self):
         print(f'\nProceed with copy? ( y / n )')
@@ -31,11 +33,15 @@ class CopyController:
             return True
 
     def __perform_copy(self, stats):
+        self.__pre_copy_logging(stats)
+        FileCopier().copy_source_files_to_destination()
+        self.__post_copy_error_logging_and_display()
+        FileGateway().wipe_database()  # TODO dev only, remove later
+
+    def __pre_copy_logging(self, stats):
         Logger().init_log_file(self.destination_root_directory)
         Logger().log_to_file(stats)
-        FileCopier().copy_source_files_to_destination()
-        self.__display_errors()
 
-    def __display_errors(self):
+    def __post_copy_error_logging_and_display(self):
         error_messages = Logger().write_errors_to_logfile()
         print(error_messages) if error_messages else None

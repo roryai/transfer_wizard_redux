@@ -101,7 +101,7 @@ def test_selects_file_where_copy_not_attempted(
     for f in [copied_file, file_with_copy_error, uncopied_file, duplicate_file]:
         gateway.insert(f)
 
-    record = gateway.select_one_file_where_copy_not_attempted()
+    record = gateway.select_one_where_copy_not_attempted()
     selected_file = File.init_from_record(record)
 
     assert selected_file == uncopied_file
@@ -111,7 +111,7 @@ def test_selects_file_where_copy_not_attempted(
     uncopied_file.copy_attempted = True
     gateway.update_copied(uncopied_file.copied, uncopied_file.copy_attempted,
                           uncopied_file.source_filepath)
-    selected_record = gateway.select_one_file_where_copy_not_attempted()
+    selected_record = gateway.select_one_where_copy_not_attempted()
 
     assert selected_record is None
 
@@ -121,7 +121,7 @@ def test_when_attempting_to_select_uncopied_file_it_returns_none_when_no_valid_r
     gateway.insert(copied_file)
     gateway.insert(file_with_copy_error)
 
-    record = gateway.select_one_file_where_copy_not_attempted()
+    record = gateway.select_one_where_copy_not_attempted()
 
     assert record is None
 

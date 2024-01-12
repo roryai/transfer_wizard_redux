@@ -59,7 +59,7 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)
 
-    def select_one_file_where_copy_not_attempted(self):
+    def select_one_where_copy_not_attempted(self):
         statement = """
             SELECT *
             FROM files

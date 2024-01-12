@@ -14,12 +14,12 @@ class FileCopier:
         self.file_gateway = file_gateway()
 
     def copy_source_files_to_destination(self):
-        record = self.file_gateway.select_one_file_where_copy_not_attempted()
-        while record:
-            file = File.init_from_record(record)
+        record_for_file_to_copy = self.file_gateway.select_one_where_copy_not_attempted()
+        while record_for_file_to_copy:
+            file = File.init_from_record(record_for_file_to_copy)
             self.directory_manager.create_directory_if_not_exists(file.destination_directory())
             self.__copy_file(file)
-            record = self.file_gateway.select_one_file_where_copy_not_attempted()
+            record_for_file_to_copy = self.file_gateway.select_one_where_copy_not_attempted()
 
     def __copy_file(self, file):
         shutil.copy2(file.source_filepath, file.destination_filepath)

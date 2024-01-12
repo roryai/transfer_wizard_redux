@@ -36,7 +36,8 @@ class DBInitializer:
                  size INTEGER NOT NULL,
                  copied BOOLEAN,
                  name_clash BOOLEAN,
-                 media BOOLEAN NOT NULL
+                 media BOOLEAN NOT NULL,
+                 copy_attempted BOOLEAN NOT NULL
              );
          """
         DBController().set_connection(self.connection).execute_query(create_files_table, [])

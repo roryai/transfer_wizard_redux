@@ -22,4 +22,5 @@ def test_inserts_and_maps_a_file():
     assert result['name_clash'] is 0
     assert result['copied'] is None
     assert result['media'] is 1
-    assert len(result) == 6
+    assert result['copy_attempted'] is 0
+    assert len(result) == 7

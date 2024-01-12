@@ -20,7 +20,8 @@ class FileFactory:
              size=size,
              name_clash=name_clash,
              copied=None,  # TODO set to false after making column not null
-             media=media).save()
+             media=media,
+             copy_attempted=False).save()
 
     def __name_clash(self, source_filepath, destination_filepath):
         if destination_filepath is None:

@@ -13,5 +13,6 @@ class FileRecord:
             'size': record[3],
             'copied': record[4],
             'name_clash': record[5],
-            'media': record[6]
+            'media': record[6],
+            'copy_attempted': record[7]
         }

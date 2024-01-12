@@ -25,7 +25,13 @@ def test_files_in_existing_directory_persist_after_second_call_to_create_directo
     destination_filepath = construct_path(destination_directory, filename)
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)
+
+    assert not Path(destination_filepath).is_file()
+
     shutil.copy2(source_filepath, destination_filepath)
+
+    assert Path(destination_filepath).is_file()
+
     DirectoryManager().create_directory_if_not_exists(destination_directory)
 
     assert Path(destination_filepath).is_file()

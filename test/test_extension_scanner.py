@@ -13,8 +13,8 @@ def display_misc_extensions():
 
 
 def test_displays_misc_extension_information_when_misc_extensions_are_present(capsys):
-    create_file_with_data(source_directory, 'filename.non')
-    create_file_with_data(source_directory, 'filename.err')
+    create_file_on_disk_with_data(source_directory, 'filename.non')
+    create_file_on_disk_with_data(source_directory, 'filename.err')
 
     display_misc_extensions()
 

@@ -55,13 +55,13 @@ def test_returns_none_if_generated_path_points_to_identical_file():
 
 def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size():
     filename = 'test_file.jpeg'
-    source_filepath = create_file_with_data(source_directory, filename, 'Same data')
+    source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
     destination_directory = static_destination_path(source_filepath)
 
     # source filepath has name clash with this filepath, so generated filename is incremented
-    create_file_with_data(destination_directory, filename, 'Unique data')
+    create_file_on_disk_with_data(destination_directory, filename, 'Unique data')
     # generated incremented filepath is identical, and files are same size/have same data
-    create_file_with_data(destination_directory, 'test_file___1.jpeg', 'Same data')
+    create_file_on_disk_with_data(destination_directory, 'test_file___1.jpeg', 'Same data')
 
     generated_destination_path = FilepathGenerator(source_filepath,
                                                    destination_root_directory

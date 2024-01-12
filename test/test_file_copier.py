@@ -21,7 +21,7 @@ def filename_and_destination_filepath(filename='filename.jpeg'):
 
 def create_source_file_and_save_file_record(filename='filename.jpeg', name_clash=False):
     source_filepath = construct_path(source_directory, filename)
-    create_file(source_directory, filename)
+    create_file_on_disk(source_directory, filename)
     file = file_instance(source_filepath=source_filepath, name_clash=name_clash)
     file.save()
     return file

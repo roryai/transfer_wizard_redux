@@ -12,7 +12,7 @@ def teardown():
 
 
 def test_discovers_a_media_file_when_scanning_for_media():
-    media_filepath = create_file(source_directory, 'file.jpg')
+    media_filepath = create_file_on_disk(source_directory, 'file.jpg')
 
     discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
 
@@ -20,7 +20,7 @@ def test_discovers_a_media_file_when_scanning_for_media():
 
 
 def test_ignores_files_without_desired_extensions_when_scanning_for_media():
-    create_file(source_directory, 'file.txt')
+    create_file_on_disk(source_directory, 'file.txt')
 
     discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
 
@@ -28,7 +28,7 @@ def test_ignores_files_without_desired_extensions_when_scanning_for_media():
 
 
 def test_discovers_a_misc_extension():
-    create_file(source_directory, 'file.txt')
+    create_file_on_disk(source_directory, 'file.txt')
 
     discovered_extensions = list(scanner.misc_extensions_in(source_directory))
 
@@ -36,15 +36,15 @@ def test_discovers_a_misc_extension():
 
 
 def test_ignores_files_with_media_extensions_when_scanning_for_misc_extensions():
-    create_file(source_directory, 'a_file.jpg')
+    create_file_on_disk(source_directory, 'a_file.jpg')
     discovered_extensions = scanner.misc_extensions_in(source_directory)
 
     assert len(discovered_extensions) == 0
 
 
 def test_provides_a_set_of_misc_file_extensions():
-    create_file(source_directory, 'a_file.non')
-    create_file(source_directory, 'a_file_2.non')
+    create_file_on_disk(source_directory, 'a_file.non')
+    create_file_on_disk(source_directory, 'a_file_2.non')
     result = list(scanner.misc_extensions_in(source_directory))
     extension = '.non'
 
@@ -52,8 +52,8 @@ def test_provides_a_set_of_misc_file_extensions():
 
 
 def test_provides_multiple_misc_extensions():
-    create_file(source_directory, 'a_file.non')
-    create_file(source_directory, 'a_file_2.hlp')
+    create_file_on_disk(source_directory, 'a_file.non')
+    create_file_on_disk(source_directory, 'a_file_2.hlp')
     results = list(scanner.misc_extensions_in(source_directory))
     extensions = ['.hlp', '.non']
 

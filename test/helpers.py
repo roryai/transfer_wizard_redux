@@ -37,10 +37,10 @@ def file_instance(source_filepath=default_source_filepath,
 
 def create_test_files(filename='test_file.jpeg', create_destination_file=False,
                       source_data='default_source_data', dest_data='default_destination_data'):
-    source_filepath = create_file_with_data(source_directory, filename, source_data)
+    source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
     destination_directory = static_destination_path(source_filepath)
     destination_filepath = construct_path(destination_directory, filename)
-    create_file_with_data(destination_directory, filename, dest_data) if create_destination_file else None
+    create_file_on_disk_with_data(destination_directory, filename, dest_data) if create_destination_file else None
     return filename, source_filepath, destination_directory, destination_filepath
 
 
@@ -51,11 +51,11 @@ def static_destination_path(source_filepath):
     return construct_path(destination_root_directory, '2023/Q4')
 
 
-def create_file(directory, filename):
-    return create_file_with_data(directory, filename)
+def create_file_on_disk(directory, filename):
+    return create_file_on_disk_with_data(directory, filename)
 
 
-def create_file_with_data(directory_path, filename, data=''):
+def create_file_on_disk_with_data(directory_path, filename, data=''):
     Path(directory_path).mkdir(parents=True, exist_ok=True)
     file_path = construct_path(directory_path, filename)
     with open(file_path, 'x') as file:

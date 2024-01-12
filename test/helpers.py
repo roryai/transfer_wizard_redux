@@ -3,6 +3,7 @@ from pathlib import Path
 import pytest
 import shutil
 
+from main import ROOT_DIR
 from app.db_initializer import DBInitializer
 from app.file import File
 from app.file_gateway import FileGateway
@@ -21,7 +22,7 @@ destination_root_directory = construct_path(test_media_directory, 'destination')
 default_source_filepath = construct_path(source_directory, 'filename.jpg')
 default_destination_filepath = construct_path(destination_root_directory, 'filename.jpg')
 
-DBInitializer().init_test_database()
+DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
 
 

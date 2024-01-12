@@ -1,9 +1,12 @@
 import argparse
+import pathlib
 
 from app.app_controller import AppController
 from app.db_initializer import DBInitializer
 from app.directory_manager import DirectoryManager
 from app.extension_scanner import ExtensionScanner
+
+ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 
 if __name__ == '__main__':
     program_description = """This program copies media files to an organised directory structure.
@@ -18,7 +21,7 @@ if __name__ == '__main__':
                         help='Displays miscellaneous extensions in source directory.')
     args = parser.parse_args()
 
-    DBInitializer().init_prod_database()
+    DBInitializer(ROOT_DIR).init_prod_database()
 
     if args.extensions:
         DirectoryManager().check_if_directory_exists(args.source)

@@ -1,4 +1,4 @@
-from pathlib import Path
+import os
 import sqlite3
 
 from app.db_controller import DBController
@@ -6,8 +6,9 @@ from app.db_controller import DBController
 
 class DBInitializer:
 
-    def __init__(self):
+    def __init__(self, project_root):
         self.connection = None
+        self.project_root = project_root
 
     def init_prod_database(self):
         self.__init_database('files_prod')
@@ -24,8 +25,8 @@ class DBInitializer:
         self.connection = sqlite3.connect(db_filepath)
 
     def __db_path(self, db_name):
-        # TODO set ROOT_DIR in main.py and import, use os.path.join
-        return str(Path(__file__).parent.parent) + f'/{db_name}.db'
+        db_filename = f'{db_name}.db'
+        return os.path.join(self.project_root, db_filename)
 
     def __create_table(self):
         create_files_table = """

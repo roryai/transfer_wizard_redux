@@ -27,7 +27,7 @@ def test_a_file_is_built_and_saved():
     assert file.destination_filepath == destination_filepath
     assert file.size == 23
     assert file.name_clash is False
-    assert file.copied is None
+    assert file.copied is None  # TODO this will be represented differently
     assert file.media is True
 
 

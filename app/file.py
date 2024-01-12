@@ -36,7 +36,7 @@ class File:
             source_filepath=vals['source_filepath'],
             destination_filepath=vals['destination_filepath'],
             size=vals['size'],
-            copied=cls.__set_copied(vals['copied']),
+            copied=cls.__set_copied(vals['copied']),  # TODO sort this
             name_clash=True if vals['name_clash'] == 1 else False,
             media=True if vals['media'] == 1 else False
         )

@@ -27,7 +27,7 @@ class FileCopier:
             file.copied = True
             Logger().log_successful_copy(file.source_filepath, file.destination_filepath)
         else:
-            file.copied = False
+            file.copied = False  # TODO find another way to represent a failed copy. Copy attempted?
             Logger().log_unsuccessful_copy(file.source_filepath, file.destination_filepath)
         self.file_gateway.update_copied(file)
 

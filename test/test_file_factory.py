@@ -21,7 +21,7 @@ def test_a_file_is_built_and_saved():
 
     save_pre_copy_file_record(source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(source_filepath)
 
     assert file.source_filepath == source_filepath
     assert file.destination_filepath == destination_filepath
@@ -37,7 +37,7 @@ def test_file_is_marked_as_having_name_clash_when_an_existing_destination_file_h
 
     save_pre_copy_file_record(source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(source_filepath)
     expected_filename = 'test_file___1.jpeg'
 
     assert file.source_filepath == source_filepath
@@ -53,7 +53,7 @@ def test_duplicate_files_are_marked_as_having_no_destination_filepath_and_not_ha
 
     save_pre_copy_file_record(source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(source_filepath)
 
     assert file.source_filepath == source_filepath
     assert file.name_clash is False
@@ -65,7 +65,7 @@ def test_denotes_copy_not_yet_attempted_by_setting_copied_and_copy_attempted_to_
 
     save_pre_copy_file_record(source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(source_filepath)
 
     assert file.source_filepath == source_filepath
     assert file.copied is False

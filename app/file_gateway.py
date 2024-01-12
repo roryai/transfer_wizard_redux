@@ -52,6 +52,14 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    def select(self, source_filepath):
+        statement = f"""
+            SELECT * 
+            FROM files
+            WHERE source_filepath = '{source_filepath}';
+        """
+        return self.db_controller.execute_read_query(statement)[0]
+
     def select_all(self):
         statement = """
             SELECT * 

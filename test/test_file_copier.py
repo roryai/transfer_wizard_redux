@@ -55,16 +55,16 @@ def test_copies_multiple_files():
 
 
 def test_records_a_successful_copy_attempt():
-    create_source_file_and_save_file_record()
+    file = create_source_file_and_save_file_record()
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is False
     assert file.copy_attempted is False
 
     copy_source_files_to_destination()
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is True
     assert file.copy_attempted is True
@@ -77,16 +77,16 @@ def test_records_an_unsuccessful_copy_attempt(monkeypatch):
     # this approach isn't ideal but it runs the section of code under test
     monkeypatch.setattr(Path, "is_file", mock_is_file)
 
-    create_source_file_and_save_file_record()
+    file = create_source_file_and_save_file_record()
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is False
     assert file.copy_attempted is False
 
     copy_source_files_to_destination()
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is False
     assert file.copy_attempted is True

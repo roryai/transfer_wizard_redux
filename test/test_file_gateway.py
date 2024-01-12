@@ -13,7 +13,7 @@ def teardown():
 def test_can_read_and_write_file(file):
     gateway.insert(file)
 
-    retrieved_file = instantiate_file_from_db_record()
+    retrieved_file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file == retrieved_file
 
@@ -66,7 +66,7 @@ def test_updates_copied_and_copy_attempted_fields_to_denote_copy_success(file):
     file.copy_attempted = True
     gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is True
     assert file.copy_attempted is True
@@ -78,7 +78,7 @@ def test_updates_copied_and_copy_attempted_fields_to_denote_copy_failure(file):
     file.copy_attempted = True
     gateway.update_copied(file.copied, file.copy_attempted, file.source_filepath)
 
-    file = instantiate_file_from_db_record()
+    file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file.copied is False
     assert file.copy_attempted is True

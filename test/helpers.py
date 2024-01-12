@@ -66,10 +66,9 @@ def insert_db_record(file):
     FileGateway().insert(file)
 
 
-def instantiate_file_from_db_record():
+def instantiate_file_from_db_record(source_filepath):
     gateway = FileGateway()
-    assert gateway.count() == 1
-    return File.init_from_record(gateway.select_all()[0])
+    return File.init_from_record(gateway.select(source_filepath))
 
 
 def clear_database():

@@ -19,9 +19,10 @@ def test_files_can_be_compared():
 
 
 def test_file_instantiated_from_record_has_expected_attributes():
-    file_instance().save()
+    file = file_instance()
+    file.save()
 
-    retrieved_file = instantiate_file_from_db_record()
+    retrieved_file = instantiate_file_from_db_record(file.source_filepath)
 
     assert retrieved_file.source_filepath == default_source_filepath
     assert retrieved_file.destination_filepath == default_destination_filepath

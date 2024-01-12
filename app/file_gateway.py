@@ -60,13 +60,6 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0]
 
-    def select_all(self):
-        statement = """
-            SELECT * 
-            FROM files;
-        """
-        return self.db_controller.execute_read_query(statement)
-
     def select_one_where_copy_not_attempted(self):
         statement = """
             SELECT *

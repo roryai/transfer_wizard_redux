@@ -5,7 +5,7 @@ from .helpers import *
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_test_directories()
+    clear_db_and_test_directories()
 
 
 def display_misc_extensions():

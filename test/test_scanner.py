@@ -8,7 +8,7 @@ scanner = Scanner()
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_test_directories()
+    clear_db_and_test_directories()
 
 
 def test_discovers_a_media_file_when_scanning_for_media():

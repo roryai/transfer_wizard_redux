@@ -6,8 +6,7 @@ from app.file_factory import FileFactory
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_database()
-    clear_test_directories()
+    clear_db_and_test_directories()
 
 
 def save_pre_copy_file_record(source_filepath):

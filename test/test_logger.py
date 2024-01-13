@@ -9,7 +9,7 @@ def teardown():
     LoggerMeta._instance = {}
     Logger().init_log_file(logfile_directory)
     yield
-    clear_test_directories()
+    clear_db_and_test_directories()
 
 
 def file_content():

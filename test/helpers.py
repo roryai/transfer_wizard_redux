@@ -84,3 +84,8 @@ def clear_test_directories():
                 os.unlink(construct_path(root, f))
             for d in dirs:
                 shutil.rmtree(construct_path(root, d))
+
+
+def clear_db_and_test_directories():
+    clear_database()
+    clear_test_directories()

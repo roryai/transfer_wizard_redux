@@ -1,6 +1,7 @@
-from .helpers import (pytest, os, Path, clear_db_and_test_directories, construct_path,
-                      create_file_on_disk_with_data, create_test_files, destination_root_directory,
-                      source_directory, static_destination_path)
+from datetime import datetime
+from .helpers import (Path, clear_db_and_test_directories, construct_path, create_file_on_disk_with_data,
+                      create_test_files, destination_root_directory, source_directory, static_destination_path)
+from test.fixtures.filepath_generator_fixtures import *
 from app.filepath_generator import FilepathGenerator
 
 
@@ -69,3 +70,17 @@ def test_returns_none_if_second_path_generated_points_to_file_with_identical_nam
                                                    ).generate_destination_filepath()
 
     assert generated_destination_path is None
+
+
+def test_uses_file_birth_time_when_birth_time_is_before_modified_time(birthtime_earlier):
+    generated_date = FilepathGenerator('/source', '/destination')._earliest_approximation_of_file_creation_time()
+    expected_date = datetime.fromtimestamp(birthtime_earlier.st_birthtime)
+
+    assert expected_date == generated_date
+
+
+def test_uses_file_modified_time_when_birth_time_is_after_modified_time(birthtime_later):
+    generated_date = FilepathGenerator('/source', '/destination')._earliest_approximation_of_file_creation_time()
+    expected_date = datetime.fromtimestamp(birthtime_later.st_mtime)
+
+    assert expected_date == generated_date

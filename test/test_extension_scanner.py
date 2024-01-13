@@ -1,5 +1,5 @@
 from app.extension_scanner import ExtensionScanner
-from .helpers import *
+from .helpers import pytest, create_file_on_disk_with_data, clear_db_and_test_directories, source_directory
 
 
 @pytest.fixture(autouse=True)

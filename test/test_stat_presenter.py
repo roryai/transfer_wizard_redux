@@ -1,7 +1,8 @@
+from .helpers import pytest, clear_db_and_test_directories, insert_db_record
+from test.fixtures.stat_presenter_fixtures import (simple_file_1, simple_file_2,
+                                                   duplicate_file_1, duplicate_file_2,
+                                                   name_clash_file_1, name_clash_file_2)
 from app.stat_presenter import StatPresenter
-from test.fixtures.stat_presenter_fixtures import *
-
-from .helpers import *
 
 
 @pytest.fixture(autouse=True)

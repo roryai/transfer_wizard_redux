@@ -1,4 +1,6 @@
-from test.helpers import *
+import pytest
+
+from test.helpers import file_instance
 
 
 @pytest.fixture

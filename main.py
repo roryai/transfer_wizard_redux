@@ -26,6 +26,15 @@ USAGE = """
 python main.py -s path/to/source -d path/to/destination  <-- To copy media files from source to destination
 python main.py -s path/to/directory -ext                 <-- To discover miscellaneous file extensions in directory
 """
+ERROR_MESSAGE = """
+Must always provide source flag and path (-s /path/to/source) in addition to one of the three options below:
+
+-ext                            
+-d /path/to/directory 
+-d /path/to/directory -misc
+
+Run with --help to see further documentation.
+"""
 
 
 def main():
@@ -42,8 +51,7 @@ def main():
         DirectoryManager().check_if_directory_exists(args.destination)
         __run_copy_controller(args, include_misc_files=False)
     else:
-        error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
-                        "-d flag (-d <directory path>)"
+        error_message = ERROR_MESSAGE
         raise argparse.ArgumentError(None, error_message)
 
 

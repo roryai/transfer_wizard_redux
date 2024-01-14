@@ -3,7 +3,7 @@ import sys
 
 from .helpers import clear_db_and_test_directories
 from test.fixtures.main_fixtures import *
-from main import main, PROGRAM_DESCRIPTION, ROOT_DIR, USAGE, _configure_parser
+from main import main, ERROR_MESSAGE, PROGRAM_DESCRIPTION, ROOT_DIR, USAGE, _configure_parser
 
 
 @pytest.fixture(autouse=True)
@@ -39,8 +39,7 @@ def test_throws_error_and_provides_error_message_when_only_source_provided(capsy
     with pytest.raises(argparse.ArgumentError) as exc_info:
         main()
 
-    assert 'Must provide source flag (-s <directory path>) and either ' \
-           '-ext flag or -d flag (-d <directory path>)' in str(exc_info.value)
+    assert ERROR_MESSAGE in str(exc_info.value)
 
 
 def test_throws_error_when_only_destination_provided(set_only_destination_arg):

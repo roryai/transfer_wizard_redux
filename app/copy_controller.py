@@ -10,7 +10,7 @@ from app.logger import Logger
 
 class CopyController:
 
-    def __init__(self, destination_root_directory, source_root_directory, include_misc_files=False):
+    def __init__(self, destination_root_directory, source_root_directory, include_misc_files):
         self.source_root_directory = source_root_directory
         self.destination_root_directory = destination_root_directory
         self.include_misc_files = include_misc_files

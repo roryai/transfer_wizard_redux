@@ -29,29 +29,39 @@ python main.py -s path/to/directory -ext                 <-- To discover miscell
 
 
 def main():
+    args = _configure_parser().parse_args(sys.argv[1:])
+    DirectoryManager().check_if_directory_exists(args.source)
     DBInitializer(ROOT_DIR).init_prod_database()
-    args = configure_parser().parse_args(sys.argv[1:])
-    if args.extensions:
-        DirectoryManager().check_if_directory_exists(args.source)
+
+    if args.extensions and args.source:
         ExtensionPresenter(args.source).display_misc_extensions()
-    elif args.destination:
-        DirectoryManager().check_if_directory_exists(args.source)
+    elif args.miscellaneous and args.source and args.destination:
         DirectoryManager().check_if_directory_exists(args.destination)
-        CopyController(destination_root_directory=args.destination,
-                       source_root_directory=args.source).copy_media_files()
+        __run_copy_controller(args, include_misc_files=True)
+    elif args.destination and args.source:
+        DirectoryManager().check_if_directory_exists(args.destination)
+        __run_copy_controller(args, include_misc_files=False)
     else:
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>)"
         raise argparse.ArgumentError(None, error_message)
 
 
-def configure_parser():
+def __run_copy_controller(args, include_misc_files):
+    CopyController(destination_root_directory=args.destination,
+                   source_root_directory=args.source,
+                   include_misc_files=include_misc_files).copy_files()
+
+
+def _configure_parser():
     parser = argparse.ArgumentParser(description=PROGRAM_DESCRIPTION, usage=USAGE,
                                      formatter_class=argparse.RawTextHelpFormatter)
     parser.add_argument('-s', '--source', type=str, required=True, help='Source directory path.')
     parser.add_argument('-d', '--destination', type=str, required=False, help='Destination directory path.')
     parser.add_argument('-ext', '--extensions', action='store_true', default=False, required=False,
                         help='Displays miscellaneous extensions in source directory.')
+    parser.add_argument('-misc', '--miscellaneous', action='store_true', default=False, required=False,
+                        help='Copies miscellaneous files to /<destination directory path>/misc')
     return parser
 
 

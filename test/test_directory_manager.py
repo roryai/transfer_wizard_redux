@@ -38,5 +38,6 @@ def test_files_in_existing_directory_persist_after_second_call_to_create_directo
 
 
 def test_raises_error_if_directory_does_not_exist():
-    with pytest.raises(FileNotFoundError):
-        DirectoryManager().check_if_directory_exists(destination_root_directory + 'jgjgjg')
+    fake_directory = f'{destination_root_directory}fake'
+    with pytest.raises(FileNotFoundError, match=f'{fake_directory} is not a valid directory.'):
+        DirectoryManager().check_if_directory_exists(fake_directory)

@@ -20,11 +20,11 @@ class CopyController:
 
     def __prepare_database_records(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
-        self.__create_db_records_for_files_to_be_copied(self.destination_root_directory)
+        self.__create_db_records_for_files_to_be_copied()
 
-    def __create_db_records_for_files_to_be_copied(self, destination_root_directory):
+    def __create_db_records_for_files_to_be_copied(self):
         source_filepaths = Scanner().media_filepaths_in(self.source_root_directory)
-        [FileFactory(src, destination_root_directory).save_pre_copy_file_record()
+        [FileFactory(src, self.destination_root_directory).save_pre_copy_file_record()
          for src in source_filepaths]
 
     def __user_confirms_copy(self):

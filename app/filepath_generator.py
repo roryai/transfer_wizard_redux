@@ -13,15 +13,17 @@ class FilepathGenerator:
 
     def generate_destination_filepath(self):
         filename = Path(self.source_filepath).name
-        file_creation_time = self._approximate_media_capture_date()
-        quarter = self.__determine_quarter(file_creation_time.month)
+        media_capture_time = self._approximate_media_capture_time()
+        quarter = self.__determine_quarter(media_capture_time.month)
         prospective_destination_filepath = os.path.join(
-            self.destination_root_directory, str(file_creation_time.year), quarter, filename)
+            self.destination_root_directory, str(media_capture_time.year), quarter, filename)
         return self.__resolve_path(prospective_destination_filepath)
 
-    def _approximate_media_capture_date(self):
+    def _approximate_media_capture_time(self):
         file_metadata = Path(self.source_filepath).stat()
-        return datetime.fromtimestamp(min(file_metadata.st_mtime, file_metadata.st_birthtime))
+        return datetime.fromtimestamp(min(file_metadata.st_mtime,
+                                          file_metadata.st_birthtime,
+                                          file_metadata.st_ctime))
 
     def __determine_quarter(self, month):
         quarters = {1: 'Q1', 2: 'Q1', 3: 'Q1', 4: 'Q2', 5: 'Q2', 6: 'Q2',

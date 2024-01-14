@@ -72,15 +72,22 @@ def test_returns_none_if_second_path_generated_points_to_file_with_identical_nam
     assert generated_destination_path is None
 
 
-def test_uses_file_birth_time_when_birth_time_is_before_modified_time(birthtime_earlier):
-    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_date()
-    expected_date = datetime.fromtimestamp(birthtime_earlier.st_birthtime)
+def test_uses_birth_time_for_capture_time_when_it_is_earliest_file_stat_time(birth_time_first):
+    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
+    expected_date = datetime.fromtimestamp(birth_time_first.st_birthtime)
 
     assert expected_date == generated_date
 
 
-def test_uses_file_modified_time_when_birth_time_is_after_modified_time(birthtime_later):
-    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_date()
-    expected_date = datetime.fromtimestamp(birthtime_later.st_mtime)
+def test_uses_modified_time_for_capture_time_when_it_is_earliest_file_stat_time(modified_time_first):
+    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
+    expected_date = datetime.fromtimestamp(modified_time_first.st_mtime)
+
+    assert expected_date == generated_date
+
+
+def test_uses_creation_time_for_capture_time_when_it_is_earliest_file_stat_time(creation_time_first):
+    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
+    expected_date = datetime.fromtimestamp(creation_time_first.st_ctime)
 
     assert expected_date == generated_date

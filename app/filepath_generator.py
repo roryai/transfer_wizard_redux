@@ -9,14 +9,23 @@ class FilepathGenerator:
     def __init__(self, source_filepath, destination_root_directory):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
+        self.misc_root_directory = os.path.join(destination_root_directory, 'misc')
         self.spacer = '___'
 
-    def generate_destination_filepath(self):
+    def generate_destination_filepath(self, media):
+        return self.__generate_media_destination_filepath() if media else self.__generate_misc_destination_filepath()
+
+    def __generate_media_destination_filepath(self):
         filename = Path(self.source_filepath).name
         media_capture_time = self._approximate_media_capture_time()
         quarter = self.__determine_quarter(media_capture_time.month)
         prospective_destination_filepath = os.path.join(
             self.destination_root_directory, str(media_capture_time.year), quarter, filename)
+        return self.__resolve_path(prospective_destination_filepath)
+
+    def __generate_misc_destination_filepath(self):
+        filename = Path(self.source_filepath).name
+        prospective_destination_filepath = os.path.join(self.misc_root_directory, filename)
         return self.__resolve_path(prospective_destination_filepath)
 
     def _approximate_media_capture_time(self):

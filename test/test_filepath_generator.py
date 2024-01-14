@@ -1,6 +1,7 @@
 from datetime import datetime
 from .helpers import (Path, clear_db_and_test_directories, construct_path, create_file_on_disk_with_data,
-                      create_test_media_files, destination_root_directory, source_directory, static_destination_path)
+                      create_test_media_files, create_test_misc_files, destination_root_directory,
+                      source_directory, static_destination_path, misc_destination_directory)
 from test.fixtures.filepath_generator_fixtures import *
 from app.filepath_generator import FilepathGenerator
 
@@ -16,9 +17,9 @@ def run_with_media_flag_enabled(source_filepath):
                              ).generate_destination_filepath(media=True)
 
 
-def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size():
-    filename, source_filepath, destination_directory, _ = create_test_media_files(
-        create_destination_file=True)
+def run_with_media_flag_disabled(source_filepath):
+    return FilepathGenerator(source_filepath, destination_root_directory
+                             ).generate_destination_filepath(media=False)
 
 
 class TestSharedFunctionality:
@@ -51,7 +52,7 @@ class TestSharedFunctionality:
 
         generated_destination_path = FilepathGenerator(source_filepath,
                                                        destination_root_directory
-                                                       ).generate_media_destination_filepath()
+                                                       ).generate_destination_filepath(media=True)
 
         assert generated_destination_path is None
 
@@ -92,3 +93,48 @@ class TestMediaFilesFunctionality:
         expected_date = datetime.fromtimestamp(creation_time_first.st_ctime)
 
         assert expected_date == generated_date
+
+
+class TestMiscFilesFunctionality:
+    def test_returns_none_if_generated_path_points_to_identical_file(self):
+        data = 'same data'
+        _, source_filepath, _, _ = create_test_misc_files(
+            filename='a_file___1.txt', source_data=data, dest_data=data, create_destination_file=True)
+        generated_destination_path = run_with_media_flag_disabled(source_filepath)
+
+        assert generated_destination_path is None
+
+    def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(self):
+        filename = 'test_file.gif'
+        source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
+        # source filepath has name clash with this filepath, so generated filename is incremented
+        create_file_on_disk_with_data(misc_destination_directory, filename, 'Unique data')
+        # generated incremented filepath is identical, and files are same size/have same data
+        create_file_on_disk_with_data(misc_destination_directory, 'test_file___1.gif', 'Same data')
+
+        generated_destination_path = FilepathGenerator(source_filepath,
+                                                       destination_root_directory
+                                                       ).generate_destination_filepath(media=False)
+
+        assert generated_destination_path is None
+
+    def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_misc_file(self):
+        filename, source_filepath, destination_directory, _ = create_test_misc_files(
+            create_destination_file=True)
+
+        generated_destination_path = run_with_media_flag_disabled(source_filepath)
+        expected_filename = f'{Path(filename).stem}___1.gif'
+        expected_destination_path = construct_path(destination_directory, expected_filename)
+
+        assert generated_destination_path == expected_destination_path
+
+    def test_misc_files_go_to_misc_directory(self):
+        filename, source_filepath, destination_directory, _ = create_test_misc_files(
+            create_destination_file=True)
+
+        generated_destination_path = run_with_media_flag_disabled(source_filepath)
+        expected_filename = f'{Path(filename).stem}___1.gif'
+        expected_destination_path = construct_path(destination_directory, expected_filename)
+        bottom_directory_name = f'misc/{expected_filename}'
+
+        assert generated_destination_path == expected_destination_path

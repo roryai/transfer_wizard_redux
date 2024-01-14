@@ -13,7 +13,8 @@ class FilepathGenerator:
         self.spacer = '___'
 
     def generate_destination_filepath(self, media):
-        return self.__generate_media_destination_filepath() if media else self.__generate_misc_destination_filepath()
+        return self.__generate_media_destination_filepath() if media \
+            else self.__generate_misc_destination_filepath()
 
     def __generate_media_destination_filepath(self):
         filename = Path(self.source_filepath).name

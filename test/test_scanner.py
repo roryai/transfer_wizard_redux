@@ -1,5 +1,5 @@
 from .helpers import pytest, clear_db_and_test_directories, create_file_on_disk, source_directory
-from app.scanner import Scanner, MEDIA_EXTENSIONS
+from app.scanner import Scanner, MEDIA_FILETYPES
 
 scanner = Scanner()
 
@@ -18,6 +18,14 @@ def test_discovers_a_media_file():
     assert discovered_filepaths == [media_filepath]
 
 
+def test_discovers_a_misc_file():
+    misc_filepath = create_file_on_disk(source_directory, 'file.gif')
+
+    discovered_extensions = list(scanner.misc_filepaths_in(source_directory))
+
+    assert discovered_extensions == [misc_filepath]
+
+
 def test_discovers_a_misc_extension():
     create_file_on_disk(source_directory, 'file.txt')
 
@@ -32,6 +40,13 @@ def test_ignores_files_with_misc_extensions_when_scanning_for_media_files():
     discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
 
     assert len(discovered_filepaths) == 0
+
+
+def test_ignores_files_with_media_extensions_when_scanning_for_misc_files():
+    create_file_on_disk(source_directory, 'a_file.jpg')
+    discovered_extensions = list(scanner.misc_filepaths_in(source_directory))
+
+    assert len(discovered_extensions) == 0
 
 
 def test_ignores_files_with_media_extensions_when_scanning_for_misc_extensions():
@@ -64,4 +79,4 @@ def test_media_extensions_includes_upper_and_lower_case_extensions():
                   '.BMP', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.HEIC',
                   '.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc',
                   '.MP4', '.MOV', '.AVI', '.WMV', '.MKV', '.HEVC']
-    assert sorted(MEDIA_EXTENSIONS) == sorted(media_exts)
+    assert sorted(MEDIA_FILETYPES) == sorted(media_exts)

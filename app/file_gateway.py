@@ -153,12 +153,24 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
-    def sum_size_of_files_to_be_copied(self):
+    def sum_size_of_media_files_to_be_copied(self):
         statement = """
             SELECT SUM(size)
             FROM files
             WHERE destination_filepath IS NOT NULL
             AND copied == '0'
-            AND copy_attempted == '0';
+            AND copy_attempted == '0'
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_misc_files_to_be_copied(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NOT NULL
+            AND copied == '0'
+            AND copy_attempted == '0'
+            AND media = '0';
         """
         return self.db_controller.execute_read_query(statement)[0][0]

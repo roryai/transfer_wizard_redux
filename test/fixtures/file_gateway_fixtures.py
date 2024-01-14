@@ -60,7 +60,7 @@ def file():
 def file_2():
     return file_instance(source_filepath='/source/file2.jpg',
                          destination_filepath='/destination/file2.jpg',
-                         size=5)
+                         size=2)
 
 
 @pytest.fixture
@@ -103,14 +103,21 @@ def uncopied_media_file():
 
 
 @pytest.fixture
-def uncopied_misc_file():
-    return file_instance(source_filepath='/source/file.txt',
-                         destination_filepath='/destination/file.txt',
-                         media=False, copied=False, copy_attempted=False)
+def uncopied_media_file_2():
+    return file_instance(source_filepath='/source/file2.jpg',
+                         destination_filepath='/destination/file2.jpg',
+                         media=True, copied=False, copy_attempted=False, size=5)
 
 
 @pytest.fixture
-def uncopied_file_2():
+def uncopied_misc_file():
+    return file_instance(source_filepath='/source/file.txt',
+                         destination_filepath='/destination/file.txt',
+                         media=False, copied=False, copy_attempted=False, size=7)
+
+
+@pytest.fixture
+def uncopied_misc_file_2():
     return file_instance(source_filepath='/source/file2.jpg',
                          destination_filepath='/destination/file2.jpg',
-                         copied=False, copy_attempted=False, size=5)
+                         media=False, copied=False, copy_attempted=False, size=13)

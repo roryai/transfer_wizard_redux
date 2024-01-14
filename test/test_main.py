@@ -3,7 +3,7 @@ import sys
 
 from .helpers import clear_db_and_test_directories
 from test.fixtures.main_fixtures import *
-from main import main, ROOT_DIR, configure_parser
+from main import main, PROGRAM_DESCRIPTION, ROOT_DIR, USAGE, configure_parser
 
 
 @pytest.fixture(autouse=True)
@@ -83,3 +83,11 @@ def test_db_initializer_called_with_correct_args(mocker, set_default_copy_args):
     main()
 
     mocked_db_initializer.assert_called_once_with(ROOT_DIR)
+
+
+def test_program_description_text():
+    assert configure_parser().description == PROGRAM_DESCRIPTION
+
+
+def test_program_usage_text():
+    assert configure_parser().usage == USAGE

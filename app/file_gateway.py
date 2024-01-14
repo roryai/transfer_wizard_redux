@@ -86,6 +86,66 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    def count_uncopied_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '0'
+            AND copy_attempted = '0'
+            AND media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_copied_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '1'
+            AND copy_attempted = '1'
+            AND media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_uncopied_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '0'
+            AND copy_attempted = '0'
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_copied_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '1'
+            AND copy_attempted = '1'
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_failed_copy_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '0'
+            AND copy_attempted = '1'
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_failed_copy_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = '0'
+            AND copy_attempted = '1'
+            AND media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
     def sum_size(self):
         statement = """
             SELECT SUM(size) 

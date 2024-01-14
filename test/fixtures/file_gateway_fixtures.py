@@ -4,10 +4,17 @@ from test.helpers import file_instance
 
 
 @pytest.fixture
-def copied_file():
-    return file_instance(source_filepath='/source/copied_file',
-                         destination_filepath='/destination/copied_file',
-                         copied=True, copy_attempted=True)
+def copied_media_file():
+    return file_instance(source_filepath='/source/copied_file.jpeg',
+                         destination_filepath='/destination/copied_file.jpeg',
+                         media=True, copied=True, copy_attempted=True)
+
+
+@pytest.fixture
+def copied_misc_file():
+    return file_instance(source_filepath='/source/misc_file.txt',
+                         destination_filepath='/destination/misc_file.txt',
+                         media=False, copied=True, copy_attempted=True)
 
 
 @pytest.fixture
@@ -26,6 +33,20 @@ def different_source_same_destination_2():
 def duplicate_file():
     return file_instance(source_filepath='/source/duplicate_file',
                          destination_filepath=None)
+
+
+@pytest.fixture
+def failed_copy_media_file():
+    return file_instance(source_filepath='/source/media.jpeg',
+                         destination_filepath='/destination/media.jpeg',
+                         media=True, copied=False, copy_attempted=True)
+
+
+@pytest.fixture
+def failed_copy_misc_file():
+    return file_instance(source_filepath='/source/file.txt',
+                         destination_filepath='/destination/file.txt',
+                         media=False, copied=False, copy_attempted=True)
 
 
 @pytest.fixture
@@ -75,10 +96,17 @@ def same_source_different_destination_2():
 
 
 @pytest.fixture
-def uncopied_file():
+def uncopied_media_file():
     return file_instance(source_filepath='/source/file1.jpg',
                          destination_filepath='/destination/file1.jpg',
-                         copied=False, copy_attempted=False, size=3)
+                         media=True, copied=False, copy_attempted=False, size=3)
+
+
+@pytest.fixture
+def uncopied_misc_file():
+    return file_instance(source_filepath='/source/file.txt',
+                         destination_filepath='/destination/file.txt',
+                         media=False, copied=False, copy_attempted=False)
 
 
 @pytest.fixture

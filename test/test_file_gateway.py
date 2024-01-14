@@ -21,25 +21,25 @@ def test_can_read_and_write_file(file):
 
 
 def test_selects_file_where_copy_not_attempted(
-        copied_file, file_with_copy_error, uncopied_file, duplicate_file):
-    for f in [copied_file, file_with_copy_error, uncopied_file, duplicate_file]:
+        copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_file):
+    for f in [copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_file]:
         gateway.insert(f)
 
     record = gateway.select_one_where_copy_not_attempted()
     selected_file = File.init_from_record(record)
 
-    assert selected_file == uncopied_file
+    assert selected_file == uncopied_media_file
 
     # confirm that it was just one record that met the criteria
-    gateway.delete(uncopied_file.source_filepath)
+    gateway.delete(uncopied_media_file.source_filepath)
     selected_record = gateway.select_one_where_copy_not_attempted()
 
     assert selected_record is None
 
 
 def test_when_attempting_to_select_uncopied_file_it_returns_none_when_no_valid_records_exist(
-        copied_file, file_with_copy_error):
-    gateway.insert(copied_file)
+        copied_media_file, file_with_copy_error):
+    gateway.insert(copied_media_file)
     gateway.insert(file_with_copy_error)
 
     record = gateway.select_one_where_copy_not_attempted()
@@ -108,6 +108,42 @@ def test_counts_duplicate_files(duplicate_file):
     assert gateway.duplicate_count() == 1
 
 
+def test_counts_misc_files_to_be_copied(uncopied_misc_file):
+    gateway.insert(uncopied_misc_file)
+
+    assert gateway.count_uncopied_misc_files() == 1
+
+
+def test_counts_media_files_to_be_copied(uncopied_media_file):
+    gateway.insert(uncopied_media_file)
+
+    assert gateway.count_uncopied_media_files() == 1
+
+
+def test_counts_copied_misc_files(copied_misc_file):
+    gateway.insert(copied_misc_file)
+
+    assert gateway.count_copied_misc_files() == 1
+
+
+def test_counts_copied_media_files(copied_media_file):
+    gateway.insert(copied_media_file)
+
+    assert gateway.count_copied_media_files() == 1
+
+
+def test_counts_failed_copy_misc_files(failed_copy_misc_file):
+    gateway.insert(failed_copy_misc_file)
+
+    assert gateway.count_failed_copy_misc_files() == 1
+
+
+def test_counts_failed_copy_media_files(failed_copy_media_file):
+    gateway.insert(failed_copy_media_file)
+
+    assert gateway.count_failed_copy_media_files() == 1
+
+
 def test_counts_name_clashes(file_with_name_clash):
     gateway.insert(file_with_name_clash)
 
@@ -122,12 +158,12 @@ def test_sums_size_of_all_files(file, file_2):
 
 
 def test_sums_size_of_files_that_are_valid_candidates_for_copying(
-        uncopied_file, uncopied_file_2, not_to_copy):
-    for f in [uncopied_file, uncopied_file_2, not_to_copy]:
+        uncopied_media_file, uncopied_file_2, not_to_copy):
+    for f in [uncopied_media_file, uncopied_file_2, not_to_copy]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_files_to_be_copied()
-    size_of_files_to_be_copied = uncopied_file.size + uncopied_file_2.size
+    size_of_files_to_be_copied = uncopied_media_file.size + uncopied_file_2.size
 
     assert sum_of_file_sizes == size_of_files_to_be_copied
 

@@ -5,7 +5,7 @@ import sys
 from app.copy_controller import CopyController
 from app.db_initializer import DBInitializer
 from app.directory_manager import DirectoryManager
-from app.extension_scanner import ExtensionScanner
+from app.extension_presenter import ExtensionPresenter
 
 ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 program_description = """
@@ -29,7 +29,7 @@ def main():
     args = parse_args(sys.argv[1:])
     if args.extensions:
         DirectoryManager().check_if_directory_exists(args.source)
-        ExtensionScanner(args.source).display_misc_extensions()
+        ExtensionPresenter(args.source).display_misc_extensions()
     elif args.destination:
         DirectoryManager().check_if_directory_exists(args.source)
         DirectoryManager().check_if_directory_exists(args.destination)

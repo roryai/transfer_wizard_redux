@@ -55,15 +55,15 @@ def test_throws_error_when_unexpected_arg_provided():
 
 def test_calls_expected_classes_when_source_and_extensions_args_provided(mocker, monkeypatch):
     mocked_directory_manager = mocker.patch('main.DirectoryManager')
-    mocked_extension_scanner = mocker.patch('main.ExtensionScanner')
+    mocked_extension_presenter = mocker.patch('main.ExtensionPresenter')
     source_dir = '/source_directory'
     monkeypatch.setattr('sys.argv', ['main.py', '-s', source_dir, '-ext'])
 
     main()
 
     mocked_directory_manager.return_value.check_if_directory_exists.assert_called_once_with(source_dir)
-    mocked_extension_scanner.assert_called_once_with(source_dir)
-    mocked_extension_scanner.return_value.display_misc_extensions.assert_called_once()
+    mocked_extension_presenter.assert_called_once_with(source_dir)
+    mocked_extension_presenter.return_value.display_misc_extensions.assert_called_once()
 
 
 def test_calls_expected_classes_when_source_and_destination_args_provided(mocker, monkeypatch):

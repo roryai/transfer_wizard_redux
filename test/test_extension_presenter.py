@@ -1,4 +1,4 @@
-from app.extension_scanner import ExtensionScanner
+from app.extension_presenter import ExtensionPresenter
 from .helpers import pytest, create_file_on_disk_with_data, clear_db_and_test_directories, source_directory
 
 
@@ -9,7 +9,7 @@ def teardown():
 
 
 def display_misc_extensions():
-    ExtensionScanner(source_directory).display_misc_extensions()
+    ExtensionPresenter(source_directory).display_misc_extensions()
 
 
 def test_displays_misc_extension_information_when_misc_extensions_are_present(capsys):
@@ -23,6 +23,7 @@ def test_displays_misc_extension_information_when_misc_extensions_are_present(ca
 The following miscellaneous file extensions are present in the source directory.
 By default these files are not copied.
 Consult the documentation to discover how to copy these files.
+
 err
 non
 
@@ -31,7 +32,7 @@ non
     assert result == expected
 
 
-def test_displays_misc_extension_information_when_no_misc_extensions_are_present(capsys):
+def test_displays_message_when_no_misc_extensions_are_present(capsys):
     display_misc_extensions()
 
     result = capsys.readouterr().out

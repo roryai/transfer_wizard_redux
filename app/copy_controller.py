@@ -43,5 +43,5 @@ class CopyController:
         Logger().log_to_file(stats)
 
     def __post_copy_error_logging_and_display(self):
-        error_messages = Logger().write_errors_to_logfile()
+        error_messages = Logger().append_errors_to_logfile()
         print(error_messages) if error_messages else None

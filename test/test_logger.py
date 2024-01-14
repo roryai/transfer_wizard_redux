@@ -63,6 +63,6 @@ def test_writes_errors_to_logfile():
                        "['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]\n"
 
     Logger().log_error(error, values)
-    Logger().write_errors_to_logfile()
+    Logger().append_errors_to_logfile()
 
     assert expected_content == file_content()

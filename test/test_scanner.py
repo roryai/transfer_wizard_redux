@@ -10,20 +10,12 @@ def teardown():
     clear_db_and_test_directories()
 
 
-def test_discovers_a_media_file_when_scanning_for_media():
+def test_discovers_a_media_file():
     media_filepath = create_file_on_disk(source_directory, 'file.jpg')
 
     discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
 
     assert discovered_filepaths == [media_filepath]
-
-
-def test_ignores_files_without_desired_extensions_when_scanning_for_media():
-    create_file_on_disk(source_directory, 'file.txt')
-
-    discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
-
-    assert len(discovered_filepaths) == 0
 
 
 def test_discovers_a_misc_extension():
@@ -32,6 +24,14 @@ def test_discovers_a_misc_extension():
     discovered_extensions = list(scanner.misc_extensions_in(source_directory))
 
     assert discovered_extensions == ['.txt']
+
+
+def test_ignores_files_with_misc_extensions_when_scanning_for_media_files():
+    create_file_on_disk(source_directory, 'file.txt')
+
+    discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
+
+    assert len(discovered_filepaths) == 0
 
 
 def test_ignores_files_with_media_extensions_when_scanning_for_misc_extensions():

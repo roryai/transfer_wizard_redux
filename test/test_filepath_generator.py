@@ -73,14 +73,14 @@ def test_returns_none_if_second_path_generated_points_to_file_with_identical_nam
 
 
 def test_uses_file_birth_time_when_birth_time_is_before_modified_time(birthtime_earlier):
-    generated_date = FilepathGenerator('/source', '/destination')._earliest_approximation_of_file_creation_time()
+    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_date()
     expected_date = datetime.fromtimestamp(birthtime_earlier.st_birthtime)
 
     assert expected_date == generated_date
 
 
 def test_uses_file_modified_time_when_birth_time_is_after_modified_time(birthtime_later):
-    generated_date = FilepathGenerator('/source', '/destination')._earliest_approximation_of_file_creation_time()
+    generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_date()
     expected_date = datetime.fromtimestamp(birthtime_later.st_mtime)
 
     assert expected_date == generated_date

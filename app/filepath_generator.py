@@ -9,35 +9,24 @@ class FilepathGenerator:
     def __init__(self, source_filepath, destination_root_directory):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
+        self.spacer = '___'
 
     def generate_destination_filepath(self):
         filename = Path(self.source_filepath).name
-        file_creation_time = self._earliest_approximation_of_file_creation_time()
+        file_creation_time = self._approximate_media_capture_date()
         quarter = self.__determine_quarter(file_creation_time.month)
         prospective_destination_filepath = os.path.join(
             self.destination_root_directory, str(file_creation_time.year), quarter, filename)
-
         return self.__resolve_path(prospective_destination_filepath)
 
-    def _earliest_approximation_of_file_creation_time(self):
-        stat = Path(self.source_filepath).stat()
-        birthtime_in_seconds = stat.st_birthtime
-        modified_time_in_seconds = stat.st_mtime
-        earliest_time = min(modified_time_in_seconds, birthtime_in_seconds)
-        return datetime.fromtimestamp(earliest_time)
+    def _approximate_media_capture_date(self):
+        file_metadata = Path(self.source_filepath).stat()
+        return datetime.fromtimestamp(min(file_metadata.st_mtime, file_metadata.st_birthtime))
 
     def __determine_quarter(self, month):
-        match month:
-            case 1 | 2 | 3:
-                return 'Q1'
-            case 4 | 5 | 6:
-                return 'Q2'
-            case 7 | 8 | 9:
-                return 'Q3'
-            case 10 | 11 | 12:
-                return 'Q4'
-            case _:
-                raise TypeError
+        quarters = {1: 'Q1', 2: 'Q1', 3: 'Q1', 4: 'Q2', 5: 'Q2', 6: 'Q2',
+                    7: 'Q3', 8: 'Q3', 9: 'Q3', 10: 'Q4', 11: 'Q4', 12: 'Q4'}
+        return quarters.get(month)
 
     def __resolve_path(self, destination_filepath):
         if not self.__path_in_use(destination_filepath):
@@ -55,20 +44,19 @@ class FilepathGenerator:
 
     def __generate_next_available_path(self, destination_filepath):
         path = Path(destination_filepath)
-        filename = self.__add_suffix(path.stem)
-        incremented_path = f'{path.parent}/{filename}{path.suffix}'
-        if self.__path_in_use(incremented_path):
-            return self.__resolve_path(incremented_path)
-        else:
-            return incremented_path
+        filename = self.__distinct_filename(path.stem)
+        next_path = os.path.join(path.parent, filename + path.suffix)
+        return self.__resolve_path(next_path) if self.__path_in_use(next_path) else next_path
 
-    def __add_suffix(self, filename):
-        if bool(re.search("___", filename)):
-            return self.__increment_suffix_number(filename)
-        else:
-            return filename + '___1'
+    def __distinct_filename(self, filename):
+        distinct_filename = f'{filename}{self.spacer}1'
+        return self.__increment_suffix_number(filename) if self.__has_suffix_already(filename) \
+            else distinct_filename
 
     def __increment_suffix_number(self, filename):
-        filename, existing_number_suffix = filename.rsplit('___', 1)
-        number_suffix = str(int(existing_number_suffix) + 1)
-        return filename.rsplit('___', 1)[0] + '___' + number_suffix
+        filename, existing_suffix_number = filename.rsplit(self.spacer, 1)
+        incremented_suffix_number = int(existing_suffix_number) + 1
+        return f'{filename}{self.spacer}{incremented_suffix_number}'
+
+    def __has_suffix_already(self, filename):
+        return bool(re.search(self.spacer, filename))

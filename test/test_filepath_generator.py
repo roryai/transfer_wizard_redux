@@ -25,7 +25,7 @@ def test_generates_path_including_year_and_quarter():
     assert generated_destination_path == expected_destination_path
 
 
-def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():
+def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size():
     filename, source_filepath, destination_directory, _ = create_test_files(
         create_destination_file=True)
 
@@ -36,7 +36,7 @@ def test_adds_suffix_to_filename_if_there_is_a_name_clash_with_existing_file():
     assert generated_destination_path == expected_destination_path
 
 
-def test_increments_number_suffix_if_name_clashes_with_file_that_already_has_suffix():
+def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size():
     _, source_filepath, destination_directory, _ = create_test_files(
         filename='a_file___1.jpeg', create_destination_file=True)
 

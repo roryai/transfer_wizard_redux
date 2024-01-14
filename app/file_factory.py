@@ -22,4 +22,5 @@ class FileFactory:
     def __name_clash(self, source_filepath, destination_filepath):
         if destination_filepath is None:
             return False
+        # names will be different if destination filename has incremented suffix
         return Path(source_filepath).name != Path(destination_filepath).name

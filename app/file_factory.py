@@ -15,17 +15,11 @@ class FileFactory:
             self.source_filepath, self.destination_root_directory).generate_destination_filepath()
         size = Path(self.source_filepath).stat().st_size
         name_clash = self.__name_clash(self.source_filepath, destination_filepath)
-        File(source_filepath=self.source_filepath,
-             destination_filepath=destination_filepath,
-             size=size,
-             name_clash=name_clash,
-             copied=False,
-             media=media,
-             copy_attempted=False).save()
+        File(source_filepath=self.source_filepath, destination_filepath=destination_filepath,
+             size=size, name_clash=name_clash, copied=False, media=media, copy_attempted=False
+             ).save()
 
     def __name_clash(self, source_filepath, destination_filepath):
         if destination_filepath is None:
             return False
-        source_filename = Path(source_filepath).name
-        destination_filename = Path(destination_filepath).name
-        return source_filename != destination_filename
+        return Path(source_filepath).name != Path(destination_filepath).name

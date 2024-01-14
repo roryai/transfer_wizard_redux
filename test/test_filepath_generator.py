@@ -30,7 +30,7 @@ def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_si
         create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath)
-    expected_filename = Path(filename).stem + '___1.jpeg'
+    expected_filename = f'{Path(filename).stem}___1.jpeg'
     expected_destination_path = construct_path(destination_directory, expected_filename)
 
     assert generated_destination_path == expected_destination_path

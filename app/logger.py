@@ -42,7 +42,7 @@ class Logger(metaclass=LoggerMeta):
 
     def append_errors_to_logfile(self):
         self.combined_error_messages = '\n'.join(self.error_messages)
-        self.__append_to_logfile('\nErrors:\n' + self.combined_error_messages)
+        self.__append_to_logfile(f'\nErrors:\n{self.combined_error_messages}')
 
     def log_to_file(self, log_entry):
         self.__append_to_logfile(log_entry)

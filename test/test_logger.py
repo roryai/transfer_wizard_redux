@@ -28,7 +28,7 @@ def test_init_log_file_creates_file():
     assert os.path.exists(Logger().log_file_path)
 
     timestamp_format = '%Y-%m-%d-%H%M.%S'
-    expected_filename = datetime.now().strftime(timestamp_format) + '_media_transfer_logfile.txt'
+    expected_filename = f'{datetime.now().strftime(timestamp_format)}_media_transfer_logfile.txt'
 
     assert Path(Logger().log_file_path).name == expected_filename
 

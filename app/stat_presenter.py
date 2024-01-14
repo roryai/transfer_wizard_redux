@@ -42,9 +42,9 @@ class StatPresenter:
         if self.duplicate_file_count + self.name_clash_file_count > 0:
             summary += '\n'
         if self.duplicate_file_count > 0:
-            summary += self.__duplicate_file_info() + '\n'
+            summary += f'{self.__duplicate_file_info()}\n'
         if self.name_clash_file_count > 0:
-            summary += self.__name_clash_file_info() + '\n'
+            summary += f'{self.__name_clash_file_info()}\n'
         return summary
 
     def __duplicate_file_info(self):

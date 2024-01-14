@@ -47,7 +47,7 @@ class FilepathGenerator:
     def __generate_next_available_path(self, destination_filepath):
         path = Path(destination_filepath)
         filename = self.__distinct_filename(path.stem)
-        next_path = os.path.join(path.parent, filename + path.suffix)
+        next_path = os.path.join(path.parent, f'{filename}{path.suffix}')
         return self.__resolve_path(next_path) if self.__path_in_use(next_path) else next_path
 
     def __distinct_filename(self, filename):

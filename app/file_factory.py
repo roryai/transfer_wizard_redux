@@ -10,7 +10,7 @@ class FileFactory:
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
 
-    def save_pre_copy_file_record(self, media=True):  # TODO remove default val when adding misc file functionality
+    def save_pre_copy_file_record(self, media):
         destination_filepath = FilepathGenerator(
             self.source_filepath, self.destination_root_directory).generate_destination_filepath(media)
         size = Path(self.source_filepath).stat().st_size

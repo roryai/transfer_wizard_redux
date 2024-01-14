@@ -15,19 +15,20 @@ def construct_path(*args):
 
 
 test_directory = str(Path(__file__).parent)
-test_media_directory = construct_path(test_directory, 'media')
-source_directory = construct_path(test_media_directory, 'source')
+test_resources_directory = construct_path(test_directory, 'test_resources')
+source_directory = construct_path(test_resources_directory, 'source')
 logfile_directory = construct_path(test_directory, 'logs')
-destination_root_directory = construct_path(test_media_directory, 'destination')
-default_source_filepath = construct_path(source_directory, 'filename.jpg')
-default_destination_filepath = construct_path(destination_root_directory, 'filename.jpg')
+destination_root_directory = construct_path(test_resources_directory, 'destination')
+misc_destination_directory = construct_path(destination_root_directory, 'misc')
+default_source_media_filepath = construct_path(source_directory, 'filename.jpg')
+default_destination_media_filepath = construct_path(destination_root_directory, 'filename.jpg')
 
 DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
 
 
-def file_instance(source_filepath=default_source_filepath,
-                  destination_filepath=default_destination_filepath,
+def file_instance(source_filepath=default_source_media_filepath,
+                  destination_filepath=default_destination_media_filepath,
                   size=1024, copied=False, name_clash=False, media=True,
                   copy_attempted=False):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
@@ -35,13 +36,21 @@ def file_instance(source_filepath=default_source_filepath,
                 copy_attempted=copy_attempted)
 
 
-def create_test_files(filename='test_file.jpeg', create_destination_file=False,
-                      source_data='default_source_data', dest_data='default_destination_data'):
+def create_test_media_files(filename='test_media_file.jpeg', create_destination_file=False,
+                            source_data='default_source_data', dest_data='default_destination_data'):
     source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
     destination_directory = static_destination_path(source_filepath)
     destination_filepath = construct_path(destination_directory, filename)
     create_file_on_disk_with_data(destination_directory, filename, dest_data) if create_destination_file else None
     return filename, source_filepath, destination_directory, destination_filepath
+
+
+def create_test_misc_files(filename='test_misc_file.gif', create_destination_file=False,
+                           source_data='default_source_data', dest_data='default_destination_data'):
+    source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
+    destination_filepath = construct_path(misc_destination_directory, filename)
+    create_file_on_disk_with_data(misc_destination_directory, filename, dest_data) if create_destination_file else None
+    return filename, source_filepath, misc_destination_directory, destination_filepath
 
 
 def static_destination_path(source_filepath):

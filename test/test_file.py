@@ -1,7 +1,7 @@
 from pathlib import PosixPath
 
-from .helpers import (pytest, clear_db_and_test_directories, default_destination_filepath,
-                      default_source_filepath, file_instance, instantiate_file_from_db_record)
+from .helpers import (pytest, clear_db_and_test_directories, default_destination_media_filepath,
+                      default_source_media_filepath, file_instance, instantiate_file_from_db_record)
 from app.file_gateway import FileGateway
 
 gateway = FileGateway()
@@ -26,8 +26,8 @@ def test_file_instantiated_from_record_has_expected_attributes():
 
     retrieved_file = instantiate_file_from_db_record(file.source_filepath)
 
-    assert retrieved_file.source_filepath == default_source_filepath
-    assert retrieved_file.destination_filepath == default_destination_filepath
+    assert retrieved_file.source_filepath == default_source_media_filepath
+    assert retrieved_file.destination_filepath == default_destination_media_filepath
     assert retrieved_file.size == 1024
     assert retrieved_file.name_clash is False
     assert retrieved_file.copied is False

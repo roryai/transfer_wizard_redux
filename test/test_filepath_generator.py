@@ -1,6 +1,6 @@
 from datetime import datetime
 from .helpers import (Path, clear_db_and_test_directories, construct_path, create_file_on_disk_with_data,
-                      create_test_files, destination_root_directory, source_directory, static_destination_path)
+                      create_test_media_files, destination_root_directory, source_directory, static_destination_path)
 from test.fixtures.filepath_generator_fixtures import *
 from app.filepath_generator import FilepathGenerator
 
@@ -17,7 +17,7 @@ def run_test_class(source_filepath):
 
 
 def test_generates_path_including_year_and_quarter():
-    filename, source_filepath, destination_directory, _ = create_test_files()
+    filename, source_filepath, destination_directory, _ = create_test_media_files()
 
     generated_destination_path = run_test_class(source_filepath)
     expected_destination_path = construct_path(destination_directory, filename)
@@ -26,7 +26,7 @@ def test_generates_path_including_year_and_quarter():
 
 
 def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size():
-    filename, source_filepath, destination_directory, _ = create_test_files(
+    filename, source_filepath, destination_directory, _ = create_test_media_files(
         create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath)
@@ -37,7 +37,7 @@ def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_si
 
 
 def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size():
-    _, source_filepath, destination_directory, _ = create_test_files(
+    _, source_filepath, destination_directory, _ = create_test_media_files(
         filename='a_file___1.jpeg', create_destination_file=True)
 
     generated_destination_path = run_test_class(source_filepath)
@@ -48,7 +48,7 @@ def test_increments_number_suffix_if_existing_file_already_has_suffix_and_differ
 
 def test_returns_none_if_generated_path_points_to_identical_file():
     data = 'same data'
-    _, source_filepath, _, _ = create_test_files(
+    _, source_filepath, _, _ = create_test_media_files(
         filename='a_file___1.jpeg', source_data=data, dest_data=data, create_destination_file=True)
     generated_destination_path = run_test_class(source_filepath)
 
@@ -67,7 +67,7 @@ def test_returns_none_if_second_path_generated_points_to_file_with_identical_nam
 
     generated_destination_path = FilepathGenerator(source_filepath,
                                                    destination_root_directory
-                                                   ).generate_destination_filepath()
+                                                   ).generate_media_destination_filepath()
 
     assert generated_destination_path is None
 

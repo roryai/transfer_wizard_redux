@@ -20,7 +20,7 @@ It scans files in the source directory, analyses them, and copies them to the ne
 Files are organised by year and quarter based on the approximate (see note on copy behaviour on different file systems, below) creation date of the files: 
 ```bash
 └── destination_directory
-    └── 2023
+    └── 2024
         └── Q1
             └── video.mov
         └── Q2
@@ -28,7 +28,7 @@ Files are organised by year and quarter based on the approximate (see note on co
         └── Q3
             └── film.mkv        
         └── Q4
-            └── cat.gif
+            └── cat.hevc
 ```
 
 The program handles files with the same name but different sizes (name clash files) by copying the file and adding a unique suffix to the filename.

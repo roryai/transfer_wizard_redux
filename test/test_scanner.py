@@ -60,8 +60,8 @@ def test_provides_multiple_misc_extensions():
 
 
 def test_media_extensions_includes_upper_and_lower_case_extensions():
-    media_exts = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic',
-                  '.BMP', '.GIF', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.HEIC',
+    media_exts = ['.bmp', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic',
+                  '.BMP', '.JPG', '.JPEG', '.PNG', '.TIF', '.TIFF', '.HEIC',
                   '.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc',
                   '.MP4', '.MOV', '.AVI', '.WMV', '.MKV', '.HEVC']
     assert sorted(MEDIA_EXTENSIONS) == sorted(media_exts)

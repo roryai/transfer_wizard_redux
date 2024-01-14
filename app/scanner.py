@@ -1,7 +1,7 @@
 from functools import partial
 import os
 
-PHOTO_EXTENSIONS = ['.bmp', '.gif', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic']
+PHOTO_EXTENSIONS = ['.bmp', '.jpg', '.jpeg', '.png', '.tif', '.tiff', '.heic']
 VIDEO_EXTENSIONS = ['.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc']
 MEDIA_EXTENSIONS = [ext.upper() for extensions in [PHOTO_EXTENSIONS, VIDEO_EXTENSIONS] for ext in extensions] \
                    + PHOTO_EXTENSIONS + VIDEO_EXTENSIONS

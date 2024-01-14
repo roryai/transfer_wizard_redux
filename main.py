@@ -15,18 +15,9 @@ python main.py -s path/to/source -d path/to/destination  <-- To copy files from 
 python main.py -s path/to/directory -ext  <-- To discover miscellaneous file extensions in directory."""
 
 
-def parse_args(args):
-    parser = argparse.ArgumentParser(description=program_description)
-    parser.add_argument('-s', '--source', type=str, required=True, help='Source directory path.')
-    parser.add_argument('-d', '--destination', type=str, required=False, help='Destination directory path.')
-    parser.add_argument('-ext', '--extensions', action='store_true', default=False, required=False,
-                        help='Displays miscellaneous extensions in source directory.')
-    return parser.parse_args(args)
-
-
 def main():
     DBInitializer(ROOT_DIR).init_prod_database()
-    args = parse_args(sys.argv[1:])
+    args = configure_parser().parse_args(sys.argv[1:])
     if args.extensions:
         DirectoryManager().check_if_directory_exists(args.source)
         ExtensionPresenter(args.source).display_misc_extensions()
@@ -39,6 +30,15 @@ def main():
         error_message = "Must provide source flag (-s <directory path>) and either -ext flag or " \
                         "-d flag (-d <directory path>)"
         raise argparse.ArgumentError(None, error_message)
+
+
+def configure_parser():
+    parser = argparse.ArgumentParser(description=program_description)
+    parser.add_argument('-s', '--source', type=str, required=True, help='Source directory path.')
+    parser.add_argument('-d', '--destination', type=str, required=False, help='Destination directory path.')
+    parser.add_argument('-ext', '--extensions', action='store_true', default=False, required=False,
+                        help='Displays miscellaneous extensions in source directory.')
+    return parser
 
 
 if __name__ == '__main__':

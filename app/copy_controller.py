@@ -29,8 +29,7 @@ class CopyController:
 
     def __user_confirms_copy(self):
         print(f'\nProceed with copy? ( y / n )')
-        if input() == 'y':
-            return True
+        return input().lower() == 'y'
 
     def __perform_copy(self, stats):
         self.__pre_copy_logging(stats)

@@ -1,7 +1,7 @@
 from datetime import datetime
 from .helpers import (Path, clear_db_and_test_directories, construct_path, create_file_on_disk_with_data,
                       create_test_media_files, create_test_misc_files, destination_root_directory,
-                      source_directory, static_destination_path, misc_destination_directory)
+                      source_directory, static_date_based_destination_path, misc_destination_directory)
 from test.fixtures.filepath_generator_fixtures import *
 from app.filepath_generator import FilepathGenerator
 
@@ -43,7 +43,7 @@ class TestSharedFunctionality:
     def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(self):
         filename = 'test_file.jpeg'
         source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
-        destination_directory = static_destination_path(source_filepath)
+        destination_directory = static_date_based_destination_path(source_filepath)
 
         # source filepath has name clash with this filepath, so generated filename is incremented
         create_file_on_disk_with_data(destination_directory, filename, 'Unique data')

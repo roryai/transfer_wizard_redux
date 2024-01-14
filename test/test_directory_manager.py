@@ -1,6 +1,8 @@
 from app.directory_manager import DirectoryManager
 
-from .helpers import pytest, Path, shutil, clear_db_and_test_directories, create_file_on_disk, construct_path, destination_root_directory, source_directory, static_destination_path
+from .helpers import (pytest, Path, shutil, clear_db_and_test_directories,
+                      create_file_on_disk, construct_path, destination_root_directory,
+                      source_directory, static_date_based_destination_path)
 
 
 @pytest.fixture(autouse=True)
@@ -21,7 +23,7 @@ def test_creates_a_directory():
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
     filename = 'test_file.jpeg'
     source_filepath = create_file_on_disk(source_directory, filename)
-    destination_directory = static_destination_path(source_filepath)
+    destination_directory = static_date_based_destination_path(source_filepath)
     destination_filepath = construct_path(destination_directory, filename)
 
     DirectoryManager().create_directory_if_not_exists(destination_directory)

@@ -34,13 +34,4 @@ class File:
 
     @classmethod
     def init_from_record(cls, record):
-        vals = FileRecord().map_from_record(record)
-        return File(
-            source_filepath=vals['source_filepath'],
-            destination_filepath=vals['destination_filepath'],
-            size=vals['size'],
-            copied=vals['copied'],
-            name_clash=vals['name_clash'],
-            media=vals['media'],
-            copy_attempted=vals['copy_attempted']
-        )
+        return cls(**FileRecord().map_from_record(record))

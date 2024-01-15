@@ -22,7 +22,7 @@ Destination root directory: destination/
 6 candidate files discovered in source directory.
 Total size of candidate files: 6.15MB
 
-4 files are media files: 3.22MB
+4 files are media files: 4.2MB
 2 files are miscellaneous files: 1.95MB
 
 2 files are duplicates and will not be copied.
@@ -46,7 +46,7 @@ Destination root directory: destination/
 2 candidate files discovered in source directory.
 Total size of candidate files: 1.76MB
 
-1 file is a media file: 0.0MB
+1 file is a media file: 0.2MB
 1 file is a miscellaneous file: 1.56MB
 
 1 file is a duplicate and will not be copied.

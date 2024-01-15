@@ -47,9 +47,10 @@ class StatPresenter:
 
     def __candidate_files_info(self):
         file_or_files = self.__file_or_files(self.candidate_file_count)
-        candidates = f'{self.candidate_file_count} candidate {file_or_files} discovered in source directory.'
-        candidates_size = f'Total size of candidate {file_or_files}: {self.__convert_bytes_to_megabytes(self.gateway.sum_size())}MB'
-        return f'{candidates}\n{candidates_size}\n'
+        count_info = f'{self.candidate_file_count} candidate {file_or_files} discovered in source directory.'
+        all_files_size = self.__convert_bytes_to_megabytes(self.gateway.sum_size())
+        size_info = f'Total size of candidate {file_or_files}: {all_files_size}MB'
+        return f'{count_info}\n{size_info}\n'
 
     def __filetype_info(self):
         info = ''
@@ -60,11 +61,11 @@ class StatPresenter:
 
     def __media_file_info(self):
         media_file_count = self.gateway.count_uncopied_media_files()
-        if media_file_count == 0:
+        if media_file_count == 0:  # TODO move check to __filetype_info()?
             return ''
         media_file_or_files = self.__single_or_plural_grammar(media_file_count,
                                                               'file is a media file', 'files are media files')
-        media_files_size = self.__convert_bytes_to_megabytes(self.gateway.sum_size_of_media_files_to_be_copied())
+        media_files_size = self.__convert_bytes_to_megabytes(self.gateway.sum_size_of_media_files())
         return f'{media_file_count} {media_file_or_files}: {media_files_size}MB'
 
     def __misc_file_info(self):
@@ -74,7 +75,7 @@ class StatPresenter:
         misc_file_or_files = self.__single_or_plural_grammar(misc_file_count,
                                                              'file is a miscellaneous file',
                                                              'files are miscellaneous files')
-        misc_files_size = self.__convert_bytes_to_megabytes(self.gateway.sum_size_of_misc_files_to_be_copied())
+        misc_files_size = self.__convert_bytes_to_megabytes(self.gateway.sum_size_of_misc_files())
         return f'{misc_file_count} {misc_file_or_files}: {misc_files_size}MB'
 
     def __handle_display_of_duplicate_and_name_clash_info(self):

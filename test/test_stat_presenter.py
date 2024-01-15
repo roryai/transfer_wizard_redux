@@ -128,7 +128,7 @@ def test_displays_no_files_found_message(capsys):
     expected_output = """Source root directory: source/
 Destination root directory: destination/
 
-No files found in source directory\n"""
+No files found in source directory.\n"""
 
     present_stats()
     captured = capsys.readouterr()

@@ -19,7 +19,7 @@ class StatPresenter:
         return self.stats_summary
 
     def __build_stats_summary(self):
-        if self.to_be_copied_count == 0:
+        if self.gateway.count() == 0:
             return self.__no_files_to_copy_message()
         else:
             return self.__files_to_copy_message()
@@ -27,7 +27,7 @@ class StatPresenter:
     def __no_files_to_copy_message(self):
         return '\n'.join([
             self.__destination_and_source_path_info(),
-            'No files found in source directory'
+            'No files found in source directory.'
         ])
 
     def __files_to_copy_message(self):

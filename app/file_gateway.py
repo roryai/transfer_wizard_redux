@@ -153,6 +153,22 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    def sum_size_of_media_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_misc_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
     def sum_size_of_media_files_to_be_copied(self):
         statement = """
             SELECT SUM(size)

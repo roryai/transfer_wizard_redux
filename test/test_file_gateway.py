@@ -157,9 +157,33 @@ def test_sums_size_of_all_files(file, file_2):
     assert gateway.sum_size() == 13
 
 
+def test_sums_size_of_media_files(
+        uncopied_media_file, media_file_not_to_copy, copied_media_file):
+    for f in [uncopied_media_file, media_file_not_to_copy, copied_media_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_media_files()
+    size_of_files_to_be_copied = \
+        uncopied_media_file.size + media_file_not_to_copy.size + copied_media_file.size
+
+    assert sum_of_file_sizes == size_of_files_to_be_copied
+
+
+def test_sums_size_of_misc_files(
+        uncopied_misc_file, misc_file_not_to_copy, copied_misc_file):
+    for f in [uncopied_misc_file, misc_file_not_to_copy, copied_misc_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_misc_files()
+    size_of_files_to_be_copied = \
+        uncopied_misc_file.size + misc_file_not_to_copy.size + copied_misc_file.size
+
+    assert sum_of_file_sizes == size_of_files_to_be_copied
+
+
 def test_sums_size_of_media_files_that_are_valid_candidates_for_copying(
-        uncopied_media_file, uncopied_media_file_2, not_to_copy):
-    for f in [uncopied_media_file, uncopied_media_file_2, not_to_copy]:
+        uncopied_media_file, uncopied_media_file_2, media_file_not_to_copy):
+    for f in [uncopied_media_file, uncopied_media_file_2, media_file_not_to_copy]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_media_files_to_be_copied()
@@ -169,8 +193,8 @@ def test_sums_size_of_media_files_that_are_valid_candidates_for_copying(
 
 
 def test_sums_size_of_misc_files_that_are_valid_candidates_for_copying(
-        uncopied_misc_file, uncopied_misc_file_2, not_to_copy):
-    for f in [uncopied_misc_file, uncopied_misc_file_2, not_to_copy]:
+        uncopied_misc_file, uncopied_misc_file_2, misc_file_not_to_copy):
+    for f in [uncopied_misc_file, uncopied_misc_file_2, misc_file_not_to_copy]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_misc_files_to_be_copied()

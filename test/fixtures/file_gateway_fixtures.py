@@ -7,14 +7,14 @@ from test.helpers import file_instance
 def copied_media_file():
     return file_instance(source_filepath='/source/copied_file.jpeg',
                          destination_filepath='/destination/copied_file.jpeg',
-                         media=True, copied=True, copy_attempted=True)
+                         media=True, copied=True, copy_attempted=True, size=19)
 
 
 @pytest.fixture
 def copied_misc_file():
     return file_instance(source_filepath='/source/misc_file.txt',
                          destination_filepath='/destination/misc_file.txt',
-                         media=False, copied=True, copy_attempted=True)
+                         media=False, copied=True, copy_attempted=True, size=17)
 
 
 @pytest.fixture
@@ -78,9 +78,15 @@ def file_with_name_clash():
 
 
 @pytest.fixture
-def not_to_copy():
+def media_file_not_to_copy():
     return file_instance(source_filepath='/source/file_with_copy_error',
-                         destination_filepath=None, size=7)
+                         media=True, destination_filepath=None, size=7)
+
+
+@pytest.fixture
+def misc_file_not_to_copy():
+    return file_instance(source_filepath='/source/file_with_copy_error',
+                         media=False, destination_filepath=None, size=23)
 
 
 @pytest.fixture

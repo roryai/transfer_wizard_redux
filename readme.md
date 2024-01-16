@@ -1,15 +1,17 @@
 # Transfer Wizard
-#### A tool to organise your media files by date into folders structured by year and quarter
+### A tool to organise your media files by date into folders structured by year and quarter
 
 ##### Development notes:
 
 This project is a work in progress and is under active development. As such use it at your own risk.
 
-My main language is Ruby. I wanted to learn Python so that's the language I chose for this project. As such my coding style may be less Pythonic and more influenced by Ruby conventions.
+My main language is Ruby. I wanted to learn Python and so taught myself whilst building this. As such I will not always follow Pythonic conventions.
 
 I wanted to learn by experimenting, so some design decisions are unorthodox. e.g.: instead of using the built in logger I have built my own using the singleton pattern. The database controller also uses the singleton pattern.
 
 I aim to use the Python standard library or build my own helpers and tools wherever possible. As such pytest and pytest-mock are the only external requirements.
+
+There is only minimal error handling as I wanted errors to surface immediately during development and testing. Error handling is on the roadmap.
 
 ### Overview
 
@@ -38,17 +40,20 @@ Duplicate files (files that have the same name and the same size) are identified
 The program gives a summary of files to be copied before asking for user confirmation of copy:
 
 ```commandline
-Source directory: /source
-Destination directory: /destination
+Source root directory: source/
+Destination root directory: destination/
 
-7 candidate photo and video files discovered in source directory.
-Total size of candidate files: 2.89MB
+6 candidate files discovered in source directory.
+Total size of candidate files: 6.15MB
 
-5 files are duplicates. Duplicates will not be copied.
-0 files had name clashes. Files will be copied with a unique suffix.
-2 files will be copied.
+4 files are media files: 4.2MB
+2 files are miscellaneous files: 1.95MB
 
-Total size of files to be copied: 0.63MB
+2 files are duplicates and will not be copied.
+2 files have name clashes and will be copied with a unique suffix.
+
+4 files will be copied.
+Total size of files to be copied: 5.18MB
 
 Proceed with copy? ( y / n )
 ```
@@ -65,14 +70,16 @@ You will be presented with statistics on the files you want to copy. You can the
 
 
 ### Current functionality
+Three modes:
 - Copies photos and videos from source directory to generated directory structure in destination directory
-- Status update before copy
+- Lists miscellaneous file extensions that won't be copied when above mode is run
+- Same as first mode, but copies the miscellaneous files to a single directory (misc) in destination directory
+- Detailed summary before copy of how many files are: copy candidates, media files, misc files, duplicates, and files with name clash. Lists count and total size of files to be copied.
 - Command line interface
-- Has alternate mode where it lists file extensions that won't be copied from source directory
 - Detailed log files
 
 ### Future functionality
-- Reorganise (move) files in source directory instead of copying them to a new location.
+- Reorganise (move) files in source directory instead of copying them to a destination directory.
 - Pause and resume function
 - Status updates during and after copy
 - Scheduled backup functionality

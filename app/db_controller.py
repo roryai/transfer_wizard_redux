@@ -30,8 +30,8 @@ class DBController(metaclass=DBControllerMeta):
         except Error as e:
             Logger().log_error(e, values)
 
-    def execute_read_query(self, query):
+    def execute_read_query(self, query, values):
         cursor = self.connection.cursor()
-        cursor.execute(query)
+        cursor.execute(query, values)
         result = cursor.fetchall()
         return result

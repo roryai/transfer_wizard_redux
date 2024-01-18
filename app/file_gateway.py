@@ -23,7 +23,7 @@ class FileGateway:
             FROM files
             WHERE source_filepath = '{source_filepath}';
         """
-        return self.db_controller.execute_read_query(statement)[0]
+        return self.db_controller.execute_read_query(statement, [])[0]
 
     def select_one_where_copy_not_attempted(self):
         statement = """
@@ -34,7 +34,7 @@ class FileGateway:
             AND destination_filepath IS NOT NULL
             LIMIT 1;
         """
-        result = self.db_controller.execute_read_query(statement)
+        result = self.db_controller.execute_read_query(statement, [])
         if len(result) == 0:
             return None
         return result[0]
@@ -63,15 +63,12 @@ class FileGateway:
         """
         return self.db_controller.execute_query(statement, [])
 
-    ######################################################################
-    # COUNT
-    ######################################################################
     def count(self):
         statement = """
             SELECT COUNT(*)
             FROM files;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
 
     def duplicate_count(self):
         statement = """
@@ -79,7 +76,7 @@ class FileGateway:
             FROM files
             WHERE destination_filepath IS NULL
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
 
     def name_clash_count(self):
         statement = """
@@ -87,147 +84,105 @@ class FileGateway:
             FROM files
             WHERE name_clash = '1';
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
 
-    def count_misc_files(self):
+    def count_files_by_type(self, media):
         statement = """
             SELECT COUNT(*)
             FROM files
-            WHERE media = '0';
+            WHERE media = ?;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
-
-    def count_uncopied_misc_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = '0'
-            AND copy_attempted = '0'
-            AND media = '0';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
-
-    def count_duplicate_misc_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = '0'
-            AND destination_filepath IS NULL;
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
-
-    def count_name_clash_misc_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = '0'
-            AND name_clash = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
-
-    def count_copied_misc_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = '1'
-            AND copy_attempted = '1'
-            AND media = '0';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
-
-    def count_uncopied_media_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = '0'
-            AND copy_attempted = '0'
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
     def count_media_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.count_files_by_type(media=True)
 
-    def count_duplicate_media_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = '1'
-            AND destination_filepath IS NULL;
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+    def count_misc_files(self):
+        return self.count_files_by_type(media=False)
 
-    def count_name_clash_media_files(self):
+    def count_name_clash_files_by_type(self, media):
         statement = """
             SELECT COUNT(*)
             FROM files
-            WHERE media = '1'
+            WHERE media = ?
             AND name_clash = '1';
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
+
+    def count_name_clash_misc_files(self):
+        return self.count_name_clash_files_by_type(media=False)
+
+    def count_name_clash_media_files(self):
+        return self.count_name_clash_files_by_type(media=True)
+
+    def count_files_by_copy_status_and_type(self, copied, copy_attempted, media):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE copied = ?
+            AND copy_attempted = ?
+            AND media = ?;
+        """
+        values = [int(copied), int(copy_attempted), int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
+
+    def count_copied_misc_files(self):
+        return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=False)
 
     def count_copied_media_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = '1'
-            AND copy_attempted = '1'
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=True)
 
-    def count_failed_copy_media_files(self):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = '0'
-            AND copy_attempted = '1'
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+    def count_uncopied_misc_files(self):
+        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=False, media=False)
+
+    def count_uncopied_media_files(self):
+        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=False, media=True)
 
     def count_failed_copy_misc_files(self):
+        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=False)
+
+    def count_failed_copy_media_files(self):
+        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=True)
+
+    def count_duplicate_files_by_type(self, media):
         statement = """
             SELECT COUNT(*)
             FROM files
-            WHERE copied = '0'
-            AND copy_attempted = '1'
-            AND media = '0';
+            WHERE media = ?
+            AND destination_filepath IS NULL;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
-    ######################################################################
-    # COUNT
-    ######################################################################
-    # SIZE
-    ######################################################################
+    def count_duplicate_media_files(self):
+        return self.count_duplicate_files_by_type(media=True)
+
+    def count_duplicate_misc_files(self):
+        return self.count_duplicate_files_by_type(media=False)
+
     def sum_size(self):
         statement = """
             SELECT SUM(size) 
             FROM files;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
+
+    def sum_size_of_files_by_type(self, media):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE media = ?;
+        """
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
     def sum_size_of_media_files(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_files_by_type(media=True)
 
     def sum_size_of_misc_files(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE media = '0';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_files_by_type(media=False)
 
     def sum_size_of_name_clash_files(self):
         statement = """
@@ -235,7 +190,7 @@ class FileGateway:
             FROM files
             WHERE name_clash = '1';
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
 
     def sum_size_of_duplicate_files(self):
         statement = """
@@ -243,62 +198,54 @@ class FileGateway:
             FROM files
             WHERE destination_filepath IS NULL;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.db_controller.execute_read_query(statement, [])[0][0]
+
+    def sum_size_of_duplicate_files_by_type(self, media):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NULL
+            AND media = ?;
+        """
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
     def sum_size_of_duplicate_media_files(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE destination_filepath IS NULL
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_duplicate_files_by_type(media=True)
 
     def sum_size_of_duplicate_misc_files(self):
+        return self.sum_size_of_duplicate_files_by_type(media=False)
+
+    def sum_size_of_name_clash_files_by_type(self, media):
         statement = """
             SELECT SUM(size)
             FROM files
-            WHERE destination_filepath IS NULL
-            AND media = '0';
+            WHERE name_clash is '1'
+            AND media = ?;
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
     def sum_size_of_name_clash_media_files(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE name_clash is '1'
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_name_clash_files_by_type(media=True)
 
     def sum_size_of_name_clash_misc_files(self):
+        return self.sum_size_of_name_clash_files_by_type(media=False)
+
+    def sum_size_of_files_to_be_copied_by_type(self, media):
         statement = """
             SELECT SUM(size)
             FROM files
-            WHERE name_clash is '1'
-            AND media = '0';
+            WHERE destination_filepath IS NOT NULL
+            AND copied == '0'
+            AND copy_attempted == '0'
+            AND media = ?
         """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        values = [int(media)]
+        return self.db_controller.execute_read_query(statement, values)[0][0]
 
     def sum_size_of_media_files_to_be_copied(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE destination_filepath IS NOT NULL
-            AND copied == '0'
-            AND copy_attempted == '0'
-            AND media = '1';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_files_to_be_copied_by_type(media=True)
 
     def sum_size_of_misc_files_to_be_copied(self):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE destination_filepath IS NOT NULL
-            AND copied == '0'
-            AND copy_attempted == '0'
-            AND media = '0';
-        """
-        return self.db_controller.execute_read_query(statement)[0][0]
+        return self.sum_size_of_files_to_be_copied_by_type(media=False)

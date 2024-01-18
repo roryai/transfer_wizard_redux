@@ -6,6 +6,16 @@ class FileGateway:
     def __init__(self):
         self.db_controller = DBController()
 
+    def execute_query(self, statement):
+        return self.db_controller.execute_query(statement, [])
+
+    def execute_read_query(self, statement, values=None):
+        values = values if values else []
+        return self.min_size_zero(self.db_controller.execute_read_query(statement, values)[0][0])
+
+    def min_size_zero(self, result):
+        return 0 if not result else result
+
     def insert(self, file):
         statement = """
             INSERT INTO
@@ -35,9 +45,7 @@ class FileGateway:
             LIMIT 1;
         """
         result = self.db_controller.execute_read_query(statement, [])
-        if len(result) == 0:
-            return None
-        return result[0]
+        return None if len(result) == 0 else result[0]
 
     def update_copied(self, copied, copy_attempted, source_filepath):
         statement = f"""
@@ -48,27 +56,27 @@ class FileGateway:
             WHERE
                 source_filepath = '{source_filepath}'
         """
-        return self.db_controller.execute_query(statement, [])
+        return self.execute_query(statement)
 
     def delete(self, source_filepath):
         statement = f"""
             DELETE FROM files
             WHERE source_filepath = '{source_filepath}';
         """
-        return self.db_controller.execute_query(statement, [])
+        return self.execute_query(statement)
 
     def wipe_database(self):
         statement = """
             DELETE FROM files;
         """
-        return self.db_controller.execute_query(statement, [])
+        return self.execute_query(statement)
 
     def count(self):
         statement = """
             SELECT COUNT(*)
             FROM files;
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def duplicate_count(self):
         statement = """
@@ -76,7 +84,7 @@ class FileGateway:
             FROM files
             WHERE destination_filepath IS NULL
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def name_clash_count(self):
         statement = """
@@ -84,7 +92,7 @@ class FileGateway:
             FROM files
             WHERE name_clash = '1';
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def count_files_by_type(self, media):
         statement = """
@@ -93,7 +101,7 @@ class FileGateway:
             WHERE media = ?;
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def count_media_files(self):
         return self.count_files_by_type(media=True)
@@ -109,7 +117,7 @@ class FileGateway:
             AND name_clash = '1';
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def count_name_clash_misc_files(self):
         return self.count_name_clash_files_by_type(media=False)
@@ -126,7 +134,7 @@ class FileGateway:
             AND media = ?;
         """
         values = [int(copied), int(copy_attempted), int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def count_copied_misc_files(self):
         return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=False)
@@ -154,7 +162,7 @@ class FileGateway:
             AND destination_filepath IS NULL;
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def count_duplicate_media_files(self):
         return self.count_duplicate_files_by_type(media=True)
@@ -167,7 +175,7 @@ class FileGateway:
             SELECT SUM(size) 
             FROM files;
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def sum_size_of_files_by_type(self, media):
         statement = """
@@ -176,7 +184,7 @@ class FileGateway:
             WHERE media = ?;
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def sum_size_of_media_files(self):
         return self.sum_size_of_files_by_type(media=True)
@@ -190,7 +198,7 @@ class FileGateway:
             FROM files
             WHERE name_clash = '1';
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def sum_size_of_duplicate_files(self):
         statement = """
@@ -198,7 +206,7 @@ class FileGateway:
             FROM files
             WHERE destination_filepath IS NULL;
         """
-        return self.db_controller.execute_read_query(statement, [])[0][0]
+        return self.execute_read_query(statement)
 
     def sum_size_of_duplicate_files_by_type(self, media):
         statement = """
@@ -208,7 +216,7 @@ class FileGateway:
             AND media = ?;
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def sum_size_of_duplicate_media_files(self):
         return self.sum_size_of_duplicate_files_by_type(media=True)
@@ -224,7 +232,7 @@ class FileGateway:
             AND media = ?;
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def sum_size_of_name_clash_media_files(self):
         return self.sum_size_of_name_clash_files_by_type(media=True)
@@ -242,7 +250,7 @@ class FileGateway:
             AND media = ?
         """
         values = [int(media)]
-        return self.db_controller.execute_read_query(statement, values)[0][0]
+        return self.execute_read_query(statement, values)
 
     def sum_size_of_media_files_to_be_copied(self):
         return self.sum_size_of_files_to_be_copied_by_type(media=True)

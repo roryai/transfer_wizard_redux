@@ -63,6 +63,9 @@ class FileGateway:
         """
         return self.db_controller.execute_query(statement, [])
 
+    ######################################################################
+    # COUNT
+    ######################################################################
     def count(self):
         statement = """
             SELECT COUNT(*)
@@ -86,6 +89,14 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    def count_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
     def count_uncopied_misc_files(self):
         statement = """
             SELECT COUNT(*)
@@ -93,6 +104,24 @@ class FileGateway:
             WHERE copied = '0'
             AND copy_attempted = '0'
             AND media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_duplicate_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '0'
+            AND destination_filepath IS NULL;
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_name_clash_misc_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '0'
+            AND name_clash = '1';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
@@ -113,6 +142,32 @@ class FileGateway:
             WHERE copied = '0'
             AND copy_attempted = '0'
             AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_duplicate_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '1'
+            AND destination_filepath IS NULL;
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def count_name_clash_media_files(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE media = '1'
+            AND name_clash = '1';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
@@ -146,6 +201,11 @@ class FileGateway:
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 
+    ######################################################################
+    # COUNT
+    ######################################################################
+    # SIZE
+    ######################################################################
     def sum_size(self):
         statement = """
             SELECT SUM(size) 
@@ -166,6 +226,58 @@ class FileGateway:
             SELECT SUM(size)
             FROM files
             WHERE media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_name_clash_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE name_clash = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_duplicate_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NULL;
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_duplicate_media_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NULL
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_duplicate_misc_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NULL
+            AND media = '0';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_name_clash_media_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE name_clash is '1'
+            AND media = '1';
+        """
+        return self.db_controller.execute_read_query(statement)[0][0]
+
+    def sum_size_of_name_clash_misc_files(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE name_clash is '1'
+            AND media = '0';
         """
         return self.db_controller.execute_read_query(statement)[0][0]
 

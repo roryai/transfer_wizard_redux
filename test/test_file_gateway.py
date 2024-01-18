@@ -21,8 +21,8 @@ def test_can_read_and_write_file(file):
 
 
 def test_selects_file_where_copy_not_attempted(
-        copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_file):
-    for f in [copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_file]:
+        copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_media_file):
+    for f in [copied_media_file, file_with_copy_error, uncopied_media_file, duplicate_media_file]:
         gateway.insert(f)
 
     record = gateway.select_one_where_copy_not_attempted()
@@ -102,8 +102,8 @@ def test_counts_records(file, file_2):
     assert gateway.count() == 2
 
 
-def test_counts_duplicate_files(duplicate_file):
-    gateway.insert(duplicate_file)
+def test_counts_duplicate_files(duplicate_media_file):
+    gateway.insert(duplicate_media_file)
 
     assert gateway.duplicate_count() == 1
 
@@ -112,6 +112,25 @@ def test_counts_misc_files_to_be_copied(uncopied_misc_file):
     gateway.insert(uncopied_misc_file)
 
     assert gateway.count_uncopied_misc_files() == 1
+
+
+def test_counts_misc_files(uncopied_misc_file, copied_misc_file):
+    gateway.insert(uncopied_misc_file)
+    gateway.insert(copied_misc_file)
+
+    assert gateway.count_misc_files() == 2
+
+
+def test_counts_duplicate_misc_files(duplicate_misc_file):
+    gateway.insert(duplicate_misc_file)
+
+    assert gateway.count_duplicate_misc_files() == 1
+
+
+def test_counts_name_clash_misc_files(misc_file_with_name_clash):
+    gateway.insert(misc_file_with_name_clash)
+
+    assert gateway.count_name_clash_misc_files() == 1
 
 
 def test_counts_media_files_to_be_copied(uncopied_media_file):
@@ -132,6 +151,24 @@ def test_counts_copied_media_files(copied_media_file):
     assert gateway.count_copied_media_files() == 1
 
 
+def test_counts_media_files(copied_media_file):
+    gateway.insert(copied_media_file)
+
+    assert gateway.count_media_files() == 1
+
+
+def test_counts_duplicate_media_files(duplicate_media_file):
+    gateway.insert(duplicate_media_file)
+
+    assert gateway.count_duplicate_media_files() == 1
+
+
+def test_counts_name_clash_media_files(media_file_with_name_clash):
+    gateway.insert(media_file_with_name_clash)
+
+    assert gateway.count_name_clash_media_files() == 1
+
+
 def test_counts_failed_copy_misc_files(failed_copy_misc_file):
     gateway.insert(failed_copy_misc_file)
 
@@ -144,8 +181,8 @@ def test_counts_failed_copy_media_files(failed_copy_media_file):
     assert gateway.count_failed_copy_media_files() == 1
 
 
-def test_counts_name_clashes(file_with_name_clash):
-    gateway.insert(file_with_name_clash)
+def test_counts_name_clashes(media_file_with_name_clash):
+    gateway.insert(media_file_with_name_clash)
 
     assert gateway.name_clash_count() == 1
 
@@ -158,32 +195,96 @@ def test_sums_size_of_all_files(file, file_2):
 
 
 def test_sums_size_of_media_files(
-        uncopied_media_file, media_file_not_to_copy, copied_media_file):
-    for f in [uncopied_media_file, media_file_not_to_copy, copied_media_file]:
+        uncopied_media_file, duplicate_media_file, copied_media_file):
+    for f in [uncopied_media_file, duplicate_media_file, copied_media_file]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_media_files()
     size_of_files_to_be_copied = \
-        uncopied_media_file.size + media_file_not_to_copy.size + copied_media_file.size
+        uncopied_media_file.size + duplicate_media_file.size + copied_media_file.size
 
     assert sum_of_file_sizes == size_of_files_to_be_copied
 
 
+def test_sums_size_of_duplicate_media_files(
+        duplicate_media_file, copied_media_file):
+    for f in [duplicate_media_file, copied_media_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_duplicate_media_files()
+
+    assert sum_of_file_sizes == duplicate_media_file.size
+
+
+def test_sums_size_of_name_clash_media_files(
+        duplicate_media_file, media_file_with_name_clash):
+    for f in [duplicate_media_file, media_file_with_name_clash]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_name_clash_media_files()
+
+    assert sum_of_file_sizes == media_file_with_name_clash.size
+
+
 def test_sums_size_of_misc_files(
-        uncopied_misc_file, misc_file_not_to_copy, copied_misc_file):
-    for f in [uncopied_misc_file, misc_file_not_to_copy, copied_misc_file]:
+        uncopied_misc_file, duplicate_misc_file, copied_misc_file):
+    for f in [uncopied_misc_file, duplicate_misc_file, copied_misc_file]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_misc_files()
     size_of_files_to_be_copied = \
-        uncopied_misc_file.size + misc_file_not_to_copy.size + copied_misc_file.size
+        uncopied_misc_file.size + duplicate_misc_file.size + copied_misc_file.size
+
+    assert sum_of_file_sizes == size_of_files_to_be_copied
+
+
+def test_sums_size_of_duplicate_misc_files(
+        uncopied_misc_file, duplicate_misc_file, copied_misc_file):
+    for f in [uncopied_misc_file, duplicate_misc_file, copied_misc_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_duplicate_misc_files()
+
+    assert sum_of_file_sizes == duplicate_misc_file.size
+
+
+def test_sums_size_of_name_clash_misc_files(
+        uncopied_misc_file, misc_file_with_name_clash, copied_misc_file):
+    for f in [uncopied_misc_file, misc_file_with_name_clash, copied_misc_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_name_clash_misc_files()
+
+    assert sum_of_file_sizes == misc_file_with_name_clash.size
+
+
+def test_sums_size_of_name_clash_files(
+        media_file_with_name_clash, misc_file_with_name_clash, copied_misc_file):
+    for f in [media_file_with_name_clash, misc_file_with_name_clash, copied_misc_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_name_clash_files()
+    size_of_files_to_be_copied = \
+        media_file_with_name_clash.size + misc_file_with_name_clash.size
+
+    assert sum_of_file_sizes == size_of_files_to_be_copied
+
+
+def test_sums_size_of_duplicate_files(
+        duplicate_media_file, duplicate_misc_file, copied_misc_file):
+    for f in [duplicate_media_file, duplicate_misc_file, copied_misc_file]:
+        gateway.insert(f)
+
+    sum_of_file_sizes = gateway.sum_size_of_duplicate_files()
+    size_of_files_to_be_copied = \
+        duplicate_media_file.size + duplicate_misc_file.size
 
     assert sum_of_file_sizes == size_of_files_to_be_copied
 
 
 def test_sums_size_of_media_files_that_are_valid_candidates_for_copying(
-        uncopied_media_file, uncopied_media_file_2, media_file_not_to_copy):
-    for f in [uncopied_media_file, uncopied_media_file_2, media_file_not_to_copy]:
+        uncopied_media_file, uncopied_media_file_2, duplicate_media_file):
+    for f in [uncopied_media_file, uncopied_media_file_2, duplicate_media_file]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_media_files_to_be_copied()
@@ -193,8 +294,8 @@ def test_sums_size_of_media_files_that_are_valid_candidates_for_copying(
 
 
 def test_sums_size_of_misc_files_that_are_valid_candidates_for_copying(
-        uncopied_misc_file, uncopied_misc_file_2, misc_file_not_to_copy):
-    for f in [uncopied_misc_file, uncopied_misc_file_2, misc_file_not_to_copy]:
+        uncopied_misc_file, uncopied_misc_file_2, duplicate_misc_file):
+    for f in [uncopied_misc_file, uncopied_misc_file_2, duplicate_misc_file]:
         gateway.insert(f)
 
     sum_of_file_sizes = gateway.sum_size_of_misc_files_to_be_copied()

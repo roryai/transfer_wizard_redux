@@ -30,9 +30,9 @@ def different_source_same_destination_2():
 
 
 @pytest.fixture
-def duplicate_file():
-    return file_instance(source_filepath='/source/duplicate_file',
-                         destination_filepath=None)
+def duplicate_misc_file():
+    return file_instance(source_filepath='/source/duplicate_file2',
+                         media=False, destination_filepath=None, size=41)
 
 
 @pytest.fixture
@@ -71,22 +71,23 @@ def file_with_copy_error():
 
 
 @pytest.fixture
-def file_with_name_clash():
-    return file_instance(source_filepath='/source/valid_name_clash_file',
-                         destination_filepath='/destination/valid_name_clash_file',
-                         name_clash=True)
+def media_file_with_name_clash():
+    return file_instance(source_filepath='/source/valid_name_clash_file1',
+                         destination_filepath='/destination/valid_name_clash_file1',
+                         media=True, name_clash=True, size=29)
 
 
 @pytest.fixture
-def media_file_not_to_copy():
+def misc_file_with_name_clash():
+    return file_instance(source_filepath='/source/valid_name_clash_file2',
+                         destination_filepath='/destination/valid_name_clash_file2',
+                         media=False, name_clash=True, size=31)
+
+
+@pytest.fixture
+def duplicate_media_file():
     return file_instance(source_filepath='/source/file_with_copy_error',
                          media=True, destination_filepath=None, size=7)
-
-
-@pytest.fixture
-def misc_file_not_to_copy():
-    return file_instance(source_filepath='/source/file_with_copy_error',
-                         media=False, destination_filepath=None, size=23)
 
 
 @pytest.fixture

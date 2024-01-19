@@ -22,23 +22,26 @@ class StatPresenter:
 
     def __build_stat_summary(self):
         return '\n'.join([
-            self.__directories(),
-            table_header,
-            table_subheading,
-            divider,
-            self.__build_row('media'),
-            self.__build_row('misc'),
-            divider,
-            self.__build_row('total'),
+            self.__directories_info(),
+            *self.__table(),
             footer_info,
             self.__total_to_be_copied_count(),
             self.__total_to_be_copied_size_sum()
         ])
 
-    def __directories(self):
+    def __directories_info(self):
         return f"""Source root directory: {self.source_root_directory}
 Destination root directory: {self.destination_root_directory}
 """
+
+    def __table(self):
+        return [table_header,
+                table_subheading,
+                divider,
+                self.__build_row('media'),
+                self.__build_row('misc'),
+                divider,
+                self.__build_row('total')]
 
     def __build_row(self, row_name):
         methods = self.__switch_methods(row_name)

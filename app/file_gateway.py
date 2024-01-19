@@ -142,17 +142,29 @@ class FileGateway:
     def count_copied_media_files(self):
         return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=True)
 
-    def count_uncopied_misc_files(self):
-        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=False, media=False)
-
-    def count_uncopied_media_files(self):
-        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=False, media=True)
-
     def count_failed_copy_misc_files(self):
         return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=False)
 
     def count_failed_copy_media_files(self):
         return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=True)
+
+    def count_files_to_be_copied_by_type(self, media):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE destination_filepath IS NOT NULL
+            AND copied = '0'
+            AND copy_attempted = '0'
+            AND media = ?;
+        """
+        values = [int(media)]
+        return self.execute_read_query(statement, values)
+
+    def count_misc_files_to_be_copied(self):
+        return self.count_files_to_be_copied_by_type(media=False)
+
+    def count_media_files_to_be_copied(self):
+        return self.count_files_to_be_copied_by_type(media=True)
 
     def count_duplicate_files_by_type(self, media):
         statement = """
@@ -239,6 +251,16 @@ class FileGateway:
 
     def sum_size_of_name_clash_misc_files(self):
         return self.sum_size_of_name_clash_files_by_type(media=False)
+
+    def sum_size_of_files_to_be_copied(self):
+        statement = """
+            SELECT SUM(size)
+            FROM files
+            WHERE destination_filepath IS NOT NULL
+            AND copied == '0'
+            AND copy_attempted == '0';
+        """
+        return self.execute_read_query(statement)
 
     def sum_size_of_files_to_be_copied_by_type(self, media):
         statement = """

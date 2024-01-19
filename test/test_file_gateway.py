@@ -108,10 +108,11 @@ def test_counts_duplicate_files(duplicate_media_file):
     assert gateway.duplicate_count() == 1
 
 
-def test_counts_misc_files_to_be_copied(uncopied_misc_file):
+def test_counts_misc_files_to_be_copied(uncopied_misc_file, duplicate_misc_file):
     gateway.insert(uncopied_misc_file)
+    gateway.insert(duplicate_misc_file)
 
-    assert gateway.count_uncopied_misc_files() == 1
+    assert gateway.count_misc_files_to_be_copied() == 1
 
 
 def test_counts_misc_files(uncopied_misc_file, copied_misc_file):
@@ -133,10 +134,11 @@ def test_counts_name_clash_misc_files(misc_file_with_name_clash):
     assert gateway.count_name_clash_misc_files() == 1
 
 
-def test_counts_media_files_to_be_copied(uncopied_media_file):
+def test_counts_media_files_to_be_copied(uncopied_media_file, duplicate_media_file):
     gateway.insert(uncopied_media_file)
+    gateway.insert(duplicate_media_file)
 
-    assert gateway.count_uncopied_media_files() == 1
+    assert gateway.count_media_files_to_be_copied() == 1
 
 
 def test_counts_copied_misc_files(copied_misc_file):

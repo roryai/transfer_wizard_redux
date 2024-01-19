@@ -78,6 +78,16 @@ class FileGateway:
         """
         return self.execute_read_query(statement)
 
+    def count_files_to_be_copied(self):
+        statement = """
+            SELECT COUNT(*)
+            FROM files
+            WHERE destination_filepath IS NOT NULL
+            AND copied = '0'
+            AND copy_attempted = '0';
+        """
+        return self.execute_read_query(statement, [])
+
     def duplicate_count(self):
         statement = """
             SELECT COUNT(*)

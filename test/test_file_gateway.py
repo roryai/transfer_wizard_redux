@@ -102,6 +102,13 @@ def test_counts_records(file, file_2):
     assert gateway.count() == 2
 
 
+def test_counts_files_to_be_copied(file, duplicate_media_file):
+    gateway.insert(file)
+    gateway.insert(duplicate_media_file)
+
+    assert gateway.count_files_to_be_copied() == 1
+
+
 def test_counts_duplicate_files(duplicate_media_file):
     gateway.insert(duplicate_media_file)
 

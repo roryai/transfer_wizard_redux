@@ -1,13 +1,12 @@
-from .helpers import (pytest, Path, clear_db_and_test_directories, construct_path,
-                      create_file_on_disk, file_instance, instantiate_file_from_db_record,
-                      source_directory)
+from .helpers import (pytest, Path, cleanup, construct_path, create_file_on_disk,
+                      file_instance, instantiate_file_from_db_record, source_directory)
 from app.file_copier import FileCopier
 
 
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def copy_source_files_to_destination():

@@ -1,4 +1,4 @@
-from .helpers import pytest, clear_db_and_test_directories, insert_db_record
+from .helpers import pytest, cleanup, insert_db_record
 from test.fixtures.shared_fixtures import *
 from app.stat_presenter import StatPresenter
 
@@ -6,7 +6,7 @@ from app.stat_presenter import StatPresenter
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def present_stats():

@@ -1,5 +1,5 @@
 from datetime import datetime
-from .helpers import (Path, clear_db_and_test_directories, construct_path, create_file_on_disk_with_data,
+from .helpers import (Path, cleanup, construct_path, create_file_on_disk_with_data,
                       create_test_media_files, create_test_misc_files, destination_root_directory,
                       source_directory, static_date_based_destination_path, misc_destination_directory)
 from test.fixtures.filepath_generator_fixtures import *
@@ -9,7 +9,7 @@ from app.filepath_generator import FilepathGenerator
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def run_with_media_flag_enabled(source_filepath):

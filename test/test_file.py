@@ -1,6 +1,6 @@
 from pathlib import PosixPath
 
-from .helpers import (pytest, clear_db_and_test_directories, default_destination_media_filepath,
+from .helpers import (pytest, cleanup, default_destination_media_filepath,
                       default_source_media_filepath, file_instance, instantiate_file_from_db_record)
 from app.file_gateway import FileGateway
 
@@ -10,7 +10,7 @@ gateway = FileGateway()
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def test_files_can_be_compared():

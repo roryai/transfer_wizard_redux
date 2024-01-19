@@ -1,4 +1,4 @@
-from .helpers import pytest, clear_db_and_test_directories, default_destination_media_filepath, default_source_media_filepath, file_instance
+from .helpers import pytest, cleanup, default_destination_media_filepath, default_source_media_filepath, file_instance
 from app.file_gateway import FileGateway
 from app.file_record import FileRecord
 
@@ -6,7 +6,7 @@ from app.file_record import FileRecord
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def test_inserts_and_maps_a_file():

@@ -1,6 +1,6 @@
 from app.directory_manager import DirectoryManager
 
-from .helpers import (pytest, Path, shutil, clear_db_and_test_directories,
+from .helpers import (pytest, Path, shutil, cleanup,
                       create_file_on_disk, construct_path, destination_root_directory,
                       source_directory, static_date_based_destination_path)
 
@@ -8,7 +8,7 @@ from .helpers import (pytest, Path, shutil, clear_db_and_test_directories,
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def test_creates_a_directory():

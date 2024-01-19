@@ -1,7 +1,7 @@
 import argparse
 import sys
 
-from .helpers import clear_db_and_test_directories
+from .helpers import cleanup
 from test.fixtures.main_fixtures import *
 from main import main, ERROR_MESSAGE, PROGRAM_DESCRIPTION, ROOT_DIR, USAGE, _configure_parser
 
@@ -9,7 +9,7 @@ from main import main, ERROR_MESSAGE, PROGRAM_DESCRIPTION, ROOT_DIR, USAGE, _con
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def parse_args():

@@ -1,12 +1,12 @@
-from .helpers import (pytest, clear_db_and_test_directories, create_test_media_files, create_test_misc_files,construct_path,
-                      destination_root_directory, instantiate_file_from_db_record)
+from .helpers import (pytest, cleanup, create_test_media_files, create_test_misc_files,
+                      construct_path, destination_root_directory, instantiate_file_from_db_record)
 from app.file_factory import FileFactory
 
 
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def save_pre_copy_file_record(source_filepath, media):

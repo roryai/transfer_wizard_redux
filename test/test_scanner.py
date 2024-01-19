@@ -1,4 +1,4 @@
-from .helpers import (pytest, Path, clear_db_and_test_directories, create_file_on_disk,
+from .helpers import (pytest, Path, cleanup, create_file_on_disk,
                       construct_path, source_directory)
 from app.scanner import Scanner, MEDIA_FILETYPES
 
@@ -8,7 +8,7 @@ scanner = Scanner()
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def test_discovers_a_media_file():

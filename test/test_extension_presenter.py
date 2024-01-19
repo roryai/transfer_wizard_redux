@@ -1,11 +1,11 @@
 from app.extension_presenter import ExtensionPresenter
-from .helpers import pytest, create_file_on_disk_with_data, clear_db_and_test_directories, source_directory
+from .helpers import pytest, create_file_on_disk_with_data, cleanup, source_directory
 
 
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def display_misc_extensions():

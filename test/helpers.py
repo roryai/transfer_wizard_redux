@@ -95,7 +95,7 @@ def clear_test_directories():
                 shutil.rmtree(construct_path(root, d))
 
 
-def clear_db_and_test_directories():
+def cleanup():
     LoggerMeta._instance = {}
     Logger().init_log_file(logfile_directory)
     clear_database()

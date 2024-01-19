@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from .helpers import (pytest, os, Path, clear_db_and_test_directories, construct_path,
+from .helpers import (pytest, os, Path, cleanup, construct_path,
                       logfile_directory)
 from app.logger import Logger
 
@@ -8,7 +8,7 @@ from app.logger import Logger
 @pytest.fixture(autouse=True)
 def teardown():
     yield
-    clear_db_and_test_directories()
+    cleanup()
 
 
 def file_content():

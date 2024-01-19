@@ -1,5 +1,5 @@
 from .helpers import clear_db_and_test_directories, instantiate_file_from_db_record
-from test.fixtures.file_gateway_fixtures import *
+from test.fixtures.shared_fixtures import *
 from app.file import File
 from app.file_gateway import FileGateway
 

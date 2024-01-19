@@ -1,4 +1,5 @@
-from .helpers import pytest, clear_db_and_test_directories, create_file_on_disk, source_directory
+from .helpers import (pytest, Path, clear_db_and_test_directories, create_file_on_disk,
+                      construct_path, source_directory)
 from app.scanner import Scanner, MEDIA_FILETYPES
 
 scanner = Scanner()
@@ -20,6 +21,28 @@ def test_discovers_a_media_file():
 
 def test_discovers_a_misc_file():
     misc_filepath = create_file_on_disk(source_directory, 'file.gif')
+
+    discovered_extensions = list(scanner.misc_filepaths_in(source_directory))
+
+    assert discovered_extensions == [misc_filepath]
+
+
+def test_discovers_a_file_in_a_nested_directory():
+    nested_directory = construct_path(source_directory, 'nested')
+    Path(nested_directory).mkdir(parents=True, exist_ok=True)
+    misc_filepath = create_file_on_disk(nested_directory, 'file.gif')
+
+    discovered_extensions = list(scanner.misc_filepaths_in(source_directory))
+
+    assert discovered_extensions == [misc_filepath]
+
+
+def test_discovers_a_file_in_a_twice_nested_directory():
+    nested_directory = construct_path(source_directory, 'nest')
+    inside_nested_directory = construct_path(source_directory, 'egg')
+    Path(nested_directory).mkdir(parents=True, exist_ok=True)
+    Path(inside_nested_directory).mkdir(parents=True, exist_ok=True)
+    misc_filepath = create_file_on_disk(inside_nested_directory, 'file.gif')
 
     discovered_extensions = list(scanner.misc_filepaths_in(source_directory))
 
@@ -80,3 +103,5 @@ def test_media_extensions_includes_upper_and_lower_case_extensions():
                   '.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc',
                   '.MP4', '.MOV', '.AVI', '.WMV', '.MKV', '.HEVC']
     assert sorted(MEDIA_FILETYPES) == sorted(media_exts)
+
+# def test_ignores_directories

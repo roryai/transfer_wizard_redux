@@ -38,7 +38,10 @@ class Scanner:
     def __extension_only(self, _, filename):
         return self.__extension(filename)
 
-    def __scan_directory(self, source_root_directory, filetype_filter, path_constructor):
+    def __scan_directory(self, source_root_directory, extension_filter, path_constructor):
         file_tree = os.walk(source_root_directory)
-        for (_, _, filenames) in file_tree:
-            yield from filter(filetype_filter, map(partial(path_constructor, source_root_directory), filenames))
+        for (root, _, files) in file_tree:
+            file_paths_with_root = map(partial(path_constructor, root), files)
+            filtered_file_paths = filter(extension_filter, file_paths_with_root)
+            yield from filtered_file_paths
+

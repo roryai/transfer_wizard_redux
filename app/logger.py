@@ -1,5 +1,6 @@
 from datetime import datetime
 import os
+import sys
 
 
 class LoggerMeta(type):
@@ -19,6 +20,11 @@ class Logger(metaclass=LoggerMeta):
         self.combined_error_messages = ''
         self.successful_copy_count = 0
         self.unsuccessful_copy_count = 0
+        self.exit_message = """
+Error limit reached. Check logfile for full details.
+
+Errors:
+"""
 
     def init_log_file(self, destination_root_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
@@ -43,6 +49,10 @@ class Logger(metaclass=LoggerMeta):
     def log_error(self, error, values):
         message = f'Error: {error}. Values: {values}'
         self.error_messages.append(message)
+        if len(self.error_messages) > 2:
+            self.exit_message += '\n'.join(self.error_messages)
+            print(self.exit_message)
+            sys.exit()
 
     def append_errors_to_logfile(self):
         self.combined_error_messages = '\n'.join(self.error_messages)
@@ -53,8 +63,7 @@ class Logger(metaclass=LoggerMeta):
         file_or_files_failed = self.__file_or_files(self.unsuccessful_copy_count)
         summary = f"""
 {self.successful_copy_count} {file_or_files_succeeded} copied successfully
-{self.unsuccessful_copy_count} {file_or_files_failed} failed to copy
-"""
+{self.unsuccessful_copy_count} {file_or_files_failed} failed to copy"""
         self.__append_to_logfile(summary)
 
     def log_to_file(self, log_entry):

@@ -7,7 +7,7 @@ from main import ROOT_DIR
 from app.db_initializer import DBInitializer
 from app.file import File
 from app.file_gateway import FileGateway
-from app.logger import Logger
+from app.logger import Logger, LoggerMeta
 
 
 def construct_path(*args):
@@ -96,5 +96,7 @@ def clear_test_directories():
 
 
 def clear_db_and_test_directories():
+    LoggerMeta._instance = {}
+    Logger().init_log_file(logfile_directory)
     clear_database()
     clear_test_directories()

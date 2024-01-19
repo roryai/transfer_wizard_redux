@@ -2,13 +2,11 @@ from datetime import datetime
 
 from .helpers import (pytest, os, Path, clear_db_and_test_directories, construct_path,
                       logfile_directory)
-from app.logger import Logger, LoggerMeta
+from app.logger import Logger
 
 
 @pytest.fixture(autouse=True)
 def teardown():
-    LoggerMeta._instance = {}
-    Logger().init_log_file(logfile_directory)
     yield
     clear_db_and_test_directories()
 
@@ -25,6 +23,8 @@ destination_filepath = construct_path('/destination', source_file_path)
 
 
 def test_init_log_file_creates_file():
+    Logger().init_log_file(logfile_directory)
+
     assert os.path.exists(Logger().log_file_path)
 
     timestamp_format = '%Y-%m-%d-%H%M.%S'
@@ -71,10 +71,28 @@ def test_writes_errors_to_logfile():
 
 
 def test_appends_summary():
-    expected_content = "\n1 file copied successfully\n2 files failed to copy\n\n"
+    expected_content = "\n1 file copied successfully\n2 files failed to copy\n"
 
     Logger().successful_copy_count = 1
     Logger().unsuccessful_copy_count = 2
     Logger().append_summary_to_file()
 
     assert expected_content == file_content()
+
+
+def test_outputs_errors_and_quits_program_if_more_than_2_errors_logged(capsys, mocker):
+    mocked_sys = mocker.patch('sys.exit')
+    expected_content = """
+Error limit reached. Check logfile for full details.
+
+Errors:
+a
+b
+Error: f. Values: []
+"""
+
+    Logger().error_messages = ['a', 'b']
+    Logger().log_error('f', [])
+
+    mocked_sys.assert_called_once()
+    assert capsys.readouterr().out == expected_content

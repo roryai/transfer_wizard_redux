@@ -30,6 +30,12 @@ def different_source_same_destination_2():
 
 
 @pytest.fixture
+def duplicate_media_file():
+    return file_instance(source_filepath='/source/file_with_copy_error',
+                         media=True, destination_filepath=None, size=7)
+
+
+@pytest.fixture
 def duplicate_misc_file():
     return file_instance(source_filepath='/source/duplicate_file2',
                          media=False, destination_filepath=None, size=41)
@@ -82,12 +88,6 @@ def misc_file_with_name_clash():
     return file_instance(source_filepath='/source/valid_name_clash_file2',
                          destination_filepath='/destination/valid_name_clash_file2',
                          media=False, name_clash=True, size=31)
-
-
-@pytest.fixture
-def duplicate_media_file():
-    return file_instance(source_filepath='/source/file_with_copy_error',
-                         media=True, destination_filepath=None, size=7)
 
 
 @pytest.fixture

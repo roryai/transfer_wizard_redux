@@ -17,7 +17,6 @@ def set_source_and_ext_args(monkeypatch):
     set_args(monkeypatch, ['-s', source_directory, '-ext'])
 
 
-
 @pytest.fixture
 def set_only_source_arg(monkeypatch):
     set_args(monkeypatch, ['-s', source_directory])

@@ -40,22 +40,20 @@ Duplicate files (files that have the same name and the same size) are identified
 The program gives a summary of files to be copied before asking for user confirmation of copy:
 
 ```commandline
-Source root directory: source/
-Destination root directory: destination/
+        Discovered         To be copied       Duplicate          Name clash
+        Count   Size       Count   Size       Count   Size       Count   Size
+______________________________________________________________________________
+Media   7       2.89MB     7       2.89MB     0       0.0MB      0       0.0MB      
+Misc    0       0.0MB      0       0.0MB      0       0.0MB      0       0.0MB      
+______________________________________________________________________________
+Total   7       2.89MB     7       2.89MB     0       0.0MB      0       0.0MB      
 
-6 candidate files discovered in source directory.
-Total size of candidate files: 6.15MB
+Duplicates will not be copied
+Name clash files will be copied with a unique suffix
 
-4 files are media files: 4.2MB
-2 files are miscellaneous files: 1.95MB
-
-2 files are duplicates and will not be copied.
-2 files have name clashes and will be copied with a unique suffix.
-
-4 files will be copied.
-Total size of files to be copied: 5.18MB
-
-Proceed with copy? ( y / n )
+Total to be copied:
+7 files
+2.89MB
 ```
 
 ### Installation

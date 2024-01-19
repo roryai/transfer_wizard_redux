@@ -11,24 +11,24 @@ class DBInitializer:
         self.project_root = project_root
 
     def init_prod_database(self):
-        self.__init_database('files_prod')
+        self._init_database('files_prod')
 
     def init_test_database(self):
-        self.__init_database('files_test')
+        self._init_database('files_test')
 
-    def __init_database(self, db_name):
-        self.__connection(db_name)
-        self.__create_table()
+    def _init_database(self, db_name):
+        self._connection(db_name)
+        self._create_table()
 
-    def __connection(self, db_name):
-        db_filepath = self.__db_path(db_name)
+    def _connection(self, db_name):
+        db_filepath = self._db_path(db_name)
         self.connection = sqlite3.connect(db_filepath)
 
-    def __db_path(self, db_name):
+    def _db_path(self, db_name):
         db_filename = f'{db_name}.db'
         return os.path.join(self.project_root, db_filename)
 
-    def __create_table(self):
+    def _create_table(self):
         create_files_table = """
              CREATE TABLE IF NOT EXISTS files (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,

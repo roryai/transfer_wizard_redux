@@ -16,47 +16,47 @@ class CopyController:
         self.include_misc_files = include_misc_files
 
     def copy_files(self):
-        self.__prepare_database_records()
+        self._prepare_database_records()
         stats = StatPresenter(self.source_root_directory,
                               self.destination_root_directory).print_stats_summary()
-        self.__perform_copy(stats) if self.__user_confirms_copy() else None
+        self._perform_copy(stats) if self._user_confirms_copy() else None
 
-    def __prepare_database_records(self):
+    def _prepare_database_records(self):
         FileGateway().wipe_database()  # TODO dev only, remove later
-        self.__create_db_records_for_files_to_be_copied()
+        self._create_db_records_for_files_to_be_copied()
 
-    def __create_db_records_for_files_to_be_copied(self):
-        file_paths = self.__scan_files_in_source_directory()
+    def _create_db_records_for_files_to_be_copied(self):
+        file_paths = self._scan_files_in_source_directory()
         [FileFactory(src, self.destination_root_directory).save_pre_copy_file_record(media=media)
          for src, media in file_paths]
 
-    def __scan_files_in_source_directory(self):
+    def _scan_files_in_source_directory(self):
         return itertools.chain(
-            ((src, True) for src in self.__media_source_filepaths()),
-            ((src, False) for src in self.__misc_source_filepaths()))
+            ((src, True) for src in self._media_source_filepaths()),
+            ((src, False) for src in self._misc_source_filepaths()))
 
-    def __media_source_filepaths(self):
+    def _media_source_filepaths(self):
         return Scanner().media_filepaths_in(self.source_root_directory)
 
-    def __misc_source_filepaths(self):
+    def _misc_source_filepaths(self):
         return Scanner().misc_filepaths_in(
             self.source_root_directory) if self.include_misc_files else []
 
-    def __perform_copy(self, stats):
-        self.__pre_copy_logging(stats)
+    def _perform_copy(self, stats):
+        self._pre_copy_logging(stats)
         FileCopier().copy_source_files_to_destination()
-        self.__post_copy_logging_and_display()
+        self._post_copy_logging_and_display()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
-    def __user_confirms_copy(self):
+    def _user_confirms_copy(self):
         print(f'\nProceed with copy? ( y / n )')
         return input().lower() == 'y'
 
-    def __pre_copy_logging(self, stats):
+    def _pre_copy_logging(self, stats):
         Logger().init_log_file(self.destination_root_directory)
         Logger().log_to_file(stats)
 
-    def __post_copy_logging_and_display(self):
+    def _post_copy_logging_and_display(self):
         Logger().append_summary_to_file()
         error_messages = Logger().append_errors_to_logfile()
         print(error_messages) if error_messages else None

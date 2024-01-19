@@ -46,16 +46,16 @@ def main():
         ExtensionPresenter(args.source).display_misc_extensions()
     elif args.miscellaneous and args.source and args.destination:
         DirectoryManager().check_if_directory_exists(args.destination)
-        __run_copy_controller(args, include_misc_files=True)
+        _run_copy_controller(args, include_misc_files=True)
     elif args.destination and args.source:
         DirectoryManager().check_if_directory_exists(args.destination)
-        __run_copy_controller(args, include_misc_files=False)
+        _run_copy_controller(args, include_misc_files=False)
     else:
         error_message = ERROR_MESSAGE
         raise argparse.ArgumentError(None, error_message)
 
 
-def __run_copy_controller(args, include_misc_files):
+def _run_copy_controller(args, include_misc_files):
     CopyController(destination_root_directory=args.destination,
                    source_root_directory=args.source,
                    include_misc_files=include_misc_files).copy_files()

@@ -14,12 +14,12 @@ class FileFactory:
         destination_filepath = FilepathGenerator(
             self.source_filepath, self.destination_root_directory).generate_destination_filepath(media)
         size = Path(self.source_filepath).stat().st_size
-        name_clash = self.__name_clash(self.source_filepath, destination_filepath)
+        name_clash = self._name_clash(self.source_filepath, destination_filepath)
         File(source_filepath=self.source_filepath, destination_filepath=destination_filepath,
              size=size, name_clash=name_clash, copied=False, media=media, copy_attempted=False
              ).save()
 
-    def __name_clash(self, source_filepath, destination_filepath):
+    def _name_clash(self, source_filepath, destination_filepath):
         if destination_filepath is None:
             return False
         # names will be different if destination filename has incremented suffix

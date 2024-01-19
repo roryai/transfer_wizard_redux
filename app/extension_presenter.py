@@ -20,8 +20,8 @@ Consult the documentation to discover how to copy these files.
             print(self.no_exts_found_message)
         else:
             print(self.exts_found_message)
-            self.__print_extensions_without_periods(extensions)
+            self._print_extensions_without_periods(extensions)
 
-    def __print_extensions_without_periods(self, extensions):
+    def _print_extensions_without_periods(self, extensions):
         [print(ext.replace('.', '')) for ext in sorted(extensions)]
         print()

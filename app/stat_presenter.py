@@ -18,7 +18,9 @@ class StatPresenter:
         self.gateway = FileGateway()
 
     def print_stats_summary(self):
+        summary = self.__build_stat_summary()
         print(self.__build_stat_summary())
+        return summary
 
     def __build_stat_summary(self):
         return '\n'.join([
@@ -26,7 +28,8 @@ class StatPresenter:
             *self.__table(),
             footer_info,
             self.__total_to_be_copied_count(),
-            self.__total_to_be_copied_size_sum()
+            self.__total_to_be_copied_size_sum(),
+            ''
         ])
 
     def __directories_info(self):

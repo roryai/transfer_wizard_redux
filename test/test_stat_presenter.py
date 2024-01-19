@@ -31,6 +31,7 @@ Name clash files will be copied with a unique suffix
 Total to be copied:
 0 files
 0.0MB
+
 """
 
     present_stats()
@@ -59,6 +60,7 @@ Name clash files will be copied with a unique suffix
 Total to be copied:
 4 files
 192.0MB
+
 """
     for f in [uncopied_media_file, uncopied_misc_file,
               duplicate_media_file, duplicate_misc_file,

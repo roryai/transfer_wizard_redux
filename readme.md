@@ -3,7 +3,7 @@
 
 ##### Development notes:
 
-This project is a work in progress and is under active development. As such use it at your own risk.
+This project is a work in progress and is under active development.
 
 My main language is Ruby. I wanted to learn Python and so taught myself whilst building this. As such I will not always follow Pythonic conventions.
 
@@ -13,6 +13,18 @@ I aim to use the Python standard library or build my own helpers and tools where
 
 There is only minimal error handling as I wanted errors to surface immediately during development and testing. Error handling is on the roadmap.
 
+I prefer abbreviating lines for readability, so you (hopefully) won't see long lines going off the end of the screen.
+
+Feedback and pull requests welcome!
+
+### Take a look at...
+[FileCopier](https://github.com/roryai/transfer_wizard_redux/blob/main/app/file_copier.py) for recursion, and a guest appearance from the [controversial](https://pythonsimplified.com/the-most-controversial-python-walrus-operator) walrus operator!
+
+[StatPresenter](https://github.com/roryai/transfer_wizard_redux/blob/main/app/stat_presenter.py) for some metaprogramming that was deeply satisfying to write. I love the result (see the pre-copy file summary table, below). I tried a couple of table generators, including pandas, but it was inadequate for what I wanted to do.
+
+[Scanner](https://github.com/roryai/transfer_wizard_redux/blob/main/app/scanner.py) for clean design, and functions being passed to functions.
+
+The [main.py tests](https://github.com/roryai/transfer_wizard_redux/blob/main/test/test_main.py) to see me getting to grips with pytest mocking and fixtures.
 ### Overview
 
 This program will allow you to unify your disparate photo and video libraries in to an organised directory structure.
@@ -68,10 +80,10 @@ You will be presented with statistics on the files you want to copy. You can the
 
 
 ### Current functionality
-Three modes:
-- Copies photos and videos from source directory to generated directory structure in destination directory
-- Lists miscellaneous file extensions that won't be copied when above mode is run
-- Same as first mode, but copies the miscellaneous files to a single directory (misc) in destination directory
+- Three modes
+  - Copies photos and videos from source directory to generated directory structure in destination directory
+  - Lists miscellaneous file extensions that won't be copied when above mode is run
+  - Same as first mode, but copies the miscellaneous files to a single directory (/misc) in destination directory
 - Detailed summary before copy of how many files are: copy candidates, media files, misc files, duplicates, and files with name clash. Lists count and total size of files to be copied.
 - Command line interface
 - Detailed log files
@@ -89,6 +101,6 @@ One day I plan to have a raspberry pi set up to detect my camera via bluetooth, 
 
 On Windows the creation time (or birth time) is preserved when a file is copied. On Unix systems by default the creation time of a copied file is the time at which it was copied (for instance when copying with drag and drop). This program utilises the `shutil.copy2()` method, which wherever possible preserves the original file metadata when copying, even on Unix systems. This means that the program can be run twice on the same files and will be able to sort them again. 
 
-I have designed this program to select the earlier of either the file birth time or modification time to be the date that is used to determine the destination directory. In future I may also check camera file metadata to determine the earliest date.
+I have designed this program to select the earlier of either the file birth time, creation time, or modification time to be the date that is used to determine the destination directory. In future I may also check camera file metadata to determine the earliest date.
 
 This is because I have some pictures on my Windows hard drive that somehow have a modified time that is before the creation time! I am unsure how this happened, but expect it happened during a transfer of some sort. The creation times are all the same, but the modified dates are different, leading me to believe that the modified dates are the dates that the photos were taken.

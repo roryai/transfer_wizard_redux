@@ -17,6 +17,8 @@ class Logger(metaclass=LoggerMeta):
         self.log_file_path = None
         self.error_messages = []
         self.combined_error_messages = ''
+        self.successful_copy_count = 0
+        self.unsuccessful_copy_count = 0
 
     def init_log_file(self, destination_root_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
@@ -31,10 +33,12 @@ class Logger(metaclass=LoggerMeta):
     def log_successful_copy(self, source_file_path, destination_filepath):
         log_entry = f'Copy succeeded: {source_file_path} copied to {destination_filepath}'
         self.__append_to_logfile(log_entry)
+        self.successful_copy_count += 1
 
     def log_unsuccessful_copy(self, source_file_path, destination_filepath):
         log_entry = f'Copy failed:    {source_file_path} not copied to {destination_filepath}'
         self.__append_to_logfile(log_entry)
+        self.unsuccessful_copy_count += 1
 
     def log_error(self, error, values):
         message = f'Error: {error}. Values: {values}'
@@ -44,9 +48,21 @@ class Logger(metaclass=LoggerMeta):
         self.combined_error_messages = '\n'.join(self.error_messages)
         self.__append_to_logfile(f'\nErrors:\n{self.combined_error_messages}')
 
+    def append_summary_to_file(self):
+        file_or_files_succeeded = self.__file_or_files(self.successful_copy_count)
+        file_or_files_failed = self.__file_or_files(self.unsuccessful_copy_count)
+        summary = f"""
+{self.successful_copy_count} {file_or_files_succeeded} copied successfully
+{self.unsuccessful_copy_count} {file_or_files_failed} failed to copy
+"""
+        self.__append_to_logfile(summary)
+
     def log_to_file(self, log_entry):
         self.__append_to_logfile(log_entry)
 
     def __append_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:
             file.write(f'{log_entry}\n')
+
+    def __file_or_files(self, count):
+        return 'file' if count == 1 else 'files'

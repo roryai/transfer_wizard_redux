@@ -45,7 +45,7 @@ class CopyController:
     def __perform_copy(self, stats):
         self.__pre_copy_logging(stats)
         FileCopier().copy_source_files_to_destination()
-        self.__post_copy_error_logging_and_display()
+        self.__post_copy_logging_and_display()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def __user_confirms_copy(self):
@@ -56,6 +56,7 @@ class CopyController:
         Logger().init_log_file(self.destination_root_directory)
         Logger().log_to_file(stats)
 
-    def __post_copy_error_logging_and_display(self):
+    def __post_copy_logging_and_display(self):
+        Logger().append_summary_to_file()
         error_messages = Logger().append_errors_to_logfile()
         print(error_messages) if error_messages else None

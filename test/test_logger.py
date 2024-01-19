@@ -39,6 +39,7 @@ def test_successful_write_to_logfile():
     expected_entry = f'Copy succeeded: {source_file_path} copied to {destination_filepath}\n'
 
     assert expected_entry == file_content()
+    assert Logger().successful_copy_count == 1
 
 
 def test_unsuccessful_write_to_logfile():
@@ -47,6 +48,7 @@ def test_unsuccessful_write_to_logfile():
     expected_entry = f'Copy failed:    {source_file_path} not copied to {destination_filepath}\n'
 
     assert expected_entry == file_content()
+    assert Logger().unsuccessful_copy_count == 1
 
 
 def test_logs_error():
@@ -64,5 +66,15 @@ def test_writes_errors_to_logfile():
 
     Logger().log_error(error, values)
     Logger().append_errors_to_logfile()
+
+    assert expected_content == file_content()
+
+
+def test_appends_summary():
+    expected_content = "\n1 file copied successfully\n2 files failed to copy\n\n"
+
+    Logger().successful_copy_count = 1
+    Logger().unsuccessful_copy_count = 2
+    Logger().append_summary_to_file()
 
     assert expected_content == file_content()

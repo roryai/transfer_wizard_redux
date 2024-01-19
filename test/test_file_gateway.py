@@ -191,7 +191,7 @@ def test_sums_size_of_all_files(file, file_2):
     gateway.insert(file)
     gateway.insert(file_2)
 
-    assert gateway.sum_size() == 13
+    assert gateway.sum_size() == file.size + file_2.size
 
 
 def test_sums_size_of_media_files(

@@ -31,7 +31,7 @@ def prepare_test_resources():
     return media_source_filepath, misc_source_filepath
 
 
-expected_destination_media_file_path = destination_root_directory + f'/2023/Q4/{media_filename}'
+expected_destination_media_file_path = destination_root_directory + f'/2023/{media_filename}'
 expected_destination_misc_file_path = misc_destination_directory + f'/{misc_filename}'
 home_directory = os.path.expanduser("~")
 
@@ -53,7 +53,7 @@ Total to be copied:
 2 files
 0.0MB
 
-Copy succeeded: {home_directory}/code/transfer_wizard_redux/test/test_resources/source/file.jpg copied to /Users/rory/code/transfer_wizard_redux/test/test_resources/destination/2023/Q4/file.jpg
+Copy succeeded: {home_directory}/code/transfer_wizard_redux/test/test_resources/source/file.jpg copied to /Users/rory/code/transfer_wizard_redux/test/test_resources/destination/2023/file.jpg
 Copy succeeded: {home_directory}/code/transfer_wizard_redux/test/test_resources/source/nest/file.gif copied to /Users/rory/code/transfer_wizard_redux/test/test_resources/destination/misc/file.gif
 
 2 files copied successfully
@@ -81,7 +81,7 @@ Total to be copied:
 1 file
 0.0MB
 
-Copy succeeded: {home_directory}/code/transfer_wizard_redux/test/test_resources/source/file.jpg copied to /Users/rory/code/transfer_wizard_redux/test/test_resources/destination/2023/Q4/file.jpg
+Copy succeeded: {home_directory}/code/transfer_wizard_redux/test/test_resources/source/file.jpg copied to /Users/rory/code/transfer_wizard_redux/test/test_resources/destination/2023/file.jpg
 
 1 file copied successfully
 0 files failed to copy

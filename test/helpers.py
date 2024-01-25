@@ -57,7 +57,7 @@ def static_date_based_destination_path(source_filepath):
     time_in_past = 1701639908  # 03/12/23
     # setting mtime to before creation time sets both to that time
     os.utime(source_filepath, (time_in_past, time_in_past))
-    return construct_path(destination_root_directory, '2023/Q4')
+    return construct_path(destination_root_directory, '2023')
 
 
 def create_file_on_disk(directory, filename):

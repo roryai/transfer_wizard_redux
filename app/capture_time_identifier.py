@@ -1,16 +1,14 @@
 from datetime import datetime
 
-from PIL import Image
 import exiftool
 
 
 class CaptureTimeIdentifier:
 
     def get_date_taken_for_photo(self, photo_path):
-        image = Image.open(photo_path)
-        exif_data = image.getexif().items()
-        # noinspection PyTypeChecker
-        original_capture_time = dict(exif_data).get(306)
+        with exiftool.ExifToolHelper() as et:
+            metadata = et.get_metadata(photo_path)[0]
+            original_capture_time = metadata['EXIF:DateTimeOriginal']
         date_format = '%Y:%m:%d %H:%M:%S'
         return datetime.strptime(original_capture_time, date_format).date()
 

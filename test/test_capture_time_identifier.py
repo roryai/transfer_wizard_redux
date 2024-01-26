@@ -5,6 +5,7 @@ from app.capture_time_identifier import CaptureTimeIdentifier
 
 @pytest.fixture
 def teardown():
+    yield
     cleanup()
 
 

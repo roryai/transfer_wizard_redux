@@ -72,6 +72,8 @@ Total to be copied:
 
 The project is in beta; use at your own risk.
 
+The fantastic [ExifTool](https://exiftool.org) is required to run this program, and needs to be in your PATH. Follow the instructions [here](https://pypi.org/project/PyExifTool/) to set it up.
+
 To run the project from the command line, navigate to the project root directory and run:
 
 `python main.py -s <your source directory> -t <your destination directory>`

@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from app.filetype_constants import PHOTO_FILETYPES, VIDEO_FILETYPES
+from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
 
 from exiftool import ExifToolHelper
@@ -12,9 +12,9 @@ class CaptureTimeIdentifier:
     def approximate_file_creation_date(self, filepath):
         try:
             extension = Path(filepath).suffix
-            if extension.lower() in PHOTO_FILETYPES:
+            if extension_in_photo_filetypes(extension):
                 return self._get_date_taken_for_photo(filepath)
-            if extension.lower() in VIDEO_FILETYPES:
+            if extension_in_video_filetypes(extension):
                 return self._get_date_taken_for_video(filepath)
             else:
                 return self._earliest_file_system_date(filepath)

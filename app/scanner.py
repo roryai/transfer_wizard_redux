@@ -1,5 +1,6 @@
 from functools import partial
 import os
+from pathlib import Path
 
 from app.filetype_constants import MEDIA_FILETYPES
 
@@ -7,15 +8,15 @@ from app.filetype_constants import MEDIA_FILETYPES
 class Scanner:
     def media_filepaths_in(self, source_root_directory):
         return self._scan_directory(source_root_directory,
-                                     self._is_filepath_of_media_filetype, self._full_file_path)
+                                    self._is_filepath_of_media_filetype, self._full_file_path)
 
     def misc_filepaths_in(self, source_root_directory):
         return self._scan_directory(source_root_directory,
-                                     self._is_filepath_of_misc_filetype, self._full_file_path)
+                                    self._is_filepath_of_misc_filetype, self._full_file_path)
 
     def misc_extensions_in(self, source_root_directory):
         return set(self._scan_directory(source_root_directory,
-                                         self._is_extension_of_misc_filetype, self._extension_only))
+                                        self._is_extension_of_misc_filetype, self._extension_only))
 
     def _is_filepath_of_media_filetype(self, filepath):
         return self._extension(filepath).lower() in MEDIA_FILETYPES
@@ -27,7 +28,7 @@ class Scanner:
         return extension.lower() not in MEDIA_FILETYPES
 
     def _extension(self, filepath):
-        return os.path.splitext(filepath)[1]
+        return Path(filepath).suffix
 
     def _full_file_path(self, source_directory, filename):
         return os.path.join(source_directory, filename)
@@ -41,4 +42,3 @@ class Scanner:
             file_paths_with_root = map(partial(path_constructor, root), files)
             filtered_file_paths = filter(extension_filter, file_paths_with_root)
             yield from filtered_file_paths
-

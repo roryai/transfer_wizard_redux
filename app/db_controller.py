@@ -28,7 +28,7 @@ class DBController(metaclass=DBControllerMeta):
             cursor.execute(query, values)
             self.connection.commit()
         except Error as e:
-            Logger().log_error(e, values)
+            Logger().log_error('Error in DBController', e, values)
 
     def execute_read_query(self, query, values):
         cursor = self.connection.cursor()

@@ -46,8 +46,8 @@ Errors:
         self._append_to_logfile(log_entry)
         self.unsuccessful_copy_count += 1
 
-    def log_error(self, error, values):
-        message = f'Error: {error}. Values: {values}'
+    def log_error(self, message, error, values):
+        message = f'Context: {message}\nError: {error}\nValues: {values}\n'
         self.error_messages.append(message)
         if len(self.error_messages) > 2:
             self.exit_message += '\n'.join(self.error_messages)

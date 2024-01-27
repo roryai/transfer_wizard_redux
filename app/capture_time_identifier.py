@@ -1,23 +1,58 @@
 from datetime import datetime
+from pathlib import Path
 
-import exiftool
+from app.filetype_constants import PHOTO_FILETYPES, VIDEO_FILETYPES
+from app.logger import Logger
+
+from exiftool import ExifToolHelper
 
 
 class CaptureTimeIdentifier:
 
-    def get_date_taken_for_photo(self, photo_path):
-        with exiftool.ExifToolHelper() as et:
-            metadata = et.get_metadata(photo_path)[0]
-            original_capture_time = metadata['EXIF:DateTimeOriginal']
-        date_format = '%Y:%m:%d %H:%M:%S'
-        return datetime.strptime(original_capture_time, date_format).date()
+    def approximate_file_creation_date(self, filepath):
+        try:
+            extension = Path(filepath).suffix
+            if extension.lower() in PHOTO_FILETYPES:
+                return self._get_date_taken_for_photo(filepath)
+            if extension.lower() in VIDEO_FILETYPES:
+                return self._get_date_taken_for_video(filepath)
+            else:
+                return self._earliest_file_system_date(filepath)
+        except (IsADirectoryError, FileNotFoundError) as e:
+            Logger().log_error('Attempting to approximate creation date', e, filepath)
 
-    def get_date_taken_for_video(self, video_path):
-        with exiftool.ExifToolHelper() as et:
-            metadata = et.get_metadata(video_path)[0]
+    def _get_date_taken_for_photo(self, photo_path):
+        try:
+            metadata = self._get_metadata(photo_path)
+            original_capture_time = metadata['EXIF:DateTimeOriginal']
+            date_format = '%Y:%m:%d %H:%M:%S'
+            return self._construct_datetime_object(date_format, original_capture_time)
+        except (AttributeError, KeyError, IndexError) as e:
+            Logger().log_error('Attempting to access photo metadata', e, metadata)
+
+    def _get_date_taken_for_video(self, video_path):
+        try:
+            metadata = self._get_metadata(video_path)
             date_format, tag_name = self._determine_filetype_tag_info(metadata)
             original_capture_time = metadata[tag_name]
-            return datetime.strptime(original_capture_time, date_format).date()
+            return self._construct_datetime_object(date_format, original_capture_time)
+        except (AttributeError, KeyError, IndexError) as e:
+            Logger().log_error('Attempting to access video metadata', e, metadata)
+
+    def _earliest_file_system_date(self, filepath):
+        try:
+            file_metadata = Path(filepath).stat()
+            return datetime.fromtimestamp(min(file_metadata.st_mtime,
+                                              file_metadata.st_birthtime,
+                                              file_metadata.st_ctime)).date()
+        except (AttributeError, KeyError, IndexError) as e:
+            Logger().log_error('Attempting to access file metadata', e, metadata)
+
+    def _get_metadata(self, filepath):
+        return ExifToolHelper().get_metadata(filepath)[0]
+
+    def _construct_datetime_object(self, date_format, original_capture_time):
+        return datetime.strptime(original_capture_time, date_format).date()
 
     def _determine_filetype_tag_info(self, metadata):
         for media_type in self._video_tag_info():

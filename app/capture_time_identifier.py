@@ -27,6 +27,8 @@ class CaptureTimeIdentifier:
         return date_format, tag_name
 
     def _video_tag_info(self):
-        h264 = {'tag_name': 'H264:DateTimeOriginal', 'date_format': '%Y:%m:%d %H:%M:%S%z'}
         quicktime = {'tag_name': 'QuickTime:CreateDate', 'date_format': '%Y:%m:%d %H:%M:%S'}
-        return [h264, quicktime]
+        h264 = {'tag_name': 'H264:DateTimeOriginal', 'date_format': '%Y:%m:%d %H:%M:%S%z'}
+        riff = {'tag_name': 'RIFF:DateTimeOriginal', 'date_format': '%Y:%m:%d %H:%M:%S'}
+        asf = {'tag_name': 'ASF:CreationDate', 'date_format': '%Y:%m:%d %H:%M:%SZ'}
+        return [quicktime, h264, riff, asf]

@@ -17,6 +17,7 @@ def construct_path(*args):
 test_directory = str(Path(__file__).parent)
 test_resources_directory = construct_path(test_directory, 'test_resources')
 source_directory = construct_path(test_resources_directory, 'source')
+static_media_directory = construct_path(test_resources_directory, 'static_media')
 logfile_directory = construct_path(test_directory, 'logs')
 destination_root_directory = construct_path(test_resources_directory, 'destination')
 misc_destination_directory = construct_path(destination_root_directory, 'misc')

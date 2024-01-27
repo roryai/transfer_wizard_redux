@@ -1,6 +1,6 @@
 from .helpers import (pytest, Path, cleanup, create_file_on_disk,
                       construct_path, source_directory)
-from app.scanner import Scanner, MEDIA_FILETYPES
+from app.scanner import Scanner
 
 scanner = Scanner()
 
@@ -95,3 +95,27 @@ def test_provides_multiple_misc_extensions():
     extensions = ['.hlp', '.non']
 
     assert sorted(results) == extensions
+
+
+def test_discovers_a_file_with_an_upper_case_photo_file():
+    media_filepath = create_file_on_disk(source_directory, 'file.JPG')
+
+    discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
+
+    assert discovered_filepaths == [media_filepath]
+
+
+def test_discovers_a_file_with_an_upper_case_video_file():
+    media_filepath = create_file_on_disk(source_directory, 'file.MOV')
+
+    discovered_filepaths = list(scanner.media_filepaths_in(source_directory))
+
+    assert discovered_filepaths == [media_filepath]
+
+
+def test_discovers_a_file_with_an_upper_case_misc_file():
+    media_filepath = create_file_on_disk(source_directory, 'file.TXT')
+
+    discovered_filepaths = list(scanner.misc_filepaths_in(source_directory))
+
+    assert discovered_filepaths == [media_filepath]

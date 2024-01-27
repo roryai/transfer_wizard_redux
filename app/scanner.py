@@ -18,13 +18,13 @@ class Scanner:
                                          self._is_extension_of_misc_filetype, self._extension_only))
 
     def _is_filepath_of_media_filetype(self, filepath):
-        return self._extension(filepath) in MEDIA_FILETYPES
+        return self._extension(filepath).lower() in MEDIA_FILETYPES
 
     def _is_filepath_of_misc_filetype(self, filepath):
         return self._is_extension_of_misc_filetype(self._extension(filepath))
 
     def _is_extension_of_misc_filetype(self, extension):
-        return extension not in MEDIA_FILETYPES
+        return extension.lower() not in MEDIA_FILETYPES
 
     def _extension(self, filepath):
         return os.path.splitext(filepath)[1]

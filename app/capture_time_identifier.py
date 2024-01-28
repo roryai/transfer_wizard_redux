@@ -1,10 +1,9 @@
 from datetime import datetime
 from pathlib import Path
 
+from app.exiftool_wrapper import ExiftoolWrapper
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
-
-from exiftool import ExifToolHelper
 
 
 class CaptureTimeIdentifier:
@@ -53,7 +52,7 @@ class CaptureTimeIdentifier:
             Logger().log_error('Attempting to access file metadata', e, metadata)
 
     def _get_metadata(self, filepath):
-        return ExifToolHelper().get_metadata(filepath)[0]
+        return ExiftoolWrapper().exiftool().get_metadata(filepath)[0]
 
     def _construct_datetime_object(self, date_format, original_capture_time):
         return datetime.strptime(original_capture_time, date_format).date()

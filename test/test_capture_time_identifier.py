@@ -2,6 +2,7 @@ from datetime import date, datetime
 from test.helpers import (pytest, construct_path, cleanup, create_file_on_disk,
                           destination_root_directory, static_media_directory)
 from app.capture_time_identifier import CaptureTimeIdentifier
+from test.fixtures.capture_time_identifier_fixtures import *
 
 
 @pytest.fixture(autouse=True)
@@ -10,8 +11,16 @@ def teardown():
     cleanup()
 
 
+def class_under_test():
+    return CaptureTimeIdentifier()
+
+
+def earliest_file_system_date(filepath):
+    return class_under_test()._earliest_file_system_date(filepath)
+
+
 def approximate_file_creation_date(filepath):
-    return CaptureTimeIdentifier().approximate_file_creation_date(filepath)
+    return class_under_test().approximate_file_creation_date(filepath)
 
 
 def test_identifies_capture_time_for_jpeg_from_sony_camera():
@@ -100,3 +109,24 @@ def test_logs_info_when_metadata_read_of_media_files_fails():
     expected_date = datetime.strptime('27 January 2024', "%d %B %Y").date()
 
     assert system_file_info_date == expected_date
+
+
+def test_uses_birth_time_for_capture_time_when_it_is_earliest_file_stat_time(birth_time_first):
+    generated_date = earliest_file_system_date('this_string_satisfies_mocked_Path')
+    expected_date = datetime.fromtimestamp(birth_time_first.st_birthtime).date()
+
+    assert expected_date == generated_date
+
+
+def test_uses_modified_time_for_capture_time_when_it_is_earliest_file_stat_time(modified_time_first):
+    generated_date = earliest_file_system_date('this_string_satisfies_mocked_Path')
+    expected_date = datetime.fromtimestamp(modified_time_first.st_mtime).date()
+
+    assert expected_date == generated_date
+
+
+def test_uses_creation_time_for_capture_time_when_it_is_earliest_file_stat_time(creation_time_first):
+    generated_date = earliest_file_system_date('this_string_satisfies_mocked_Path')
+    expected_date = datetime.fromtimestamp(creation_time_first.st_ctime).date()
+
+    assert expected_date == generated_date

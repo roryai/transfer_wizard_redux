@@ -28,7 +28,9 @@ class CaptureTimeIdentifier:
             date_format = '%Y:%m:%d %H:%M:%S'
             return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
-            Logger().log_error('Attempting to access photo metadata', e, metadata)
+            context_message = 'Photo metadata read error, defaulting to file system date'
+            Logger().log_error(context_message, e, metadata)
+            return self._earliest_file_system_date(photo_path)
 
     def _get_date_taken_for_video(self, video_path):
         try:
@@ -37,7 +39,9 @@ class CaptureTimeIdentifier:
             original_capture_time = metadata[tag_name]
             return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
-            Logger().log_error('Attempting to access video metadata', e, metadata)
+            context_message = 'Video metadata read error, defaulting to file system date'
+            Logger().log_error(context_message, e, metadata)
+            return self._earliest_file_system_date(video_path)
 
     def _earliest_file_system_date(self, filepath):
         try:

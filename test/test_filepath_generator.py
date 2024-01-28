@@ -1,9 +1,10 @@
-from datetime import datetime
 from .helpers import (Path, cleanup, construct_path, create_file_on_disk_with_data,
                       create_test_media_files, create_test_misc_files, destination_root_directory,
-                      source_directory, static_date_based_destination_path, misc_destination_directory)
-from test.fixtures.filepath_generator_fixtures import *
+                      source_directory, media_destination_year_directory, misc_destination_year_directory)
+from test.fixtures.capture_time_identifier_fixtures import *
+
 from app.filepath_generator import FilepathGenerator
+from test.fixtures.mock_capture_time_identifier import mock_capture_time_identifier
 
 
 @pytest.fixture(autouse=True)
@@ -12,129 +13,114 @@ def teardown():
     cleanup()
 
 
-def run_with_media_flag_enabled(source_filepath):
-    return FilepathGenerator(source_filepath, destination_root_directory
-                             ).generate_destination_filepath(media=True)
+def run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier):
+    return FilepathGenerator(source_filepath, destination_root_directory,
+                             mock_capture_time_identifier).generate_destination_filepath(media=True)
 
 
-def run_with_media_flag_disabled(source_filepath):
-    return FilepathGenerator(source_filepath, destination_root_directory
-                             ).generate_destination_filepath(media=False)
+def run_with_media_flag_disabled(source_filepath, mock_capture_time_identifier):
+    return FilepathGenerator(source_filepath, destination_root_directory,
+                             mock_capture_time_identifier).generate_destination_filepath(media=False)
 
 
 class TestSharedFunctionality:
-    def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size(self):
+    def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size(
+            self, mock_capture_time_identifier):
         _, source_filepath, destination_directory, _ = create_test_media_files(
             filename='a_file___1.jpeg', create_destination_file=True)
 
-        generated_destination_path = run_with_media_flag_enabled(source_filepath)
+        generated_destination_path = run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier)
         expected_destination_path = construct_path(destination_directory, 'a_file___2.jpeg')
 
         assert generated_destination_path == expected_destination_path
 
-    def test_returns_none_if_generated_path_points_to_identical_file(self):
+    def test_returns_none_if_generated_path_points_to_identical_file(self, mock_capture_time_identifier):
         data = 'same data'
         _, source_filepath, _, _ = create_test_media_files(
             filename='a_file___1.jpeg', source_data=data, dest_data=data, create_destination_file=True)
-        generated_destination_path = run_with_media_flag_enabled(source_filepath)
+        generated_destination_path = run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier)
 
         assert generated_destination_path is None
 
-    def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(self):
+    def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(
+            self, mock_capture_time_identifier):
         filename = 'test_file.jpeg'
         source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
-        destination_directory = static_date_based_destination_path(source_filepath)
 
         # source filepath has name clash with this filepath, so generated filename is incremented
-        create_file_on_disk_with_data(destination_directory, filename, 'Unique data')
+        create_file_on_disk_with_data(media_destination_year_directory, filename, 'Unique data')
         # generated incremented filepath is identical, and files are same size/have same data
-        create_file_on_disk_with_data(destination_directory, 'test_file___1.jpeg', 'Same data')
+        create_file_on_disk_with_data(media_destination_year_directory, 'test_file___1.jpeg', 'Same data')
 
         generated_destination_path = FilepathGenerator(source_filepath,
-                                                       destination_root_directory
+                                                       destination_root_directory,
+                                                       mock_capture_time_identifier
                                                        ).generate_destination_filepath(media=True)
 
         assert generated_destination_path is None
 
 
 class TestMediaFilesFunctionality:
-    def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_media_file(self):
+    def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_media_file(
+            self, mock_capture_time_identifier):
         filename, source_filepath, destination_directory, _ = create_test_media_files(
             create_destination_file=True)
 
-        generated_destination_path = run_with_media_flag_enabled(source_filepath)
+        generated_destination_path = run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier)
         expected_filename = f'{Path(filename).stem}___1.jpeg'
         expected_destination_path = construct_path(destination_directory, expected_filename)
 
         assert generated_destination_path == expected_destination_path
 
-    def test_generates_path_including_year_and_quarter(self):
+    def test_generates_path_including_year_and_quarter(self, mock_capture_time_identifier):
         filename, source_filepath, destination_directory, _ = create_test_media_files()
 
-        generated_destination_path = run_with_media_flag_enabled(source_filepath)
+        generated_destination_path = run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier)
         expected_destination_path = construct_path(destination_directory, filename)
 
         assert generated_destination_path == expected_destination_path
 
-    def test_uses_birth_time_for_capture_time_when_it_is_earliest_file_stat_time(self, birth_time_first):
-        generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
-        expected_date = datetime.fromtimestamp(birth_time_first.st_birthtime)
-
-        assert expected_date == generated_date
-
-    def test_uses_modified_time_for_capture_time_when_it_is_earliest_file_stat_time(self, modified_time_first):
-        generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
-        expected_date = datetime.fromtimestamp(modified_time_first.st_mtime)
-
-        assert expected_date == generated_date
-
-    def test_uses_creation_time_for_capture_time_when_it_is_earliest_file_stat_time(self, creation_time_first):
-        generated_date = FilepathGenerator('/source', '/destination')._approximate_media_capture_time()
-        expected_date = datetime.fromtimestamp(creation_time_first.st_ctime)
-
-        assert expected_date == generated_date
-
 
 class TestMiscFilesFunctionality:
-    def test_returns_none_if_generated_path_points_to_identical_file(self):
+    def test_returns_none_if_generated_path_points_to_identical_file(self, mock_capture_time_identifier):
         data = 'same data'
         _, source_filepath, _, _ = create_test_misc_files(
             filename='a_file___1.txt', source_data=data, dest_data=data, create_destination_file=True)
-        generated_destination_path = run_with_media_flag_disabled(source_filepath)
+        generated_destination_path = run_with_media_flag_disabled(source_filepath, mock_capture_time_identifier)
 
         assert generated_destination_path is None
 
-    def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(self):
+    def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(
+            self, mock_capture_time_identifier):
         filename = 'test_file.gif'
         source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
         # source filepath has name clash with this filepath, so generated filename is incremented
-        create_file_on_disk_with_data(misc_destination_directory, filename, 'Unique data')
+        create_file_on_disk_with_data(misc_destination_year_directory, filename, 'Unique data')
         # generated incremented filepath is identical, and files are same size/have same data
-        create_file_on_disk_with_data(misc_destination_directory, 'test_file___1.gif', 'Same data')
+        create_file_on_disk_with_data(misc_destination_year_directory, 'test_file___1.gif', 'Same data')
 
         generated_destination_path = FilepathGenerator(source_filepath,
-                                                       destination_root_directory
+                                                       destination_root_directory,
+                                                       mock_capture_time_identifier
                                                        ).generate_destination_filepath(media=False)
 
         assert generated_destination_path is None
 
-    def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_misc_file(self):
+    def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_misc_file(
+            self, mock_capture_time_identifier):
         filename, source_filepath, destination_directory, _ = create_test_misc_files(
             create_destination_file=True)
 
-        generated_destination_path = run_with_media_flag_disabled(source_filepath)
+        generated_destination_path = run_with_media_flag_disabled(source_filepath, mock_capture_time_identifier)
         expected_filename = f'{Path(filename).stem}___1.gif'
         expected_destination_path = construct_path(destination_directory, expected_filename)
 
         assert generated_destination_path == expected_destination_path
 
-    def test_misc_files_go_to_misc_directory(self):
-        filename, source_filepath, destination_directory, _ = create_test_misc_files(
-            create_destination_file=True)
+    def test_misc_files_copied_to_year_based_destination_directories(self, mock_capture_time_identifier):
+        filename, source_filepath, destination_directory, _ = create_test_misc_files()
 
-        generated_destination_path = run_with_media_flag_disabled(source_filepath)
-        expected_filename = f'{Path(filename).stem}___1.gif'
-        expected_destination_path = construct_path(destination_directory, expected_filename)
-        bottom_directory_name = f'misc/{expected_filename}'
+        generated_destination_path = run_with_media_flag_disabled(source_filepath, mock_capture_time_identifier)
+        expected_destination_path = construct_path(destination_directory, filename)
 
         assert generated_destination_path == expected_destination_path

@@ -3,13 +3,17 @@ from pathlib import Path
 import os
 import re
 
+from app.capture_time_identifier import CaptureTimeIdentifier
+
 
 class FilepathGenerator:
 
-    def __init__(self, source_filepath, destination_root_directory):
+    def __init__(self, source_filepath, destination_root_directory,
+                 capture_time_identifier=CaptureTimeIdentifier()):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
         self.misc_root_directory = os.path.join(destination_root_directory, 'misc')
+        self.capture_time_identifier = capture_time_identifier
         self.spacer = '___'
 
     def generate_destination_filepath(self, media):
@@ -18,7 +22,8 @@ class FilepathGenerator:
 
     def _generate_media_destination_filepath(self):
         filename = Path(self.source_filepath).name
-        media_capture_time = self._approximate_media_capture_time()
+        media_capture_time = \
+            self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
         quarter = self._determine_quarter(media_capture_time.month)
         prospective_destination_filepath = os.path.join(
             self.destination_root_directory, str(media_capture_time.year), quarter, filename)
@@ -26,14 +31,11 @@ class FilepathGenerator:
 
     def _generate_misc_destination_filepath(self):
         filename = Path(self.source_filepath).name
-        prospective_destination_filepath = os.path.join(self.misc_root_directory, filename)
+        media_capture_time = \
+            self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
+        prospective_destination_filepath = os.path.join(self.misc_root_directory,
+                                                        str(media_capture_time.year), filename)
         return self._resolve_path(prospective_destination_filepath)
-
-    def _approximate_media_capture_time(self):
-        file_metadata = Path(self.source_filepath).stat()
-        return datetime.fromtimestamp(min(file_metadata.st_mtime,
-                                          file_metadata.st_birthtime,
-                                          file_metadata.st_ctime))
 
     def _determine_quarter(self, month):
         quarters = {1: 'Q1', 2: 'Q1', 3: 'Q1', 4: 'Q2', 5: 'Q2', 6: 'Q2',

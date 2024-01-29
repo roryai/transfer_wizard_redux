@@ -17,27 +17,18 @@ class FilepathGenerator:
         self.spacer = '___'
 
     def generate_destination_filepath(self, media):
-        return self._generate_media_destination_filepath() if media \
-            else self._generate_misc_destination_filepath()
-
-    def _generate_media_destination_filepath(self):
         filename = Path(self.source_filepath).name
         media_capture_time = \
             self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
-        quarter = self._determine_quarter(media_capture_time.month)
+        quarter = self._determine_quarter(media_capture_time.month, media)
+        root_dir = self.destination_root_directory if media else self.misc_root_directory
         prospective_destination_filepath = os.path.join(
-            self.destination_root_directory, str(media_capture_time.year), quarter, filename)
+            root_dir, str(media_capture_time.year), quarter, filename)
         return self._resolve_path(prospective_destination_filepath)
 
-    def _generate_misc_destination_filepath(self):
-        filename = Path(self.source_filepath).name
-        media_capture_time = \
-            self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
-        prospective_destination_filepath = os.path.join(self.misc_root_directory,
-                                                        str(media_capture_time.year), filename)
-        return self._resolve_path(prospective_destination_filepath)
-
-    def _determine_quarter(self, month):
+    def _determine_quarter(self, month, media):
+        if not media:
+            return ''
         quarters = {1: 'Q1', 2: 'Q1', 3: 'Q1', 4: 'Q2', 5: 'Q2', 6: 'Q2',
                     7: 'Q3', 8: 'Q3', 9: 'Q3', 10: 'Q4', 11: 'Q4', 12: 'Q4'}
         return quarters.get(month)

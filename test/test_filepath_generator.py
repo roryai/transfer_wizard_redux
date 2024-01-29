@@ -2,9 +2,10 @@ from .helpers import (Path, cleanup, construct_path, create_file_on_disk_with_da
                       create_test_media_files, create_test_misc_files, destination_root_directory,
                       source_directory, media_destination_year_directory, misc_destination_year_directory)
 from test.fixtures.capture_time_identifier_fixtures import *
+from test.fixtures.mock_capture_time_identifier import mock_capture_time_identifier
 
 from app.filepath_generator import FilepathGenerator
-from test.fixtures.mock_capture_time_identifier import mock_capture_time_identifier
+from app.mode_flags import ModeFlags, ModeFlagsMeta
 
 
 @pytest.fixture(autouse=True)
@@ -77,6 +78,19 @@ class TestMediaFilesFunctionality:
 
         generated_destination_path = run_with_media_flag_enabled(source_filepath, mock_capture_time_identifier)
         expected_destination_path = construct_path(destination_directory, filename)
+
+        assert generated_destination_path == expected_destination_path
+
+    def test_files_are_sorted_into_folders_by_year_with_no_quarter_sub_folders_in_year_only_mode(
+            self, mock_capture_time_identifier):
+        ModeFlagsMeta._instance = {}
+        ModeFlags(year_mode=True)
+        filename, source_filepath, _, _ = create_test_media_files()
+
+        generated_destination_path = \
+            FilepathGenerator(source_filepath, destination_root_directory,
+                              mock_capture_time_identifier).generate_destination_filepath(media=True)
+        expected_destination_path = construct_path(destination_root_directory, '2023', filename)
 
         assert generated_destination_path == expected_destination_path
 

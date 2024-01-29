@@ -6,6 +6,7 @@ from app.copy_controller import CopyController
 from app.db_initializer import DBInitializer
 from app.directory_manager import DirectoryManager
 from app.extension_presenter import ExtensionPresenter
+from app.mode_flags import ModeFlags
 
 ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 PROGRAM_DESCRIPTION = """
@@ -42,6 +43,9 @@ def main():
     DirectoryManager().check_if_directory_exists(args.source)
     DBInitializer(ROOT_DIR).init_prod_database()
 
+    if args.year:
+        ModeFlags(year_mode=True)
+
     if args.extensions and args.source:
         ExtensionPresenter(args.source).display_misc_extensions()
     elif args.miscellaneous and args.source and args.destination:
@@ -69,7 +73,8 @@ def _configure_parser():
     parser.add_argument('-ext', '--extensions', action='store_true', default=False, required=False,
                         help='Displays miscellaneous extensions in source directory.')
     parser.add_argument('-misc', '--miscellaneous', action='store_true', default=False, required=False,
-                        help='Copies miscellaneous files to /<destination directory path>/misc')
+                        help='Copies miscellaneous files in addition to media files')
+    parser.add_argument('-y', '--year', action='store_true', default=False, required=False, help='Year based destination directories.')
     return parser
 
 

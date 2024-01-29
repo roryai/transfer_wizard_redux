@@ -1,7 +1,7 @@
 from datetime import datetime
+from exiftool import ExifToolHelper
 from pathlib import Path
 
-from app.exiftool_wrapper import ExiftoolWrapper
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
 
@@ -22,10 +22,11 @@ class CaptureTimeIdentifier:
 
     def _get_date_taken_for_photo(self, photo_path):
         try:
-            metadata = self._get_metadata(photo_path)
-            original_capture_time = metadata['EXIF:DateTimeOriginal']
-            date_format = '%Y:%m:%d %H:%M:%S'
-            return self._construct_datetime_object(date_format, original_capture_time)
+            with ExifToolHelper() as et:
+                metadata = et.get_metadata(photo_path)[0]
+                original_capture_time = metadata['EXIF:DateTimeOriginal']
+                date_format = '%Y:%m:%d %H:%M:%S'
+                return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Photo metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, metadata)
@@ -33,10 +34,11 @@ class CaptureTimeIdentifier:
 
     def _get_date_taken_for_video(self, video_path):
         try:
-            metadata = self._get_metadata(video_path)
-            date_format, tag_name = self._determine_filetype_tag_info(metadata)
-            original_capture_time = metadata[tag_name]
-            return self._construct_datetime_object(date_format, original_capture_time)
+            with ExifToolHelper() as et:
+                metadata = et.get_metadata(video_path)[0]
+                date_format, tag_name = self._determine_filetype_tag_info(metadata)
+                original_capture_time = metadata[tag_name]
+                return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Video metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, metadata)
@@ -50,9 +52,6 @@ class CaptureTimeIdentifier:
                                               file_metadata.st_ctime)).date()
         except (AttributeError, KeyError, IndexError) as e:
             Logger().log_error('Attempting to access file metadata', e, metadata)
-
-    def _get_metadata(self, filepath):
-        return ExiftoolWrapper().exiftool().get_metadata(filepath)[0]
 
     def _construct_datetime_object(self, date_format, original_capture_time):
         return datetime.strptime(original_capture_time, date_format).date()

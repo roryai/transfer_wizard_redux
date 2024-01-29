@@ -10,11 +10,11 @@ class FileFactory:
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
 
-    def save_pre_copy_file_record(self, media):
+    def save_pre_copy_file_record(self, media, et):
         destination_filepath = FilepathGenerator(
             source_filepath=self.source_filepath,
             destination_root_directory=self.destination_root_directory
-        ).generate_destination_filepath(media)
+        ).generate_destination_filepath(media, et)
         size = Path(self.source_filepath).stat().st_size
         name_clash = self._name_clash(self.source_filepath, destination_filepath)
         File(source_filepath=self.source_filepath, destination_filepath=destination_filepath,

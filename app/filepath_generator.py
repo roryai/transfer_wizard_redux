@@ -16,10 +16,10 @@ class FilepathGenerator:
         self.capture_time_identifier = capture_time_identifier
         self.spacer = '___'
 
-    def generate_destination_filepath(self, media):
+    def generate_destination_filepath(self, media, et):
         filename = Path(self.source_filepath).name
         media_capture_time = \
-            self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
+            self.capture_time_identifier.approximate_file_creation_date(self.source_filepath, et)
         quarter = self._determine_quarter(media_capture_time.month, media)
         root_dir = self.destination_root_directory if media else self.misc_root_directory
         prospective_destination_filepath = os.path.join(

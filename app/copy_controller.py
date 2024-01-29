@@ -1,4 +1,5 @@
 import itertools
+import sys
 
 from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
@@ -19,6 +20,7 @@ class CopyController:
         self._prepare_database_records()
         stats = StatPresenter(self.source_root_directory,
                               self.destination_root_directory).print_stats_summary()
+        Logger().exit_program_if_errors()
         self._perform_copy(stats) if self._user_confirms_copy() else None
 
     def _prepare_database_records(self):

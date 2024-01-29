@@ -88,22 +88,28 @@ def test_appends_summary():
     assert expected_content == file_content()
 
 
-def test_outputs_errors_and_quits_program_if_more_than_2_errors_logged(capsys, mocker):
+def test_quits_program_and_outputs_error_messages_once_1_error_logged(capsys, mocker):
     mocked_sys = mocker.patch('sys.exit')
-    expected_content = """
+    expected_message = """
 Error limit reached. Check logfile for full details.
 
 Errors:
 a
-b
-Context: Error in Class
-Error: f
-Values: []
-
 """
 
-    Logger().error_messages = ['a', 'b']
-    Logger().log_error(context_message, 'f', [])
+    Logger().error_messages = ['a']
+    Logger().exit_program_if_errors()
+
+    mocked_sys.assert_called_once()
+    assert capsys.readouterr().out == expected_message
+
+
+def test_quits_program_with_no_messages_output_to_console_once_6_errors_logged(capsys, mocker):
+    mocked_sys = mocker.patch('sys.exit')
+    expected_content = ''
+
+    Logger().error_messages = ['a', 'b', 'c', 'd', 'e', 'f']
+    Logger().exit_program_if_errors()
 
     mocked_sys.assert_called_once()
     assert capsys.readouterr().out == expected_content

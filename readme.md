@@ -1,33 +1,11 @@
 # Transfer Wizard
 ### A tool to organise your media files by date into folders structured by year and quarter
 
-##### Development notes:
-
-This project is a work in progress and is under active development.
-
-My main language is Ruby. I wanted to learn Python and so taught myself whilst building this. As such I will not always follow Pythonic conventions.
-
-I wanted to learn by experimenting, so some design decisions are unorthodox. e.g.: instead of using the built in logger I have built my own using the singleton pattern. The database controller also uses the singleton pattern.
-
-I aim to use the Python standard library or build my own helpers and tools wherever possible. As such pytest and pytest-mock are the only external requirements.
-
-There is only minimal error handling as I wanted errors to surface immediately during development and testing. Error handling is on the roadmap.
-
-I prefer abbreviating lines for readability, so you (hopefully) won't see long lines going off the end of the screen.
-
-Feedback and pull requests welcome!
-
-### Take a look at...
-[FileCopier](https://github.com/roryai/transfer_wizard_redux/blob/main/app/file_copier.py) for recursion, and a guest appearance from the [controversial](https://pythonsimplified.com/the-most-controversial-python-walrus-operator) walrus operator!
-
-[StatPresenter](https://github.com/roryai/transfer_wizard_redux/blob/main/app/stat_presenter.py) for some metaprogramming that was deeply satisfying to write. I love the result (see the pre-copy file summary table, below). I tried a couple of table generators, including pandas, but it was inadequate for what I wanted to do.
-
-[Scanner](https://github.com/roryai/transfer_wizard_redux/blob/main/app/scanner.py) for clean design, and functions being passed to functions.
-
-The [main.py tests](https://github.com/roryai/transfer_wizard_redux/blob/main/test/test_main.py) to see me getting to grips with pytest mocking and fixtures.
 ### Overview
 
 This program will allow you to unify your disparate photo and video libraries in to an organised directory structure.
+
+It also allows you to copy photos from your camera to your hard drive (see the Roadmap below for plans in this area).
 
 It scans files in the source directory, analyses them, and copies them to the new directory structure in the destination directory.
 
@@ -68,6 +46,32 @@ Total to be copied:
 2.89MB
 ```
 
+##### Development notes:
+
+This project is in beta and is under active development. See Roadmap section lower down for upcoming features and areas that need refactoring.
+
+I aim to use the Python standard library or build my own helpers and tools wherever possible. As such pytest, pytest-mock, exiftool and pillow are the only dependencies.
+
+There is only minimal error handling as I wanted errors to surface immediately during development and testing. Error handling is on the roadmap.
+
+I prefer abbreviating lines for readability, so you (hopefully) won't see long lines going off the end of the screen.
+
+My main language is Ruby. I wanted to learn Python and so taught myself whilst building this. As such I will not always follow Pythonic conventions.
+
+I wanted to experiment with a few things so I've built my own logger and table generator. I have also explored using the singleton pattern.
+
+Code reviews, feedback, and pull requests are welcome!
+
+### Take a look at...
+[FileCopier](https://github.com/roryai/transfer_wizard_redux/blob/main/app/file_copier.py) for recursion, and a guest appearance from the [controversial](https://pythonsimplified.com/the-most-controversial-python-walrus-operator) walrus operator!
+
+[StatPresenter](https://github.com/roryai/transfer_wizard_redux/blob/main/app/stat_presenter.py) for some metaprogramming that was deeply satisfying to write. I love the result (see the pre-copy file summary table, below). I tried a couple of table generators, including pandas, but it was inadequate for what I wanted to do.
+
+[Scanner](https://github.com/roryai/transfer_wizard_redux/blob/main/app/scanner.py) for clean design, and functions being passed to functions.
+
+The [main.py tests](https://github.com/roryai/transfer_wizard_redux/blob/main/test/test_main.py) to see me pytest mocking and fixtures.
+
+
 ### Installation
 
 The project is in beta; use at your own risk.
@@ -80,22 +84,29 @@ To run the project from the command line, navigate to the project root directory
 
 You will be presented with statistics on the files you want to copy. You can then confirm the copy or cancel it.
 
+### Roadmap
 
-### Current functionality
+#### Current functionality
 - Three modes
   - Copies photos and videos from source directory to generated directory structure in destination directory
-  - Lists miscellaneous file extensions that won't be copied when above mode is run
   - Same as first mode, but copies the miscellaneous files to a single directory (/misc) in destination directory
-- Detailed summary before copy of how many files are: copy candidates, media files, misc files, duplicates, and files with name clash. Lists count and total size of files to be copied.
+  - Lists miscellaneous file extensions that won't be copied when above mode is run
+- Detailed pre=copy summary of source file analysis
 - Command line interface
 - Detailed log files
 
-### Future functionality
-- Reorganise (move) files in source directory instead of copying them to a destination directory.
+#### Future functionality
+- Reorganise (move vs copy) files in source directory instead of copying them to a destination directory.
 - Pause and resume function
 - Status updates during and after copy
 - Scheduled backup functionality
 - GUI
+- Auto-runs when camera connected
+
+#### Areas in need of refactoring
+CaptureTimeIdentifier is a WIP and I am currently experiementing with two different libraries for extracting EXIF data for capture time. Exiftool works for videos and images but is relatively slow, and pillow only works for images. I haven't yet found a light weight library to extract capture time info from videos.
+FileGateway is too large and needs splitting up.
+Logger needs a rethink. Not sure I want to store so much in memory whilst the program is running.
 
 One day I plan to have a raspberry pi set up to detect my camera via bluetooth, copy all files from the camera to my cloud storage, and then delete the files on the camera. Progress will be displayed on a small screen on the raspberry pi. This will allow me to leave my camera turned on on my desk and walk away, with the media transfer happening automatically.
 

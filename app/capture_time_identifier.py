@@ -1,6 +1,7 @@
 from datetime import datetime
 from exiftool import ExifToolHelper
 from pathlib import Path
+from PIL import Image
 
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
@@ -22,11 +23,12 @@ class CaptureTimeIdentifier:
 
     def _get_date_taken_for_photo(self, photo_path):
         try:
-            with ExifToolHelper() as et:
-                metadata = et.get_metadata(photo_path)[0]
-                original_capture_time = metadata['EXIF:DateTimeOriginal']
-                date_format = '%Y:%m:%d %H:%M:%S'
-                return self._construct_datetime_object(date_format, original_capture_time)
+            image = Image.open(photo_path)
+            exif_data = image.getexif().items()
+            # noinspection PyTypeChecker
+            original_capture_time = dict(exif_data).get(306)
+            date_format = '%Y:%m:%d %H:%M:%S'
+            return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Photo metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, metadata)

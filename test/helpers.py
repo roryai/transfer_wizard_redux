@@ -25,6 +25,9 @@ misc_destination_year_directory = construct_path(misc_destination_root_directory
 media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
 default_source_media_filepath = construct_path(source_directory, 'filename.jpg')
 default_destination_media_filepath = construct_path(destination_root_directory, 'filename.jpg')
+image_with_metadata_filename = 'IMG_1687_68E3.jpg'
+image_with_metadata_source_filepath = os.path.join(static_media_directory, image_with_metadata_filename)
+image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2018/Q3')
 
 DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
@@ -57,6 +60,25 @@ def create_test_misc_files(filename='test_misc_file.gif', create_destination_fil
     create_file_on_disk_with_data(misc_destination_year_directory, filename, dest_data) \
         if create_destination_file else None
     return filename, source_filepath, misc_destination_year_directory, destination_filepath
+
+
+def prepare_test_media_source_file(directory=source_directory):
+    Path(directory).mkdir(parents=True, exist_ok=True)
+    shutil.copy2(image_with_metadata_source_filepath, directory)
+    return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
+
+
+def prepare_test_media_destination_name_clash_file():
+    destination_filepath = os.path.join(image_with_metadata_destination_directory, 'IMG_1687_68E3.jpg')
+    Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
+    open(destination_filepath, 'x').close()
+    return destination_filepath
+
+
+def prepare_test_media_destination_duplicate_file():
+    Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
+    shutil.copy2(image_with_metadata_source_filepath, image_with_metadata_destination_directory)
+    return os.path.join(image_with_metadata_destination_directory, 'IMG_1687_68E3.jpg')
 
 
 def set_file_creation_time(filepath):

@@ -2,12 +2,16 @@ from datetime import datetime
 from exiftool import ExifToolHelper
 from pathlib import Path
 from PIL import Image
+from pillow_heif import register_heif_opener
 
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
 
 
 class CaptureTimeIdentifier:
+
+    def __init__(self):
+        register_heif_opener()
 
     def approximate_file_creation_date(self, filepath):
         try:

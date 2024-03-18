@@ -31,7 +31,7 @@ def test_identifies_capture_time_for_jpeg_from_sony_camera():
     assert metadata_date == expected_date
 
 
-def test_identifies_capture_time_for_iphone_photo():
+def test_identifies_capture_time_for_jpg_from_iphone():
     photo_path = construct_path(static_media_directory, 'IMG_1687_68E3.jpg')
     metadata_date = approximate_file_creation_date(photo_path)
     expected_date = datetime.strptime('11 September 2018', "%d %B %Y").date()
@@ -39,7 +39,15 @@ def test_identifies_capture_time_for_iphone_photo():
     assert metadata_date == expected_date
 
 
-def test_identifies_capture_time_for_iphone_video():
+def test_identifies_capture_time_for_heic_photo():
+    photo_path = construct_path(static_media_directory, 'IMG_1263.HEIC')
+    metadata_date = approximate_file_creation_date(photo_path)
+    expected_date = datetime.strptime('21 June 2018', "%d %B %Y").date()
+
+    assert metadata_date == expected_date
+
+
+def test_identifies_capture_time_for_hevc_mov_video():
     video_path = construct_path(static_media_directory, 'IMG_3639_HEVC.MOV')
     metadata_date = approximate_file_creation_date(video_path)
     expected_date = datetime.strptime('27 August 2019', "%d %B %Y").date()

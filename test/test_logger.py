@@ -86,30 +86,3 @@ def test_appends_summary():
     Logger().append_summary_to_file()
 
     assert expected_content == file_content()
-
-
-def test_quits_program_and_outputs_error_messages_once_1_error_logged(capsys, mocker):
-    mocked_sys = mocker.patch('sys.exit')
-    expected_message = """
-Error limit reached. Check logfile for full details.
-
-Errors:
-a
-"""
-
-    Logger().error_messages = ['a']
-    Logger().exit_program_if_errors()
-
-    mocked_sys.assert_called_once()
-    assert capsys.readouterr().out == expected_message
-
-
-def test_quits_program_with_no_messages_output_to_console_once_6_errors_logged(capsys, mocker):
-    mocked_sys = mocker.patch('sys.exit')
-    expected_content = ''
-
-    Logger().error_messages = ['a', 'b', 'c', 'd', 'e', 'f']
-    Logger().exit_program_if_errors()
-
-    mocked_sys.assert_called_once()
-    assert capsys.readouterr().out == expected_content

@@ -24,7 +24,6 @@ def copy_files(include_misc_files):
 
 class TestIncludeMiscFiles:
     def test_copies_media_file_to_destination_directory(self, mocker, monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         destination_filepath = prepare_test_media_source_file()
 
         copy_files(include_misc_files=True)
@@ -33,7 +32,6 @@ class TestIncludeMiscFiles:
         assert Path(destination_filepath).stat().st_size == 195514
 
     def test_copies_misc_file_to_destination_directory(self, mocker, monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         _, _, destination_directory, destination_filepath = create_test_misc_files()
 
         copy_files(include_misc_files=True)
@@ -44,7 +42,6 @@ class TestIncludeMiscFiles:
 
 class TestExcludeMiscFiles:
     def test_copies_media_file_to_destination_directory(self, mocker, monkeypatch):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         monkeypatch.setattr('builtins.input', lambda: 'y')
         destination_filepath = prepare_test_media_source_file()
 
@@ -54,7 +51,6 @@ class TestExcludeMiscFiles:
         assert Path(destination_filepath).stat().st_size == 195514
 
     def test_does_not_copy_misc_file_or_create_destination_directory(self, mocker, monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         _, _, destination_directory, destination_filepath = create_test_misc_files()
 
         copy_files(include_misc_files=False)
@@ -65,7 +61,6 @@ class TestExcludeMiscFiles:
 
 class TestSharedExamples:
     def test_does_not_copy_file_when_user_enters_char_other_than_y(self, mocker, monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         _, _, destination_directory, destination_filepath = create_test_misc_files()
 
         copy_files(include_misc_files=False)
@@ -74,7 +69,6 @@ class TestSharedExamples:
         assert not Path(destination_filepath).is_file()
 
     def test_does_not_copy_duplicate_file(self, mocker, monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         destination_filepath = prepare_test_media_source_file()
         prepare_test_media_destination_duplicate_file()
 
@@ -90,7 +84,6 @@ class TestSharedExamples:
 
     def test_copies_file_with_suffix_added_when_name_clashes_with_existing_file(self, mocker,
                                                                                 monkeypatch_user_input_yes):
-        mocker.patch('app.logger.Logger.exit_program_if_errors')
         prepare_test_media_source_file()
         existing_file_with_identical_name = prepare_test_media_destination_name_clash_file()
         expected_destination_path = construct_path(image_with_metadata_destination_directory,

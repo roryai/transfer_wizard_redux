@@ -20,11 +20,6 @@ class Logger(metaclass=LoggerMeta):
         self.combined_error_messages = ''
         self.successful_copy_count = 0
         self.unsuccessful_copy_count = 0
-        self.exit_message = """
-Error limit reached. Check logfile for full details.
-
-Errors:
-"""
 
     def init_log_file(self, destination_root_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
@@ -64,14 +59,6 @@ Errors:
 
     def log_to_file(self, log_entry):
         self._append_to_logfile(log_entry)
-
-    def exit_program_if_errors(self):
-        if len(self.error_messages) > 0:
-            self.exit_message += '\n'.join(self.error_messages)
-            self._append_to_logfile(self.exit_message)
-            if len(self.error_messages) <= 5:
-                print(self.exit_message)
-            sys.exit()
 
     def _append_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:

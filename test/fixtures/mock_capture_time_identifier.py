@@ -5,10 +5,20 @@ from app.capture_time_identifier import CaptureTimeIdentifier
 
 
 @pytest.fixture(autouse=True)
-def mock_capture_time_identifier(mocker):
-    original_instance = CaptureTimeIdentifier()
+def mock_capture_time_identifier_metadata_readable(mocker):
+    instance = CaptureTimeIdentifier()
 
     desired_date = datetime(2023, 12, 3)
-    mocker.patch.object(original_instance, 'approximate_file_creation_date',
-                        return_value=desired_date)
-    return original_instance
+    mocker.patch.object(instance, 'approximate_file_creation_date',
+                        return_value=({'capture_date': desired_date, 'metadata_unreadable': False}))
+    return instance
+
+
+@pytest.fixture(autouse=True)
+def mock_capture_time_identifier_metadata_unreadable(mocker):
+    instance = CaptureTimeIdentifier()
+
+    desired_date = datetime(2023, 12, 3)
+    mocker.patch.object(instance, 'approximate_file_creation_date',
+                        return_value=({'capture_date': desired_date, 'metadata_unreadable': True}))
+    return instance

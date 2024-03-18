@@ -1,6 +1,6 @@
 from datetime import date, datetime
 from test.helpers import (pytest, construct_path, cleanup, create_file_on_disk,
-                          destination_root_directory, static_media_directory)
+                          create_test_misc_files, destination_root_directory, static_media_directory)
 from app.capture_time_identifier import CaptureTimeIdentifier
 from test.fixtures.capture_time_identifier_fixtures import *
 
@@ -16,11 +16,11 @@ def class_under_test():
 
 
 def earliest_file_system_date(filepath):
-    return class_under_test()._earliest_file_system_date(filepath)
+    return class_under_test()._earliest_file_system_date(filepath)['capture_date']
 
 
 def approximate_file_creation_date(filepath):
-    return class_under_test().approximate_file_creation_date(filepath)
+    return class_under_test().approximate_file_creation_date(filepath)['capture_date']
 
 
 def test_identifies_capture_time_for_jpeg_from_sony_camera():
@@ -112,6 +112,7 @@ def test_defaults_to_file_system_dates_for_misc_file():
 
 
 def test_logs_info_when_metadata_read_of_media_files_fails():
+    # this file has unreadable metadata
     video_path = construct_path(static_media_directory, 'MOV02021.MPG')
     system_file_info_date = approximate_file_creation_date(video_path)
     expected_date = datetime.strptime('27 January 2024', "%d %B %Y").date()
@@ -138,3 +139,35 @@ def test_uses_creation_time_for_capture_time_when_it_is_earliest_file_stat_time(
     expected_date = datetime.fromtimestamp(creation_time_first.st_ctime).date()
 
     assert expected_date == generated_date
+
+
+def test_unreadable_photo_metadata_recorded_in_result():
+    _, filepath, _, _ = create_test_misc_files()
+    result = class_under_test()._get_date_taken_for_photo(filepath)
+    expected_date = datetime.strptime('3 December 2023', "%d %B %Y").date()
+
+    assert result == ({'capture_date': expected_date, 'metadata_unreadable': True})
+
+
+def test_unreadable_video_metadata_recorded_in_result():
+    _, filepath, _, _ = create_test_misc_files()
+    result = class_under_test()._get_date_taken_for_video(filepath)
+    expected_date = datetime.strptime('3 December 2023', "%d %B %Y").date()
+
+    assert result == ({'capture_date': expected_date, 'metadata_unreadable': True})
+
+
+def test_readable_photo_metadata_recorded_in_result():
+    photo_path = construct_path(static_media_directory, 'DSC02204.JPG')
+    result = class_under_test()._get_date_taken_for_photo(photo_path)
+    expected_date = datetime.strptime('3 June 2017', "%d %B %Y").date()
+
+    assert result == ({'capture_date': expected_date, 'metadata_unreadable': False})
+
+
+def test_readable_video_metadata_recorded_in_result():
+    video_path = construct_path(static_media_directory, 'IMG_3639_HEVC.MOV')
+    result = class_under_test()._get_date_taken_for_video(video_path)
+    expected_date = datetime.strptime('27 August 2019', "%d %B %Y").date()
+
+    assert result == ({'capture_date': expected_date, 'metadata_unreadable': False})

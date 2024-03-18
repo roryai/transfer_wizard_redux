@@ -23,6 +23,7 @@ destination_root_directory = construct_path(test_resources_directory, 'destinati
 misc_destination_root_directory = construct_path(destination_root_directory, 'misc')
 misc_destination_year_directory = construct_path(misc_destination_root_directory, '2023')
 media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
+metadata_error_destination_year_directory = construct_path(destination_root_directory, 'error/2023/Q4')
 default_source_media_filepath = construct_path(source_directory, 'filename.jpg')
 default_destination_media_filepath = construct_path(destination_root_directory, 'filename.jpg')
 image_with_metadata_filename = 'IMG_1687_68E3.jpg'

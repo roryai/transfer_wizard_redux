@@ -1,7 +1,7 @@
 from datetime import datetime
 from exiftool import ExifToolHelper
 from pathlib import Path
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from pillow_heif import register_heif_opener
 
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
@@ -26,38 +26,43 @@ class CaptureTimeIdentifier:
             Logger().log_error('Attempting to approximate creation date', e, [filepath, extension])
 
     def _get_date_taken_for_photo(self, photo_path):
+        metadata = {}
         try:
             image = Image.open(photo_path)
-            exif_data = image.getexif().items()
+            metadata = image.getexif().items()
             # noinspection PyTypeChecker
-            original_capture_time = dict(exif_data).get(306)
+            capture_date_string = dict(metadata).get(306)
             date_format = '%Y:%m:%d %H:%M:%S'
-            return self._construct_datetime_object(original_capture_time, date_format)
-        except (AttributeError, KeyError, IndexError) as e:
+            capture_date = self._construct_datetime_object(capture_date_string, date_format)
+            return {'capture_date': capture_date, 'metadata_unreadable': False}
+        except (AttributeError, KeyError, IndexError, TypeError, UnidentifiedImageError) as e:
             context_message = 'Photo metadata read error, defaulting to file system date'
-            Logger().log_error(context_message, e, [photo_path, str(dict(exif_data))])
-            return self._earliest_file_system_date(photo_path)
+            Logger().log_error(context_message, e, [photo_path, str(metadata)])
+            return self._earliest_file_system_date(photo_path, metadata_unreadable=True)
 
     def _get_date_taken_for_video(self, video_path):
+        metadata = {}
         try:
             with ExifToolHelper() as et:
                 metadata = et.get_metadata(video_path)[0]
                 date_format, tag_name = self._determine_filetype_tag_info(metadata)
-                original_capture_time = metadata[tag_name]
-                return self._construct_datetime_object(original_capture_time, date_format)
-        except (AttributeError, KeyError, IndexError) as e:
+                capture_date = self._construct_datetime_object(metadata[tag_name], date_format)
+                return {'capture_date': capture_date, 'metadata_unreadable': False}
+        except (AttributeError, KeyError, IndexError, TypeError) as e:
             context_message = 'Video metadata read error, defaulting to file system date'
-            Logger().log_error(context_message, e, [video_path, metadata])
-            return self._earliest_file_system_date(video_path)
+            Logger().log_error(context_message, e, [video_path, str(metadata)])
+            return self._earliest_file_system_date(video_path, metadata_unreadable=True)
 
-    def _earliest_file_system_date(self, filepath):
+    def _earliest_file_system_date(self, filepath, metadata_unreadable=False):
+        metadata = {}
         try:
-            file_metadata = Path(filepath).stat()
-            return datetime.fromtimestamp(min(file_metadata.st_mtime,
-                                              file_metadata.st_birthtime,
-                                              file_metadata.st_ctime)).date()
+            metadata = Path(filepath).stat()
+            earliest_date = datetime.fromtimestamp(min(metadata.st_mtime,
+                                                       metadata.st_birthtime,
+                                                       metadata.st_ctime)).date()
+            return {'capture_date': earliest_date, 'metadata_unreadable': metadata_unreadable}
         except (AttributeError, KeyError, IndexError) as e:
-            Logger().log_error('Attempting to access file metadata', e, [filepath, file_metadata])
+            Logger().log_error('Attempting to access file metadata', e, [filepath, metadata])
 
     def _construct_datetime_object(self, original_capture_time, date_format):
         if not original_capture_time:
@@ -65,10 +70,13 @@ class CaptureTimeIdentifier:
         return datetime.strptime(original_capture_time, date_format).date()
 
     def _determine_filetype_tag_info(self, metadata):
+        date_format, tag_name = None, None
         for media_type in self._video_tag_info():
             if media_type['tag_name'] in metadata:
                 tag_name = media_type['tag_name']
                 date_format = media_type['date_format']
+        if not date_format or not tag_name:
+            raise AttributeError('Video metadata format not supported')
         return date_format, tag_name
 
     def _video_tag_info(self):

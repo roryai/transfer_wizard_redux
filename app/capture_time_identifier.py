@@ -32,7 +32,7 @@ class CaptureTimeIdentifier:
             # noinspection PyTypeChecker
             original_capture_time = dict(exif_data).get(306)
             date_format = '%Y:%m:%d %H:%M:%S'
-            return self._construct_datetime_object(date_format, original_capture_time)
+            return self._construct_datetime_object(original_capture_time, date_format)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Photo metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, [photo_path, str(dict(exif_data))])
@@ -44,7 +44,7 @@ class CaptureTimeIdentifier:
                 metadata = et.get_metadata(video_path)[0]
                 date_format, tag_name = self._determine_filetype_tag_info(metadata)
                 original_capture_time = metadata[tag_name]
-                return self._construct_datetime_object(date_format, original_capture_time)
+                return self._construct_datetime_object(original_capture_time, date_format)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Video metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, [video_path, metadata])
@@ -59,7 +59,9 @@ class CaptureTimeIdentifier:
         except (AttributeError, KeyError, IndexError) as e:
             Logger().log_error('Attempting to access file metadata', e, [filepath, file_metadata])
 
-    def _construct_datetime_object(self, date_format, original_capture_time):
+    def _construct_datetime_object(self, original_capture_time, date_format):
+        if not original_capture_time:
+            raise AttributeError('Not possible to read original capture time from metadata')
         return datetime.strptime(original_capture_time, date_format).date()
 
     def _determine_filetype_tag_info(self, metadata):

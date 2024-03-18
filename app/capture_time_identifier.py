@@ -19,7 +19,7 @@ class CaptureTimeIdentifier:
             else:
                 return self._earliest_file_system_date(filepath)
         except (IsADirectoryError, FileNotFoundError) as e:
-            Logger().log_error('Attempting to approximate creation date', e, filepath)
+            Logger().log_error('Attempting to approximate creation date', e, [filepath, extension])
 
     def _get_date_taken_for_photo(self, photo_path):
         try:
@@ -31,7 +31,7 @@ class CaptureTimeIdentifier:
             return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Photo metadata read error, defaulting to file system date'
-            Logger().log_error(context_message, e, metadata)
+            Logger().log_error(context_message, e, [photo_path, str(dict(exif_data))])
             return self._earliest_file_system_date(photo_path)
 
     def _get_date_taken_for_video(self, video_path):
@@ -43,7 +43,7 @@ class CaptureTimeIdentifier:
                 return self._construct_datetime_object(date_format, original_capture_time)
         except (AttributeError, KeyError, IndexError) as e:
             context_message = 'Video metadata read error, defaulting to file system date'
-            Logger().log_error(context_message, e, metadata)
+            Logger().log_error(context_message, e, [video_path, metadata])
             return self._earliest_file_system_date(video_path)
 
     def _earliest_file_system_date(self, filepath):
@@ -53,7 +53,7 @@ class CaptureTimeIdentifier:
                                               file_metadata.st_birthtime,
                                               file_metadata.st_ctime)).date()
         except (AttributeError, KeyError, IndexError) as e:
-            Logger().log_error('Attempting to access file metadata', e, metadata)
+            Logger().log_error('Attempting to access file metadata', e, [filepath, file_metadata])
 
     def _construct_datetime_object(self, date_format, original_capture_time):
         return datetime.strptime(original_capture_time, date_format).date()

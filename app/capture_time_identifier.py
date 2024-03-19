@@ -13,13 +13,13 @@ class CaptureTimeIdentifier:
     def __init__(self):
         register_heif_opener()
 
-    def approximate_file_creation_date(self, filepath):
+    def approximate_file_creation_date(self, filepath, et):
         try:
             extension = Path(filepath).suffix
             if extension_in_photo_filetypes(extension):
                 return self._get_date_taken_for_photo(filepath)
             if extension_in_video_filetypes(extension):
-                return self._get_date_taken_for_video(filepath)
+                return self._get_date_taken_for_video(filepath, et)
             else:
                 return self._earliest_file_system_date(filepath)
         except (IsADirectoryError, FileNotFoundError) as e:
@@ -40,10 +40,10 @@ class CaptureTimeIdentifier:
             Logger().log_error(context_message, e, [photo_path, str(metadata)])
             return self._earliest_file_system_date(photo_path, metadata_unreadable=True)
 
-    def _get_date_taken_for_video(self, video_path):
+    def _get_date_taken_for_video(self, video_path, et):
         metadata = {}
         try:
-            with ExifToolHelper() as et:
+            with et as et:
                 metadata = et.get_metadata(video_path)[0]
                 date_format, tag_name = self._determine_filetype_tag_info(metadata)
                 capture_date = self._construct_datetime_object(metadata[tag_name], date_format)

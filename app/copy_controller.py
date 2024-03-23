@@ -8,6 +8,7 @@ from app.scanner import Scanner
 from app.stat_presenter import StatPresenter
 from app.file_copier import FileCopier
 from app.logger import Logger
+import datetime
 
 
 class CopyController:
@@ -18,9 +19,13 @@ class CopyController:
         self.include_misc_files = include_misc_files
 
     def copy_files(self):
+        start = datetime.datetime.now()
         self._prepare_database_records()
         stats = StatPresenter(self.source_root_directory,
                               self.destination_root_directory).print_stats_summary()
+        end = datetime.datetime.now()
+        total = end - start
+        print(f'Time taken: {total}')
         self._perform_copy(stats) if self._user_confirms_copy() else None
 
     def _prepare_database_records(self):
@@ -31,9 +36,8 @@ class CopyController:
         file_paths = self._scan_files_in_source_directory()
         with ExifToolHelper() as et:
             [FileFactory(source_filepath=src,
-                         destination_root_directory=self.destination_root_directory,
-                         et
-                         ).save_pre_copy_file_record(media=media)
+                         destination_root_directory=self.destination_root_directory
+                         ).save_pre_copy_file_record(media=media, et=et)
              for src, media in file_paths]
 
     def _scan_files_in_source_directory(self):

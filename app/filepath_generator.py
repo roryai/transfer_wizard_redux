@@ -9,7 +9,6 @@ from app.mode_flags import ModeFlags
 class FilepathGenerator:
 
     def __init__(self, source_filepath, destination_root_directory,
-                 et,
                  capture_time_identifier=CaptureTimeIdentifier()):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
@@ -17,9 +16,9 @@ class FilepathGenerator:
         self.capture_time_identifier = capture_time_identifier
         self.spacer = '___'
 
-    def generate_destination_filepath(self, media):
+    def generate_destination_filepath(self, media, et):
         filename = Path(self.source_filepath).name
-        result = self.capture_time_identifier.approximate_file_creation_date(self.source_filepath, self.et)
+        result = self.capture_time_identifier.approximate_file_creation_date(self.source_filepath, et)
         capture_date = result['capture_date']
         quarter = self._determine_quarter(capture_date.month, media)
         root = self._root_dir(media, result['metadata_unreadable'])

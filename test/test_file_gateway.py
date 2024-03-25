@@ -192,6 +192,24 @@ def test_counts_name_clashes(media_file_with_name_clash):
     assert gateway.name_clash_count() == 1
 
 
+def test_detects_whether_destination_filepath_is_in_use(uncopied_media_file):
+    assert gateway.destination_filepath_in_use(uncopied_media_file.destination_filepath) is False
+
+    gateway.insert(uncopied_media_file)
+
+    assert gateway.destination_filepath_in_use(uncopied_media_file.destination_filepath) is True
+
+
+def test_detects_whether_record_with_same_size_and_destination_filepath_exists(uncopied_media_file):
+    assert gateway.identical_size_and_destination_filepath_record_exists(
+        uncopied_media_file.destination_filepath, uncopied_media_file.size) is False
+
+    gateway.insert(uncopied_media_file)
+
+    assert gateway.identical_size_and_destination_filepath_record_exists(
+        uncopied_media_file.destination_filepath, uncopied_media_file.size) is True
+
+
 def test_sums_size_of_all_files(file, file_2):
     insert_records(file, file_2)
 

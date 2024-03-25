@@ -192,6 +192,27 @@ class FileGateway:
     def count_duplicate_misc_files(self):
         return self.count_duplicate_files_by_type(media=False)
 
+    def destination_filepath_in_use(self, destination_filepath):
+        statement = """
+                    SELECT COUNT(*)
+                    FROM files
+                    WHERE destination_filepath = ?;
+                """
+        values = [destination_filepath]
+        result = self.execute_read_query(statement, values)
+        return bool(result)
+
+    def identical_size_and_destination_filepath_record_exists(self, destination_filepath, size):
+        statement = """
+                    SELECT COUNT(*)
+                    FROM files
+                    WHERE destination_filepath = ?
+                    AND size = ?;
+                """
+        values = [destination_filepath, size]
+        result = self.execute_read_query(statement, values)
+        return bool(result)
+
     def sum_size(self):
         statement = """
             SELECT SUM(size) 

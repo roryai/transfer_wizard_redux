@@ -1,7 +1,6 @@
 import argparse
 import pathlib
 import sys
-from pillow_heif import register_heif_opener
 
 from app.copy_controller import CopyController
 from app.db_initializer import DBInitializer
@@ -43,7 +42,6 @@ def main():
     args = _configure_parser().parse_args(sys.argv[1:])
     DirectoryManager().check_if_directory_exists(args.source)
     DBInitializer(ROOT_DIR).init_prod_database()
-    register_heif_opener()
 
     if args.year:
         ModeFlags(year_mode=True)

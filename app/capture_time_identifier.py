@@ -2,12 +2,26 @@ from datetime import datetime
 from exiftool import ExifToolHelper
 from pathlib import Path
 from PIL import Image, UnidentifiedImageError
+from pillow_heif import register_heif_opener
 
 from app.filetype_constants import extension_in_photo_filetypes, extension_in_video_filetypes
 from app.logger import Logger
 
 
-class CaptureTimeIdentifier:
+class CaptureTimeIdentifierMeta(type):
+    _instance = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instance:
+            cls._instance[cls] = super(CaptureTimeIdentifierMeta, cls).__call__(*args, **kwargs)
+        return cls._instance[cls]
+
+
+class CaptureTimeIdentifier(metaclass=CaptureTimeIdentifierMeta):
+
+    def __init__(self):
+        register_heif_opener()
+        self.et = ExifToolHelper()
 
     def approximate_file_creation_date(self, filepath):
         try:
@@ -39,11 +53,10 @@ class CaptureTimeIdentifier:
     def _get_date_taken_for_video(self, video_path):
         metadata = {}
         try:
-            with ExifToolHelper() as et:
-                metadata = et.get_metadata(video_path)[0]
-                date_format, tag_name = self._determine_filetype_tag_info(metadata)
-                capture_date = self._construct_datetime_object(metadata[tag_name], date_format)
-                return {'capture_date': capture_date, 'metadata_unreadable': False}
+            metadata = self.et.get_metadata(video_path)[0]
+            date_format, tag_name = self._determine_filetype_tag_info(metadata)
+            capture_date = self._construct_datetime_object(metadata[tag_name], date_format)
+            return {'capture_date': capture_date, 'metadata_unreadable': False}
         except (AttributeError, KeyError, IndexError, TypeError) as e:
             context_message = 'Video metadata read error, defaulting to file system date'
             Logger().log_error(context_message, e, [video_path, str(metadata)])

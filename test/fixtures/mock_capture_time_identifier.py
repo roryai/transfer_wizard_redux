@@ -1,11 +1,12 @@
 from datetime import datetime
 import pytest
 
-from app.capture_time_identifier import CaptureTimeIdentifier
+from app.capture_time_identifier import CaptureTimeIdentifier, CaptureTimeIdentifierMeta
 
 
 @pytest.fixture(autouse=True)
 def mock_capture_time_identifier_metadata_readable(mocker):
+    CaptureTimeIdentifierMeta._instance = {}
     instance = CaptureTimeIdentifier()
 
     desired_date = datetime(2023, 12, 3)
@@ -16,6 +17,7 @@ def mock_capture_time_identifier_metadata_readable(mocker):
 
 @pytest.fixture(autouse=True)
 def mock_capture_time_identifier_metadata_unreadable(mocker):
+    CaptureTimeIdentifierMeta._instance = {}
     instance = CaptureTimeIdentifier()
 
     desired_date = datetime(2023, 12, 3)

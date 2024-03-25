@@ -1,7 +1,7 @@
 from .helpers import (Path, cleanup, construct_path, create_file_on_disk_with_data,
                       create_test_media_files, create_test_misc_files, destination_root_directory,
                       source_directory, media_destination_year_directory, misc_destination_year_directory,
-                      metadata_error_destination_year_directory)
+                      metadata_error_destination_year_directory, file_instance)
 from test.fixtures.capture_time_identifier_fixtures import *
 from test.fixtures.mock_capture_time_identifier import mock_capture_time_identifier_metadata_readable, \
     mock_capture_time_identifier_metadata_unreadable
@@ -27,6 +27,33 @@ def run_with_media_flag_disabled(source_filepath, mock_capture_time_identifier):
 
 
 class TestSharedFunctionality:
+    def test_generates_filepath(self, mock_capture_time_identifier_metadata_readable):
+        _, source_filepath, destination_directory, expected_destination_path = create_test_media_files()
+        generated_destination_path = run_with_media_flag_enabled(source_filepath,
+                                                                 mock_capture_time_identifier_metadata_readable)
+
+        assert generated_destination_path == expected_destination_path
+
+    def test_increments_number_suffix_if_identical_destination_path_exists_in_db(
+            self, mock_capture_time_identifier_metadata_readable):
+        file_instance().save()
+        _, source_filepath, destination_directory, _ = create_test_media_files()
+        generated_destination_path = run_with_media_flag_enabled(source_filepath,
+                                                                 mock_capture_time_identifier_metadata_readable)
+
+        expected_destination_path = construct_path(destination_directory, 'test_media_file___1.jpeg')
+
+        assert generated_destination_path == expected_destination_path
+
+    def test_returns_none_if_identical_destination_path_and_size_exists_in_db(
+            self, mock_capture_time_identifier_metadata_readable):
+        file_instance(size=16).save()
+        source_filepath = create_file_on_disk_with_data(source_directory, 'test_media_file.jpeg', 'this is 16 bytes')
+        generated_destination_path = run_with_media_flag_enabled(source_filepath,
+                                                                 mock_capture_time_identifier_metadata_readable)
+
+        assert generated_destination_path is None
+
     def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size(
             self, mock_capture_time_identifier_metadata_readable):
         _, source_filepath, destination_directory, _ = create_test_media_files(
@@ -157,7 +184,7 @@ class TestMiscFilesFunctionality:
 
 class TestUnreadableMetadata:
     def test_copies_file_to_errors_folder_when_metadata_unreadable(self,
-                                                                     mock_capture_time_identifier_metadata_unreadable):
+                                                                   mock_capture_time_identifier_metadata_unreadable):
         filename, source_filepath, destination_directory, _ = create_test_media_files()
 
         generated_destination_path = run_with_media_flag_enabled(source_filepath,

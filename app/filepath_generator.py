@@ -3,6 +3,7 @@ import os
 import re
 
 from app.capture_time_identifier import CaptureTimeIdentifier
+from app.file_gateway import FileGateway
 from app.mode_flags import ModeFlags
 
 
@@ -14,6 +15,7 @@ class FilepathGenerator:
         self.destination_root_directory = destination_root_directory
         self.misc_root_directory = os.path.join(destination_root_directory, 'misc')
         self.capture_time_identifier = capture_time_identifier
+        self.gateway = FileGateway()
         self.spacer = '___'
 
     def generate_destination_filepath(self, media):
@@ -42,10 +44,22 @@ class FilepathGenerator:
             return self._generate_next_available_path(destination_filepath)
 
     def _path_in_use(self, path):
-        return Path(path).is_file()
+        return Path(path).is_file() or self.gateway.destination_filepath_in_use(path)
 
     def _destination_and_source_files_are_same_size(self, destination_filepath):
-        return Path(self.source_filepath).stat().st_size == Path(destination_filepath).stat().st_size
+        if self._identical_record_exists_for_file(destination_filepath):
+            return True
+        if os.path.exists(destination_filepath):
+            return self._source_file_size() == Path(destination_filepath).stat().st_size
+        else:
+            return False
+
+    def _identical_record_exists_for_file(self, destination_filepath):
+        return self.gateway.identical_size_and_destination_filepath_record_exists(destination_filepath,
+                                                                                  self._source_file_size())
+
+    def _source_file_size(self):
+        return Path(self.source_filepath).stat().st_size
 
     def _generate_next_available_path(self, destination_filepath):
         path = Path(destination_filepath)

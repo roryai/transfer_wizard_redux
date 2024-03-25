@@ -1,5 +1,5 @@
+import datetime
 import itertools
-import sys
 
 from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
@@ -17,9 +17,12 @@ class CopyController:
         self.include_misc_files = include_misc_files
 
     def copy_files(self):
+        start = datetime.datetime.now()
         self._prepare_database_records()
         stats = StatPresenter(self.source_root_directory,
                               self.destination_root_directory).print_stats_summary()
+        end = datetime.datetime.now()
+        print(f'Time taken to scan source directory: {end - start}')
         self._perform_copy(stats) if self._user_confirms_copy() else None
 
     def _prepare_database_records(self):

@@ -3,7 +3,9 @@ import os
 import re
 
 from app.capture_time_identifier import CaptureTimeIdentifier
+from app.file import File
 from app.file_gateway import FileGateway
+from app.logger import Logger
 from app.mode_flags import ModeFlags
 
 
@@ -48,8 +50,13 @@ class FilepathGenerator:
 
     def _destination_and_source_files_are_same_size(self, destination_filepath):
         if self._identical_record_exists_for_file(destination_filepath):
+            record = self.gateway.select_duplicate_file(
+                destination_filepath, self._source_file_size())
+            duplicate_source_path = File.init_from_record(record)
+            Logger().log_duplicate(self.source_filepath, duplicate_source_path)
             return True
         if os.path.exists(destination_filepath):
+            Logger().log_duplicate(self.source_filepath, destination_filepath)
             return self._source_file_size() == Path(destination_filepath).stat().st_size
         else:
             return False
@@ -62,6 +69,7 @@ class FilepathGenerator:
         return Path(self.source_filepath).stat().st_size
 
     def _generate_next_available_path(self, destination_filepath):
+        Logger().log_name_clash(self.source_filepath, destination_filepath)
         path = Path(destination_filepath)
         filename = self._distinct_filename(path.stem)
         next_path = os.path.join(path.parent, f'{filename}{path.suffix}')

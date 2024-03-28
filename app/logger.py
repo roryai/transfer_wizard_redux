@@ -41,6 +41,14 @@ class Logger(metaclass=LoggerMeta):
         self._append_to_logfile(log_entry)
         self.unsuccessful_copy_count += 1
 
+    def log_duplicate(self, filepath_1, filepath_2):
+        log_entry = f'Duplicate:      {filepath_1} identical to {filepath_2}'
+        self._append_to_logfile(log_entry)
+
+    def log_name_clash(self, source_filepath, destination_filepath):
+        log_entry = f'Name clash:     {source_filepath} clashes with {destination_filepath}'
+        self._append_to_logfile(log_entry)
+
     def log_error(self, message, error, values):
         message = f'Context: {message}\nError: {error}\nValues: {values}\n'
         self.error_messages.append(message)

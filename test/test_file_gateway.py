@@ -200,6 +200,14 @@ def test_detects_whether_destination_filepath_is_in_use(uncopied_media_file):
     assert gateway.destination_filepath_in_use(uncopied_media_file.destination_filepath) is True
 
 
+def test_selects_identical_destination_path_and_size_record(uncopied_media_file):
+    gateway.insert(uncopied_media_file)
+
+    record = gateway.select_duplicate_file(uncopied_media_file.destination_filepath, uncopied_media_file.size)
+    file = File.init_from_record(record)
+    assert file == uncopied_media_file
+
+
 def test_detects_whether_record_with_same_size_and_destination_filepath_exists(uncopied_media_file):
     assert gateway.identical_size_and_destination_filepath_record_exists(
         uncopied_media_file.destination_filepath, uncopied_media_file.size) is False

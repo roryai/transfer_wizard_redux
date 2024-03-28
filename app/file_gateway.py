@@ -202,6 +202,16 @@ class FileGateway:
         result = self.execute_read_query(statement, values)
         return bool(result)
 
+    def select_duplicate_file(self, destination_filepath, size):
+        statement = f"""
+                    SELECT * 
+                    FROM files
+                    WHERE destination_filepath = ?
+                    AND size = ?;
+                """
+        values = [destination_filepath, size]
+        return self.db_controller.execute_read_query(statement, values)[0]
+
     def identical_size_and_destination_filepath_record_exists(self, destination_filepath, size):
         statement = """
                     SELECT COUNT(*)

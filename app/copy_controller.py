@@ -15,6 +15,7 @@ class CopyController:
         self.source_root_directory = source_root_directory
         self.destination_root_directory = destination_root_directory
         self.include_misc_files = include_misc_files
+        Logger().init_log_file(destination_root_directory)
 
     def copy_files(self):
         start = datetime.datetime.now()
@@ -49,7 +50,7 @@ class CopyController:
             self.source_root_directory) if self.include_misc_files else []
 
     def _perform_copy(self, stats):
-        self._pre_copy_logging(stats)
+        Logger().log_to_file(stats)
         FileCopier().copy_source_files_to_destination()
         self._post_copy_logging_and_display()
         FileGateway().wipe_database()  # TODO dev only, remove later
@@ -57,10 +58,6 @@ class CopyController:
     def _user_confirms_copy(self):
         print(f'\nProceed with copy? ( y / n )')
         return input().lower() == 'y'
-
-    def _pre_copy_logging(self, stats):
-        Logger().init_log_file(self.destination_root_directory)
-        Logger().log_to_file(stats)
 
     def _post_copy_logging_and_display(self):
         Logger().append_summary_to_file()

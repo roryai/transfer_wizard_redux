@@ -56,6 +56,11 @@ def test_copies_multiple_files():
 def test_records_a_successful_copy_attempt():
     file = create_source_file_and_save_file_record()
 
+    retrieved_file = instantiate_file_from_db_record(file.source_filepath)
+
+    assert retrieved_file.copied is False
+    assert retrieved_file.copy_attempted is False
+
     copy_source_files_to_destination()
 
     retrieved_file = instantiate_file_from_db_record(file.source_filepath)

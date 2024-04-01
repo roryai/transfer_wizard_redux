@@ -52,7 +52,7 @@ class FilepathGenerator:
         if self._identical_record_exists_for_file(destination_filepath):
             record = self.gateway.select_duplicate_file(
                 destination_filepath, self._source_file_size())
-            duplicate_source_path = File.init_from_record(record)
+            duplicate_source_path = File.init_from_record(record).source_filepath
             Logger().log_duplicate(self.source_filepath, duplicate_source_path)
             return True
         if os.path.exists(destination_filepath):

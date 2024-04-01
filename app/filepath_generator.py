@@ -56,7 +56,6 @@ class FilepathGenerator:
             Logger().log_duplicate(self.source_filepath, duplicate_source_path)
             return True
         if os.path.exists(destination_filepath):
-            Logger().log_duplicate(self.source_filepath, destination_filepath)
             return self._source_file_size() == Path(destination_filepath).stat().st_size
         else:
             return False
@@ -69,7 +68,6 @@ class FilepathGenerator:
         return Path(self.source_filepath).stat().st_size
 
     def _generate_next_available_path(self, destination_filepath):
-        Logger().log_name_clash(self.source_filepath, destination_filepath)
         path = Path(destination_filepath)
         filename = self._distinct_filename(path.stem)
         next_path = os.path.join(path.parent, f'{filename}{path.suffix}')

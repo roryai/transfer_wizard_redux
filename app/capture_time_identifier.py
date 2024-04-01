@@ -66,12 +66,23 @@ class CaptureTimeIdentifier(metaclass=CaptureTimeIdentifierMeta):
         metadata = {}
         try:
             metadata = Path(filepath).stat()
-            earliest_date = datetime.fromtimestamp(min(metadata.st_mtime,
-                                                       metadata.st_birthtime,
-                                                       metadata.st_ctime)).date()
+            earliest_date = self._earliest_date(metadata)
             return {'capture_date': earliest_date, 'metadata_unreadable': metadata_unreadable}
         except (AttributeError, KeyError, IndexError) as e:
             Logger().log_error('Attempting to access file metadata', e, [filepath, metadata])
+
+    def _earliest_date(self, stat_result):
+        times = []
+        if hasattr(stat_result, 'st_mtime'):
+            times.append(stat_result.st_mtime)
+        if hasattr(stat_result, 'st_birthtime'):
+            times.append(stat_result.st_birthtime)
+        if hasattr(stat_result, 'st_ctime'):
+            times.append(stat_result.st_ctime)
+        if times:
+            return datetime.fromtimestamp(min(times)).date()
+        else:
+            raise AttributeError('Cannot read file times')
 
     def _construct_datetime_object(self, original_capture_time, date_format):
         if not original_capture_time:

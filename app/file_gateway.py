@@ -6,8 +6,8 @@ class FileGateway:
     def __init__(self):
         self.db_controller = DBController()
 
-    def execute_query(self, statement):
-        return self.db_controller.execute_query(statement, [])
+    def execute_query(self, statement, values = []):
+        return self.db_controller.execute_query(statement, values)
 
     def execute_read_query(self, statement, values=None):
         values = values if values else []
@@ -31,9 +31,9 @@ class FileGateway:
         statement = f"""
             SELECT * 
             FROM files
-            WHERE source_filepath = '{source_filepath}';
+            WHERE source_filepath = ?;
         """
-        return self.db_controller.execute_read_query(statement, [])[0]
+        return self.db_controller.execute_read_query(statement, [source_filepath])[0]
 
     def select_one_where_copy_not_attempted(self):
         statement = """
@@ -51,19 +51,20 @@ class FileGateway:
         statement = f"""
             UPDATE files
             SET 
-                copied = {copied},
-                copy_attempted = {copy_attempted}
+                copied = ?,
+                copy_attempted = ?
             WHERE
-                source_filepath = '{source_filepath}'
+                source_filepath = ?
         """
-        return self.execute_query(statement)
+        values = [copied, copy_attempted, source_filepath]
+        return self.execute_query(statement, values)
 
     def delete(self, source_filepath):
         statement = f"""
             DELETE FROM files
-            WHERE source_filepath = '{source_filepath}';
+            WHERE source_filepath = ?;
         """
-        return self.execute_query(statement)
+        return self.execute_query(statement, [source_filepath])
 
     def wipe_database(self):
         statement = """

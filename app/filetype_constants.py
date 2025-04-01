@@ -1,5 +1,5 @@
-PHOTO_FILETYPES = ['.jpg', '.jpeg', '.tif', '.tiff', '.heic']
-VIDEO_FILETYPES = ['.mp4', '.mov', '.avi', '.wmv', '.mkv', '.hevc', '.mts', '.m2ts']
+PHOTO_FILETYPES = ['.jpg', '.raf']
+VIDEO_FILETYPES = ['.mov']
 MEDIA_FILETYPES = PHOTO_FILETYPES + VIDEO_FILETYPES
 
 

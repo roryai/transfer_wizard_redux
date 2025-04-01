@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 import re
 
-from app.capture_time_identifier import CaptureTimeIdentifier
+from app.capture_date_identifier import CaptureDateIdentifier
 from app.file import File
 from app.file_gateway import FileGateway
 from app.logger import Logger
@@ -12,7 +12,7 @@ from app.mode_flags import ModeFlags
 class FilepathGenerator:
 
     def __init__(self, source_filepath, destination_root_directory,
-                 capture_time_identifier=CaptureTimeIdentifier()):
+                 capture_time_identifier=CaptureDateIdentifier()):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
         self.misc_root_directory = os.path.join(destination_root_directory, 'misc')
@@ -22,7 +22,7 @@ class FilepathGenerator:
 
     def generate_destination_filepath(self, media):
         filename = Path(self.source_filepath).name
-        result = self.capture_time_identifier.approximate_file_creation_date(self.source_filepath)
+        result = self.capture_time_identifier.media_capture_date(self.source_filepath)
         capture_date = result['capture_date']
         quarter = self._determine_quarter(capture_date.month, media)
         root = self._root_dir(media, result['metadata_unreadable'])

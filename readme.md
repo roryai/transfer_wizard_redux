@@ -91,7 +91,7 @@ You will be presented with statistics on the files you want to copy. You can the
   - Copies photos and videos from source directory to generated directory structure in destination directory
   - Same as first mode, but copies the miscellaneous files to a single directory (/misc) in destination directory
   - Lists miscellaneous file extensions that won't be copied when above mode is run
-- Detailed pre=copy summary of source file analysis
+- Detailed pre-copy summary of source file analysis
 - Command line interface
 - Detailed log files
 
@@ -104,11 +104,11 @@ You will be presented with statistics on the files you want to copy. You can the
 - Auto-runs when camera connected
 
 #### Areas in need of refactoring
-CaptureTimeIdentifier is a WIP and I am currently experiementing with two different libraries for extracting EXIF data for capture time. Exiftool works for videos and images but is relatively slow, and pillow only works for images. I haven't yet found a light weight library to extract capture time info from videos.
+CaptureTimeIdentifier is a WIP and I am currently experimenting with two different libraries for extracting EXIF data for capture time. Exiftool works for videos and images but is relatively slow, and pillow only works for images. I haven't yet found a light weight library to extract capture time info from videos.
 FileGateway is too large and needs splitting up.
 Logger needs a rethink. Not sure I want to store so much in memory whilst the program is running.
 
-One day I plan to have a raspberry pi set up to detect my camera via bluetooth, copy all files from the camera to my cloud storage, and then delete the files on the camera. Progress will be displayed on a small screen on the raspberry pi. This will allow me to leave my camera turned on on my desk and walk away, with the media transfer happening automatically.
+Ultimately I plan to have a raspberry pi set up to detect my camera via bluetooth, copy all files from the camera to my cloud storage, and then delete the files on the camera. Progress will be displayed on a small screen on the raspberry pi. This will allow me to leave my camera turned on on my desk and walk away, with the media transfer happening automatically.
 
 ### Notes on copy behaviour of different file systems
 

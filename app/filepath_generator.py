@@ -22,10 +22,9 @@ class FilepathGenerator:
 
     def generate_destination_filepath(self, media):
         filename = Path(self.source_filepath).name
-        result = self.capture_time_identifier.media_capture_date(self.source_filepath)
-        capture_date = result['capture_date']
+        capture_date = self.capture_time_identifier.media_capture_date(self.source_filepath)
         quarter = self._determine_quarter(capture_date.month, media)
-        root = self._root_dir(media, result['metadata_unreadable'])
+        root = self._root_dir(media, False)
         prospective_destination_filepath = os.path.join(
             root, str(capture_date.year), quarter, filename)
         return self._resolve_path(prospective_destination_filepath)

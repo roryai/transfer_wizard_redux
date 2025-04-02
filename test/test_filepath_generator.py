@@ -179,15 +179,3 @@ class TestMiscFilesFunctionality:
         expected_destination_path = construct_path(destination_directory, filename)
 
         assert generated_destination_path == expected_destination_path
-
-
-class TestUnreadableMetadata:
-    def test_copies_file_to_errors_folder_when_metadata_unreadable(self,
-                                                                   mock_capture_date_identifier_metadata_unreadable):
-        filename, source_filepath, destination_directory, _ = create_test_media_files()
-
-        generated_destination_path = run_with_media_flag_enabled(source_filepath,
-                                                                 mock_capture_date_identifier_metadata_unreadable)
-        expected_destination_path = construct_path(metadata_error_destination_year_directory, filename)
-
-        assert generated_destination_path == expected_destination_path

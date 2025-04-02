@@ -29,14 +29,12 @@ class CaptureDateIdentifier:
         metadata = image.getexif().items()
         # noinspection PyTypeChecker
         capture_date_val = dict(metadata).get(306)
-        capture_date = self._to_datetime(capture_date_val)
-        return {'capture_date': capture_date, 'metadata_unreadable': False}
+        return self._to_datetime(capture_date_val)
 
     def _exiftool_capture_date(self, video_path):
         media_creation_time_tag_name = 'EXIF:DateTimeOriginal'
         metadata = ExifToolHelper().get_metadata(video_path)[0]
-        capture_date = self._to_datetime(metadata[media_creation_time_tag_name])
-        return {'capture_date': capture_date, 'metadata_unreadable': False}
+        return self._to_datetime(metadata[media_creation_time_tag_name])
 
     def _to_datetime(self, original_capture_date):
         date_format = '%Y:%m:%d %H:%M:%S'

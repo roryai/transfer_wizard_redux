@@ -17,9 +17,11 @@ class CaptureDateIdentifier:
                 return self._exiftool_capture_date(filepath)
             else:
                 Logger().log_error('Extension not supported: ', SyntaxError, [filepath, extension])
+                Logger().finalise_logging()
                 raise SyntaxError
         except (Exception, UnidentifiedImageError) as e:
             Logger().log_error('Media metadata read error: ', e, [filepath, extension])
+            Logger().finalise_logging()
             raise e
 
     def _pil_capture_date(self, photo_path):

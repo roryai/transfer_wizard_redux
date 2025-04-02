@@ -63,8 +63,10 @@ Values: ['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]
     assert len(Logger().error_messages) == 1
 
 
-def test_writes_errors_to_logfile():
+def test_appends_summary():
     expected_content = """
+1 file copied successfully
+2 files failed to copy
 Errors:
 Context: Error in Class
 Error: UNIQUE constraint failed: files.source_filepath
@@ -72,17 +74,24 @@ Values: ['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]
 
 """
 
-    Logger().log_error(context_message, error, values)
-    Logger().append_errors_to_logfile()
-
-    assert expected_content == file_content()
-
-
-def test_appends_summary():
-    expected_content = "\n1 file copied successfully\n2 files failed to copy\n"
-
     Logger().successful_copy_count = 1
     Logger().unsuccessful_copy_count = 2
-    Logger().append_summary_to_file()
+    Logger().log_error(context_message, error, values)
+    Logger().finalise_logging()
 
     assert expected_content == file_content()
+
+
+def test_prints_error_messages(capsys):
+    expected_content = """Context: Error in Class
+Error: UNIQUE constraint failed: files.source_filepath
+Values: ['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]
+
+"""
+
+    Logger().log_error(context_message, error, values)
+    Logger().finalise_logging()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == expected_content

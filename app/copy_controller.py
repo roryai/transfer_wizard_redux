@@ -52,14 +52,9 @@ class CopyController:
     def _perform_copy(self, stats):
         Logger().log_to_file(stats)
         FileCopier().copy_source_files_to_destination()
-        self._post_copy_logging_and_display()
+        Logger().finalise_logging()
         FileGateway().wipe_database()  # TODO dev only, remove later
 
     def _user_confirms_copy(self):
         print(f'\nProceed with copy? ( y / n )')
         return input().lower() == 'y'
-
-    def _post_copy_logging_and_display(self):
-        Logger().append_summary_to_file()
-        error_messages = Logger().append_errors_to_logfile()
-        print(error_messages) if error_messages else None

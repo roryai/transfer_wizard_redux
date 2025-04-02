@@ -1,6 +1,5 @@
 from datetime import datetime
 import os
-import sys
 
 
 class LoggerMeta(type):
@@ -17,7 +16,6 @@ class Logger(metaclass=LoggerMeta):
     def __init__(self):
         self.log_file_path = None
         self.error_messages = []
-        self.combined_error_messages = ''
         self.successful_copy_count = 0
         self.unsuccessful_copy_count = 0
 
@@ -53,20 +51,22 @@ class Logger(metaclass=LoggerMeta):
         message = f'Context: {message}\nError: {error}\nValues: {values}\n'
         self.error_messages.append(message)
 
-    def append_errors_to_logfile(self):
-        self.combined_error_messages = '\n'.join(self.error_messages)
-        self._append_to_logfile(f'\nErrors:\n{self.combined_error_messages}')
-
-    def append_summary_to_file(self):
-        file_or_files_succeeded = self._file_or_files(self.successful_copy_count)
-        file_or_files_failed = self._file_or_files(self.unsuccessful_copy_count)
-        summary = f"""
-{self.successful_copy_count} {file_or_files_succeeded} copied successfully
-{self.unsuccessful_copy_count} {file_or_files_failed} failed to copy"""
-        self._append_to_logfile(summary)
-
     def log_to_file(self, log_entry):
         self._append_to_logfile(log_entry)
+
+    def finalise_logging(self):
+        self._append_summary_to_file()
+        print(self._format_error_messages()) if self.error_messages else print("No errors")
+
+    def _append_summary_to_file(self):
+        success_count = self._file_or_files(self.successful_copy_count)
+        failure_count = self._file_or_files(self.unsuccessful_copy_count)
+        error_messages = self._format_error_messages()
+        summary = f"""
+{self.successful_copy_count} {success_count} copied successfully
+{self.unsuccessful_copy_count} {failure_count} failed to copy
+Errors:\n{error_messages}"""
+        self._append_to_logfile(summary)
 
     def _append_to_logfile(self, log_entry):
         with open(self.log_file_path, 'a') as file:
@@ -74,3 +74,6 @@ class Logger(metaclass=LoggerMeta):
 
     def _file_or_files(self, count):
         return 'file' if count == 1 else 'files'
+
+    def _format_error_messages(self):
+        return '\n'.join(self.error_messages)

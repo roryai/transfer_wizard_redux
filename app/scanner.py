@@ -2,7 +2,7 @@ from functools import partial
 import os
 from pathlib import Path
 
-from app.filetype_constants import extension_in_media_filetypes, extension_not_in_media_filetypes
+from app.filetype_constants import extension_in_media_filetypes
 
 
 class Scanner:
@@ -10,22 +10,8 @@ class Scanner:
         return self._scan_directory(source_root_directory,
                                     self._is_filepath_of_media_filetype, self._full_file_path)
 
-    def misc_filepaths_in(self, source_root_directory):
-        return self._scan_directory(source_root_directory,
-                                    self._is_filepath_of_misc_filetype, self._full_file_path)
-
-    def misc_extensions_in(self, source_root_directory):
-        return set(self._scan_directory(source_root_directory,
-                                        self._is_extension_of_misc_filetype, self._extension_only))
-
     def _is_filepath_of_media_filetype(self, filepath):
         return extension_in_media_filetypes(self._extension(filepath))
-
-    def _is_filepath_of_misc_filetype(self, filepath):
-        return self._is_extension_of_misc_filetype(self._extension(filepath))
-
-    def _is_extension_of_misc_filetype(self, extension):
-        return extension_not_in_media_filetypes(extension)
 
     def _extension(self, filepath):
         return Path(filepath).suffix

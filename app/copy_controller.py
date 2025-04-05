@@ -1,5 +1,4 @@
 import datetime
-import itertools
 
 from app.file_factory import FileFactory
 from app.file_gateway import FileGateway
@@ -11,10 +10,9 @@ from app.logger import Logger
 
 class CopyController:
 
-    def __init__(self, destination_root_directory, source_root_directory, include_misc_files):
+    def __init__(self, destination_root_directory, source_root_directory):
         self.source_root_directory = source_root_directory
         self.destination_root_directory = destination_root_directory
-        self.include_misc_files = include_misc_files
         Logger().init_log_file(destination_root_directory)
 
     def copy_files(self):
@@ -31,23 +29,14 @@ class CopyController:
         self._create_db_records_for_files_to_be_copied()
 
     def _create_db_records_for_files_to_be_copied(self):
-        file_paths = self._scan_files_in_source_directory()
+        file_paths = [src for src in self._media_source_filepaths()]
         [FileFactory(source_filepath=src,
                      destination_root_directory=self.destination_root_directory
-                     ).save_pre_copy_file_record(media=media)
-         for src, media in file_paths]
-
-    def _scan_files_in_source_directory(self):
-        return itertools.chain(
-            ((src, True) for src in self._media_source_filepaths()),
-            ((src, False) for src in self._misc_source_filepaths()))
+                     ).save_pre_copy_file_record()
+         for src in file_paths]
 
     def _media_source_filepaths(self):
         return Scanner().media_filepaths_in(self.source_root_directory)
-
-    def _misc_source_filepaths(self):
-        return Scanner().misc_filepaths_in(
-            self.source_root_directory) if self.include_misc_files else []
 
     def _perform_copy(self, stats):
         Logger().log_to_file(stats)

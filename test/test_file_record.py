@@ -22,6 +22,5 @@ def test_inserts_and_maps_a_file():
     assert result['size'] == 1024
     assert result['name_clash'] is False
     assert result['copied'] is False
-    assert result['media'] is True
     assert result['copy_attempted'] is False
-    assert len(result) == 7
+    assert len(result) == 6

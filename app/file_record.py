@@ -13,6 +13,5 @@ class FileRecord:
             'size': record[3],
             'copied': bool(record[4]),
             'name_clash': bool(record[5]),
-            'media': bool(record[6]),
-            'copy_attempted': bool(record[7])
+            'copy_attempted': bool(record[6])
         }

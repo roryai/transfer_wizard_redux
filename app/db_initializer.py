@@ -37,7 +37,6 @@ class DBInitializer:
                  size INTEGER NOT NULL,
                  copied BOOLEAN NOT NULL,
                  name_clash BOOLEAN NOT NULL,
-                 media BOOLEAN NOT NULL,
                  copy_attempted BOOLEAN NOT NULL
              );
          """

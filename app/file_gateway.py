@@ -6,7 +6,7 @@ class FileGateway:
     def __init__(self):
         self.db_controller = DBController()
 
-    def execute_query(self, statement, values = []):
+    def execute_query(self, statement, values=[]):
         return self.db_controller.execute_query(statement, values)
 
     def execute_read_query(self, statement, values=None):
@@ -19,12 +19,12 @@ class FileGateway:
     def insert(self, file):
         statement = """
             INSERT INTO
-                files (source_filepath, destination_filepath, size, copied, name_clash, media, copy_attempted)
+                files (source_filepath, destination_filepath, size, copied, name_clash, copy_attempted)
             VALUES
-                (?, ?, ?, ?, ?, ?, ?);
+                (?, ?, ?, ?, ?, ?);
         """
         values = [file.source_filepath, file.destination_filepath, file.size,
-                  file.copied, file.name_clash, file.media, file.copy_attempted]
+                  file.copied, file.name_clash, file.copy_attempted]
         return self.db_controller.execute_query(statement, values)
 
     def select(self, source_filepath):
@@ -105,94 +105,6 @@ class FileGateway:
         """
         return self.execute_read_query(statement)
 
-    def count_files_by_type(self, media):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = ?;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def count_media_files(self):
-        return self.count_files_by_type(media=True)
-
-    def count_misc_files(self):
-        return self.count_files_by_type(media=False)
-
-    def count_name_clash_files_by_type(self, media):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = ?
-            AND name_clash = '1';
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def count_name_clash_misc_files(self):
-        return self.count_name_clash_files_by_type(media=False)
-
-    def count_name_clash_media_files(self):
-        return self.count_name_clash_files_by_type(media=True)
-
-    def count_files_by_copy_status_and_type(self, copied, copy_attempted, media):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE copied = ?
-            AND copy_attempted = ?
-            AND media = ?;
-        """
-        values = [int(copied), int(copy_attempted), int(media)]
-        return self.execute_read_query(statement, values)
-
-    def count_copied_misc_files(self):
-        return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=False)
-
-    def count_copied_media_files(self):
-        return self.count_files_by_copy_status_and_type(copied=True, copy_attempted=True, media=True)
-
-    def count_failed_copy_misc_files(self):
-        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=False)
-
-    def count_failed_copy_media_files(self):
-        return self.count_files_by_copy_status_and_type(copied=False, copy_attempted=True, media=True)
-
-    def count_files_to_be_copied_by_type(self, media):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE destination_filepath IS NOT NULL
-            AND copied = '0'
-            AND copy_attempted = '0'
-            AND media = ?;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def count_misc_files_to_be_copied(self):
-        return self.count_files_to_be_copied_by_type(media=False)
-
-    def count_media_files_to_be_copied(self):
-        return self.count_files_to_be_copied_by_type(media=True)
-
-    def count_duplicate_files_by_type(self, media):
-        statement = """
-            SELECT COUNT(*)
-            FROM files
-            WHERE media = ?
-            AND destination_filepath IS NULL;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def count_duplicate_media_files(self):
-        return self.count_duplicate_files_by_type(media=True)
-
-    def count_duplicate_misc_files(self):
-        return self.count_duplicate_files_by_type(media=False)
-
     def destination_filepath_in_use(self, destination_filepath):
         statement = """
                     SELECT COUNT(*)
@@ -231,21 +143,6 @@ class FileGateway:
         """
         return self.execute_read_query(statement)
 
-    def sum_size_of_files_by_type(self, media):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE media = ?;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def sum_size_of_media_files(self):
-        return self.sum_size_of_files_by_type(media=True)
-
-    def sum_size_of_misc_files(self):
-        return self.sum_size_of_files_by_type(media=False)
-
     def sum_size_of_name_clash_files(self):
         statement = """
             SELECT SUM(size)
@@ -262,38 +159,6 @@ class FileGateway:
         """
         return self.execute_read_query(statement)
 
-    def sum_size_of_duplicate_files_by_type(self, media):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE destination_filepath IS NULL
-            AND media = ?;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def sum_size_of_duplicate_media_files(self):
-        return self.sum_size_of_duplicate_files_by_type(media=True)
-
-    def sum_size_of_duplicate_misc_files(self):
-        return self.sum_size_of_duplicate_files_by_type(media=False)
-
-    def sum_size_of_name_clash_files_by_type(self, media):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE name_clash is '1'
-            AND media = ?;
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def sum_size_of_name_clash_media_files(self):
-        return self.sum_size_of_name_clash_files_by_type(media=True)
-
-    def sum_size_of_name_clash_misc_files(self):
-        return self.sum_size_of_name_clash_files_by_type(media=False)
-
     def sum_size_of_files_to_be_copied(self):
         statement = """
             SELECT SUM(size)
@@ -303,21 +168,3 @@ class FileGateway:
             AND copy_attempted == '0';
         """
         return self.execute_read_query(statement)
-
-    def sum_size_of_files_to_be_copied_by_type(self, media):
-        statement = """
-            SELECT SUM(size)
-            FROM files
-            WHERE destination_filepath IS NOT NULL
-            AND copied == '0'
-            AND copy_attempted == '0'
-            AND media = ?
-        """
-        values = [int(media)]
-        return self.execute_read_query(statement, values)
-
-    def sum_size_of_media_files_to_be_copied(self):
-        return self.sum_size_of_files_to_be_copied_by_type(media=True)
-
-    def sum_size_of_misc_files_to_be_copied(self):
-        return self.sum_size_of_files_to_be_copied_by_type(media=False)

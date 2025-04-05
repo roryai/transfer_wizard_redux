@@ -6,13 +6,12 @@ from app.file_record import FileRecord
 class File:
 
     def __init__(self, source_filepath, destination_filepath, size,
-                 copied, name_clash, media, copy_attempted):
+                 copied, name_clash, copy_attempted):
         self.source_filepath = source_filepath
         self.destination_filepath = destination_filepath
         self.size = size
         self.copied = copied
         self.name_clash = name_clash
-        self.media = media
         self.copy_attempted = copy_attempted
 
     def __eq__(self, other):
@@ -22,7 +21,6 @@ class File:
                 self.size == other.size and
                 self.copied is other.copied and
                 self.name_clash is other.name_clash and
-                self.media is other.media and
                 self.copy_attempted is other.copy_attempted
         )
 

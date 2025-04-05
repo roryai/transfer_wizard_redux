@@ -14,21 +14,19 @@ class FilepathGenerator:
     def __init__(self, source_filepath, destination_root_directory):
         self.source_filepath = source_filepath
         self.destination_root_directory = destination_root_directory
-        self.misc_root_directory = os.path.join(destination_root_directory, 'misc')
         self.gateway = FileGateway()
         self.spacer = '___'
 
-    def generate_destination_filepath(self, media):
+    def generate_destination_filepath(self):
         filename = Path(self.source_filepath).name
         capture_date = CaptureDateIdentifier().media_capture_date(self.source_filepath)
-        quarter = self._determine_quarter(capture_date.month, media)
-        root = self._root_dir(media, False)
+        quarter = self._determine_quarter(capture_date.month)
         prospective_destination_filepath = os.path.join(
-            root, str(capture_date.year), quarter, filename)
+            self.destination_root_directory, str(capture_date.year), quarter, filename)
         return self._resolve_path(prospective_destination_filepath)
 
-    def _determine_quarter(self, month, media):
-        if ModeFlags().year_mode or not media:
+    def _determine_quarter(self, month):
+        if ModeFlags().year_mode:
             return ''
         quarters = {1: 'Q1', 2: 'Q1', 3: 'Q1', 4: 'Q2', 5: 'Q2', 6: 'Q2',
                     7: 'Q3', 8: 'Q3', 9: 'Q3', 10: 'Q4', 11: 'Q4', 12: 'Q4'}
@@ -82,9 +80,3 @@ class FilepathGenerator:
 
     def _has_suffix_already(self, filename):
         return bool(re.search(self.spacer, filename))
-
-    def _root_dir(self, media, metadata_unreadable):
-        root = self.destination_root_directory if media else self.misc_root_directory
-        if metadata_unreadable:
-            root = os.path.join(root, 'error')
-        return root

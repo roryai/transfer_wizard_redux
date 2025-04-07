@@ -15,12 +15,6 @@ def teardown():
     cleanup()
 
 
-@pytest.fixture(autouse=True)
-def mock_capture_date_identifier(mocker):
-    mock_class = mocker.patch("app.filepath_generator.CaptureDateIdentifier")
-    mock_class.return_value.capture_date.return_value = datetime(2023, 12, 3)
-
-
 def generate_filepath(source_filepath):
     return FilepathGenerator(source_filepath, destination_root_directory
                              ).generate_destination_filepath()

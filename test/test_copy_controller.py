@@ -1,5 +1,8 @@
+import os
+
 from app.copy_controller import CopyController
-from .helpers import (pytest, Path, cleanup, construct_path, create_test_misc_files, destination_root_directory,
+from app.logger import Logger
+from .helpers import (pytest, Path, cleanup, construct_path, create_test_media_files, destination_root_directory,
                       prepare_test_media_source_file, prepare_test_media_destination_duplicate_file,
                       prepare_test_media_destination_name_clash_file, image_with_metadata_destination_directory,
                       source_directory)
@@ -31,12 +34,13 @@ def test_copies_media_file_to_destination_directory(monkeypatch_user_input_yes):
 
 def test_does_not_copy_file_when_user_enters_char_other_than_y(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'z')
-    _, _, destination_directory, destination_filepath = create_test_misc_files()
+    _, _, destination_directory, destination_filepath = create_test_media_files()
 
     copy_files()
 
     assert not Path(destination_directory).is_dir()
     assert not Path(destination_filepath).is_file()
+    assert os.stat(Logger().log_file_path).st_size == 0
 
 
 def test_does_not_copy_duplicate_file(monkeypatch_user_input_yes):

@@ -19,7 +19,7 @@ class FilepathGenerator:
 
     def generate_destination_filepath(self):
         filename = Path(self.source_filepath).name
-        capture_date = CaptureDateIdentifier().media_capture_date(self.source_filepath)
+        capture_date = CaptureDateIdentifier().capture_date(self.source_filepath)
         quarter = self._determine_quarter(capture_date.month)
         prospective_destination_filepath = os.path.join(
             self.destination_root_directory, str(capture_date.year), quarter, filename)

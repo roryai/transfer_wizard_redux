@@ -15,7 +15,7 @@ def parse_args():
     return _configure_parser().parse_args(sys.argv[1:])
 
 
-def test_parses_args_for_copying_media_files(set_copy_media_args):
+def test_parses_args_for_copying_media_files(set_default_copy_args):
     args = parse_args()
     assert args.source == source_directory
     assert args.destination == destination_root_directory
@@ -36,7 +36,7 @@ def test_throws_error_when_unexpected_arg_provided(set_unexpected_arg):
         _configure_parser().parse_args(sys.argv[1:])
 
 
-def test_calls_expected_classes_when_source_and_destination_args_provided(mocker, set_copy_media_args):
+def test_calls_expected_classes_when_source_and_destination_args_provided(mocker, set_default_copy_args):
     mocked_directory_manager = mocker.patch('main.DirectoryManager')
     mocked_copy_controller = mocker.patch('main.CopyController')
 
@@ -48,7 +48,7 @@ def test_calls_expected_classes_when_source_and_destination_args_provided(mocker
     mocked_copy_controller.return_value.copy_files.assert_called_once()
 
 
-def test_db_initializer_called_with_correct_args(mocker, set_copy_media_args):
+def test_db_initializer_called_with_correct_args(mocker, set_default_copy_args):
     mocker.patch('main.DirectoryManager')
     mocker.patch('main.CopyController')
     mocked_db_initializer = mocker.patch('main.DBInitializer')

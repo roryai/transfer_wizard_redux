@@ -1,5 +1,5 @@
 from test.helpers import cleanup
-from test.fixtures.main_fixtures import set_copy_media_args
+from test.fixtures.main_fixtures import set_default_copy_args
 from test.fixtures.main_integration_fixtures import *
 
 from main import main
@@ -25,7 +25,7 @@ def test_year_mode_happy_path(prepare_test_resources, set_year_mode_args, year_m
 
 
 def test_default_mode_happy_path(media_only_copy_expected_logfile_contents,
-                                 prepare_test_resources, set_copy_media_args):
+                                 prepare_test_resources, set_default_copy_args):
     main()
 
     assert Path(default_mode_expected_destination_jpg_file_path).is_file()

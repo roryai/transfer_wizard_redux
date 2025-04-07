@@ -29,13 +29,13 @@ class CopyController:
         self._create_db_records_for_files_to_be_copied()
 
     def _create_db_records_for_files_to_be_copied(self):
-        file_paths = [src for src in self._media_source_filepaths()]
+        file_paths = [src for src in self._source_filepaths()]
         [FileFactory(source_filepath=src,
                      destination_root_directory=self.destination_root_directory
                      ).save_pre_copy_file_record()
          for src in file_paths]
 
-    def _media_source_filepaths(self):
+    def _source_filepaths(self):
         return Scanner().media_filepaths_in(self.source_root_directory)
 
     def _perform_copy(self, stats):

@@ -3,7 +3,7 @@ from test.helpers import source_directory, destination_root_directory
 
 
 @pytest.fixture
-def set_copy_media_args(monkeypatch):
+def set_default_copy_args(monkeypatch):
     set_args(monkeypatch, ['-s', source_directory, '-d', destination_root_directory])
 
 

@@ -18,7 +18,7 @@ def teardown():
 @pytest.fixture(autouse=True)
 def mock_capture_date_identifier(mocker):
     mock_class = mocker.patch("app.filepath_generator.CaptureDateIdentifier")
-    mock_class.return_value.media_capture_date.return_value = datetime(2023, 12, 3)
+    mock_class.return_value.capture_date.return_value = datetime(2023, 12, 3)
 
 
 def generate_filepath(source_filepath):

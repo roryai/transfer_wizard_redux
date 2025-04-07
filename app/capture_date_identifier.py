@@ -7,7 +7,7 @@ from app.logger import Logger
 
 
 class CaptureDateIdentifier:
-    def media_capture_date(self, filepath):
+    def capture_date(self, filepath):
         extension = ''
         try:
             extension = Path(filepath).suffix.lower()
@@ -20,7 +20,7 @@ class CaptureDateIdentifier:
                 Logger().finalise_logging()
                 raise SyntaxError
         except (Exception, UnidentifiedImageError) as e:
-            Logger().log_error('Media metadata read error: ', e, [filepath, extension])
+            Logger().log_error('Metadata read error: ', e, [filepath, extension])
             Logger().finalise_logging()
             raise e
 
@@ -32,9 +32,9 @@ class CaptureDateIdentifier:
         return self._to_datetime(capture_date_val)
 
     def _exiftool_capture_date(self, video_path):
-        media_creation_time_tag_name = 'EXIF:DateTimeOriginal'
+        creation_time_tag_name = 'EXIF:DateTimeOriginal'
         metadata = ExifToolHelper().get_metadata(video_path)[0]
-        return self._to_datetime(metadata[media_creation_time_tag_name])
+        return self._to_datetime(metadata[creation_time_tag_name])
 
     def _to_datetime(self, original_capture_date):
         date_format = '%Y:%m:%d %H:%M:%S'

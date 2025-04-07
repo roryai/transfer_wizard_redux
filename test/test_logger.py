@@ -95,3 +95,11 @@ Values: ['/source/file1.jpg', '/destination/file1.jpg', 1024, None, False]
     captured = capsys.readouterr()
 
     assert captured.out == expected_content
+
+
+def test_in_console_message_when_no_errors(capsys):
+    Logger().finalise_logging()
+
+    captured = capsys.readouterr()
+
+    assert captured.out == "No errors\n"

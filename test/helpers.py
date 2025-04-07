@@ -44,7 +44,6 @@ def file_instance(source_filepath=default_source_media_filepath,
 def create_test_media_files(filename='test_media_file.jpg', create_destination_file=False,
                             source_data='default_source_data', dest_data='default_destination_data'):
     source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
-    set_file_creation_time(source_filepath)
     destination_filepath = construct_path(media_destination_year_directory, filename)
     create_file_on_disk_with_data(media_destination_year_directory, filename,
                                   dest_data) if create_destination_file else None
@@ -69,13 +68,6 @@ def prepare_test_media_destination_duplicate_file():
     shutil.copy2(image_with_metadata_source_filepath, image_with_metadata_destination_directory)
     return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
 
-
-def set_file_creation_time(filepath):
-    time_in_past = 1701639908  # 03/12/23
-    # setting mtime to before creation time sets both to that time
-    os.utime(filepath, (time_in_past, time_in_past))
-
-
 def create_file_on_disk(directory, filename):
     return create_file_on_disk_with_data(directory, filename)
 
@@ -97,10 +89,6 @@ def instantiate_file_from_db_record(source_filepath):
     return File.init_from_record(gateway.select(source_filepath))
 
 
-def clear_database():
-    FileGateway().wipe_database()
-
-
 def clear_test_directories():
     paths = [source_directory, destination_root_directory, logfile_directory]
     for path in paths:
@@ -114,5 +102,5 @@ def clear_test_directories():
 def cleanup():
     LoggerMeta._instance = {}
     Logger().init_log_file(logfile_directory)
-    clear_database()
+    FileGateway().wipe_database()
     clear_test_directories()

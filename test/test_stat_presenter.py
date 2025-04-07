@@ -46,7 +46,7 @@ Destination root directory: destination/
 Discovered         To be copied       Duplicate          Name clash
 Count   Size       Count   Size       Count   Size       Count   Size
 ____________________________________________________________________________
-3       101.0MB    2       90.0MB     1       11.0MB     1       37.0MB     
+3       110.53MB   2       90.0MB     1       20.53MB    1       37.0MB     
 
 Duplicates will not be copied
 Name clash files will be copied with a unique suffix

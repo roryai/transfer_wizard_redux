@@ -25,7 +25,7 @@ def different_source_same_destination_2():
 @pytest.fixture
 def duplicate_media_file_1():
     return file_instance(source_filepath='/source/file_with_copy_error_1',
-                         destination_filepath=None, size=1153)
+                         destination_filepath=None, size=21530000)
 
 
 @pytest.fixture

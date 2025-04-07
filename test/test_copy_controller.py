@@ -2,7 +2,7 @@ import os
 
 from app.copy_controller import CopyController
 from app.logger import Logger
-from .helpers import (pytest, Path, cleanup, construct_path, create_test_media_files, destination_root_directory,
+from .helpers import (pytest, Path, cleanup, construct_path, image_with_metadata_filesize, destination_root_directory,
                       prepare_test_media_source_file, prepare_test_media_destination_duplicate_file,
                       prepare_test_media_destination_name_clash_file, image_with_metadata_destination_directory,
                       source_directory)
@@ -29,7 +29,7 @@ def test_copies_media_file_to_destination_directory(monkeypatch_user_input_yes):
     copy_files()
 
     assert Path(destination_filepath).is_file()
-    assert Path(destination_filepath).stat().st_size == 195514
+    assert Path(destination_filepath).stat().st_size == image_with_metadata_filesize
 
 
 def test_does_not_copy_file_when_user_enters_char_other_than_y(monkeypatch):
@@ -53,7 +53,7 @@ def test_does_not_copy_duplicate_file(monkeypatch_user_input_yes):
     existing_file_mtime_post_run = Path(destination_filepath).stat().st_mtime
 
     assert Path(destination_filepath).is_file()
-    assert Path(destination_filepath).stat().st_size == 195514
+    assert Path(destination_filepath).stat().st_size == image_with_metadata_filesize
     assert existing_file_mtime_post_run == existing_file_mtime_pre_run
 
 
@@ -61,7 +61,7 @@ def test_copies_file_with_suffix_added_when_name_clashes_with_existing_file(monk
     prepare_test_media_source_file()
     existing_file_with_identical_name = prepare_test_media_destination_name_clash_file()
     expected_destination_path = construct_path(image_with_metadata_destination_directory,
-                                               'IMG_1687_68E3___1.JPG')
+                                               'RRY01936___1.JPG')
 
     existing_file_mtime_pre_run = Path(existing_file_with_identical_name).stat().st_mtime
 

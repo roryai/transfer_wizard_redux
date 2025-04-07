@@ -21,12 +21,12 @@ static_media_directory = construct_path(test_resources_directory, 'static_media'
 logfile_directory = construct_path(test_directory, 'logs')
 destination_root_directory = construct_path(test_resources_directory, 'destination')
 media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
-metadata_error_destination_year_directory = construct_path(destination_root_directory, 'error/2023/Q4')
 default_source_media_filepath = construct_path(source_directory, 'test_media_file.jpg')
 default_destination_media_filepath = construct_path(media_destination_year_directory, 'test_media_file.jpg')
-image_with_metadata_filename = 'IMG_1687_68E3.jpg'
+image_with_metadata_filename = 'RRY01936.JPG'
+image_with_metadata_filesize = 2374209
 image_with_metadata_source_filepath = os.path.join(static_media_directory, image_with_metadata_filename)
-image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2018/Q3')
+image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2025/Q2')
 
 DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
@@ -58,7 +58,7 @@ def prepare_test_media_source_file(directory=source_directory):
 
 
 def prepare_test_media_destination_name_clash_file():
-    destination_filepath = os.path.join(image_with_metadata_destination_directory, 'IMG_1687_68E3.jpg')
+    destination_filepath = os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     open(destination_filepath, 'x').close()
     return destination_filepath
@@ -67,7 +67,7 @@ def prepare_test_media_destination_name_clash_file():
 def prepare_test_media_destination_duplicate_file():
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     shutil.copy2(image_with_metadata_source_filepath, image_with_metadata_destination_directory)
-    return os.path.join(image_with_metadata_destination_directory, 'IMG_1687_68E3.jpg')
+    return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
 
 
 def set_file_creation_time(filepath):

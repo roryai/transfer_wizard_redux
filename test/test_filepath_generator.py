@@ -1,8 +1,8 @@
 from datetime import datetime
 
 from .helpers import (pytest, Path, cleanup, construct_path, create_file_on_disk_with_data,
-                      create_test_media_files, destination_root_directory,
-                      source_directory, media_destination_year_directory,
+                      create_test_files, destination_root_directory,
+                      source_directory, destination_year_directory,
                       file_instance)
 
 from app.filepath_generator import FilepathGenerator
@@ -28,14 +28,14 @@ def generate_filepath(source_filepath):
 
 class TestSharedFunctionality:
     def test_generates_filepath(self):
-        _, source_filepath, destination_directory, expected_destination_path = create_test_media_files()
+        _, source_filepath, destination_directory, expected_destination_path = create_test_files()
         generated_destination_path = generate_filepath(source_filepath)
 
         assert generated_destination_path == expected_destination_path
 
     def test_adds_suffix_to_filename_if_existing_file_has_same_name_and_different_size_for_media_file(
             self):
-        filename, source_filepath, destination_directory, _ = create_test_media_files(
+        filename, source_filepath, destination_directory, _ = create_test_files(
             create_destination_file=True)
 
         generated_destination_path = generate_filepath(source_filepath)
@@ -47,14 +47,14 @@ class TestSharedFunctionality:
     def test_returns_none_if_identical_destination_path_and_size_exists_in_db(
             self):
         file_instance(size=16).save()
-        source_filepath = create_file_on_disk_with_data(source_directory, 'test_media_file.jpg', 'this is 16 bytes')
+        source_filepath = create_file_on_disk_with_data(source_directory, 'test_file.jpg', 'this is 16 bytes')
         generated_destination_path = generate_filepath(source_filepath)
 
         assert generated_destination_path is None
 
     def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size(
             self):
-        _, source_filepath, destination_directory, _ = create_test_media_files(
+        _, source_filepath, destination_directory, _ = create_test_files(
             filename='a_file___1.jpg', create_destination_file=True)
 
         generated_destination_path = generate_filepath(source_filepath)
@@ -64,7 +64,7 @@ class TestSharedFunctionality:
 
     def test_returns_none_if_generated_path_points_to_identical_file(self):
         data = 'same data'
-        _, source_filepath, _, _ = create_test_media_files(
+        _, source_filepath, _, _ = create_test_files(
             filename='a_file___1.jpg', source_data=data, dest_data=data, create_destination_file=True)
         generated_destination_path = generate_filepath(source_filepath)
 
@@ -76,9 +76,9 @@ class TestSharedFunctionality:
         source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
 
         # source filepath has name clash with this filepath, so generated filename is incremented
-        create_file_on_disk_with_data(media_destination_year_directory, filename, 'Unique data')
+        create_file_on_disk_with_data(destination_year_directory, filename, 'Unique data')
         # generated incremented filepath is identical, and files are same size/have same data
-        create_file_on_disk_with_data(media_destination_year_directory, 'test_file___1.jpg', 'Same data')
+        create_file_on_disk_with_data(destination_year_directory, 'test_file___1.jpg', 'Same data')
 
         generated_destination_path = FilepathGenerator(source_filepath,
                                                        destination_root_directory
@@ -87,7 +87,7 @@ class TestSharedFunctionality:
         assert generated_destination_path is None
 
     def test_generates_path_including_year_and_quarter(self):
-        filename, source_filepath, destination_directory, _ = create_test_media_files()
+        filename, source_filepath, destination_directory, _ = create_test_files()
 
         generated_destination_path = generate_filepath(source_filepath)
         expected_destination_path = construct_path(destination_directory, filename)
@@ -98,7 +98,7 @@ class TestSharedFunctionality:
             self):
         ModeFlagsMeta._instance = {}
         ModeFlags(year_mode=True)
-        filename, source_filepath, _, _ = create_test_media_files()
+        filename, source_filepath, _, _ = create_test_files()
 
         generated_destination_path = \
             FilepathGenerator(source_filepath, destination_root_directory).generate_destination_filepath()

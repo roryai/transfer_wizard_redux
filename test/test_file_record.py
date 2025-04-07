@@ -1,4 +1,4 @@
-from .helpers import pytest, cleanup, default_destination_media_filepath, default_source_media_filepath, file_instance
+from .helpers import pytest, cleanup, default_destination_filepath, default_source_filepath, file_instance
 from app.file_gateway import FileGateway
 from app.file_record import FileRecord
 
@@ -17,8 +17,8 @@ def test_inserts_and_maps_a_file():
     assert gateway.count() == 1
     result = FileRecord().map_from_record(gateway.select(file.source_filepath))
 
-    assert result['source_filepath'] == default_source_media_filepath
-    assert result['destination_filepath'] == default_destination_media_filepath
+    assert result['source_filepath'] == default_source_filepath
+    assert result['destination_filepath'] == default_destination_filepath
     assert result['size'] == 1024
     assert result['name_clash'] is False
     assert result['copied'] is False

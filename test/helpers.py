@@ -20,11 +20,11 @@ source_directory = construct_path(test_resources_directory, 'source')
 static_media_directory = construct_path(test_resources_directory, 'static_media')
 logfile_directory = construct_path(test_directory, 'logs')
 destination_root_directory = construct_path(test_resources_directory, 'destination')
-media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
-default_source_media_filepath = construct_path(source_directory, 'test_media_file.jpg')
-default_destination_media_filepath = construct_path(media_destination_year_directory, 'test_media_file.jpg')
+destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
+default_source_filepath = construct_path(source_directory, 'test_file.jpg')
+default_destination_filepath = construct_path(destination_year_directory, 'test_file.jpg')
 image_with_metadata_filename = 'RRY01936.JPG'
-image_with_metadata_filesize = 2374209
+image_with_metadata_file_size = 2374209
 image_with_metadata_source_filepath = os.path.join(static_media_directory, image_with_metadata_filename)
 image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2025/Q2')
 
@@ -32,8 +32,8 @@ DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
 
 
-def file_instance(source_filepath=default_source_media_filepath,
-                  destination_filepath=default_destination_media_filepath,
+def file_instance(source_filepath=default_source_filepath,
+                  destination_filepath=default_destination_filepath,
                   size=1024, copied=False, name_clash=False,
                   copy_attempted=False):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
@@ -41,32 +41,33 @@ def file_instance(source_filepath=default_source_media_filepath,
                 copy_attempted=copy_attempted)
 
 
-def create_test_media_files(filename='test_media_file.jpg', create_destination_file=False,
-                            source_data='default_source_data', dest_data='default_destination_data'):
+def create_test_files(filename='test_file.jpg', create_destination_file=False,
+                      source_data='default_source_data', dest_data='default_destination_data'):
     source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
-    destination_filepath = construct_path(media_destination_year_directory, filename)
-    create_file_on_disk_with_data(media_destination_year_directory, filename,
+    destination_filepath = construct_path(destination_year_directory, filename)
+    create_file_on_disk_with_data(destination_year_directory, filename,
                                   dest_data) if create_destination_file else None
-    return filename, source_filepath, media_destination_year_directory, destination_filepath
+    return filename, source_filepath, destination_year_directory, destination_filepath
 
 
-def prepare_test_media_source_file(directory=source_directory):
+def prepare_source_file(directory=source_directory):
     Path(directory).mkdir(parents=True, exist_ok=True)
     shutil.copy2(image_with_metadata_source_filepath, directory)
     return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
 
 
-def prepare_test_media_destination_name_clash_file():
+def prepare_destination_name_clash_file():
     destination_filepath = os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     open(destination_filepath, 'x').close()
     return destination_filepath
 
 
-def prepare_test_media_destination_duplicate_file():
+def prepare_destination_duplicate_file():
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     shutil.copy2(image_with_metadata_source_filepath, image_with_metadata_destination_directory)
     return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
+
 
 def create_file_on_disk(directory, filename):
     return create_file_on_disk_with_data(directory, filename)

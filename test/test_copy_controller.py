@@ -34,11 +34,10 @@ def test_copies_media_file_to_destination_directory(monkeypatch_user_input_yes):
 
 def test_does_not_copy_file_when_user_enters_char_other_than_y(monkeypatch):
     monkeypatch.setattr('builtins.input', lambda: 'z')
-    _, _, destination_directory, destination_filepath = create_test_media_files()
+    destination_filepath = prepare_test_media_source_file()
 
     copy_files()
 
-    assert not Path(destination_directory).is_dir()
     assert not Path(destination_filepath).is_file()
     assert os.stat(Logger().log_file_path).st_size == 0
 

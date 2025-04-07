@@ -23,12 +23,6 @@ year_mode_expected_destination_raf_file_path = construct_path(destination_root_d
 year_mode_expected_destination_video_file_path = construct_path(destination_root_directory, '2025', video_filename)
 
 
-@pytest.fixture
-def set_year_mode_args(monkeypatch):
-    monkeypatch.setattr('sys.argv',
-                        ['main.py', '-s', source_directory, '-d', destination_root_directory, '-y'])
-
-
 @pytest.fixture(autouse=True)
 def prepare_test_resources(monkeypatch):
     ModeFlagsMeta._instance = {}

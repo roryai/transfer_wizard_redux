@@ -1,5 +1,5 @@
 from test.helpers import cleanup
-from test.fixtures.main_fixtures import set_default_copy_args
+from test.fixtures.main_fixtures import set_default_copy_args, set_year_mode_args
 from test.fixtures.main_integration_fixtures import *
 
 from main import main

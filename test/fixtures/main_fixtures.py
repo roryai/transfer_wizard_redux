@@ -8,6 +8,11 @@ def set_default_copy_args(monkeypatch):
 
 
 @pytest.fixture
+def set_year_mode_args(monkeypatch):
+    set_args(monkeypatch, ['-s', source_directory, '-d', destination_root_directory, '-y'])
+
+
+@pytest.fixture
 def set_only_source_arg(monkeypatch):
     set_args(monkeypatch, ['-s', source_directory])
 

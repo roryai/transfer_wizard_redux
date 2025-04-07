@@ -15,10 +15,18 @@ def parse_args():
     return _configure_parser().parse_args(sys.argv[1:])
 
 
-def test_parses_args_for_copying_media_files(set_default_copy_args):
+def test_parses_args_for_copying_media_files_default_path(set_default_copy_args):
     args = parse_args()
     assert args.source == source_directory
     assert args.destination == destination_root_directory
+    assert args.year is False
+
+
+def test_parses_args_for_copying_media_files_year_path(set_year_mode_args):
+    args = parse_args()
+    assert args.source == source_directory
+    assert args.destination == destination_root_directory
+    assert args.year is True
 
 
 def test_throws_error_when_only_source_provided(capsys, set_only_source_arg):

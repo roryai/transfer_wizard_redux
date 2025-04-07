@@ -36,6 +36,6 @@ def test_file_instantiated_from_record_has_expected_attributes():
 
 
 def test_determines_file_directory():
-    destination_directory = file_instance(destination_filepath='/destination/filename.jpeg'
+    destination_directory = file_instance(destination_filepath='/destination/filename.jpg'
                                           ).destination_directory()
     assert destination_directory == PosixPath('/destination')

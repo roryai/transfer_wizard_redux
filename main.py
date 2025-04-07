@@ -16,7 +16,7 @@ This program copies photos and videos to directory structure based on capture da
         └── Q1
             └── video.mov
         └── Q2
-            └── pic.jpeg
+            └── pic.jpg
         └── Q3
             └── film.mkv
         └── Q4

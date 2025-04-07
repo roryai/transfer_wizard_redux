@@ -13,12 +13,12 @@ def copy_source_files_to_destination():
     FileCopier().copy_source_files_to_destination()
 
 
-def filename_and_destination_filepath(filename='filename.jpeg'):
+def filename_and_destination_filepath(filename='filename.jpg'):
     destination_filepath = construct_path(source_directory, filename)
     return filename, destination_filepath
 
 
-def create_source_file_and_save_file_record(filename='filename.jpeg'):
+def create_source_file_and_save_file_record(filename='filename.jpg'):
     source_filepath = construct_path(source_directory, filename)
     create_file_on_disk(source_directory, filename)
     file = file_instance(source_filepath=source_filepath)
@@ -39,7 +39,7 @@ def test_copies_single_file():
 
 def test_copies_multiple_files():
     _, destination_filepath_1 = filename_and_destination_filepath()
-    filename_2, destination_filepath_2 = filename_and_destination_filepath('a_file2.jpeg')
+    filename_2, destination_filepath_2 = filename_and_destination_filepath('a_file2.jpg')
 
     assert not Path(destination_filepath_1).is_file()
     assert not Path(destination_filepath_2).is_file()

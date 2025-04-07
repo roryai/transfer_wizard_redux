@@ -5,8 +5,8 @@ from test.helpers import file_instance
 
 @pytest.fixture
 def copied_media_file():
-    return file_instance(source_filepath='/source/copied_file.jpeg',
-                         destination_filepath='/destination/copied_file.jpeg',
+    return file_instance(source_filepath='/source/copied_file.jpg',
+                         destination_filepath='/destination/copied_file.jpg',
                          copied=True, copy_attempted=True, size=2097152)
 
 
@@ -36,8 +36,8 @@ def duplicate_media_file_2():
 
 @pytest.fixture
 def failed_copy_media_file():
-    return file_instance(source_filepath='/source/media.jpeg',
-                         destination_filepath='/destination/media.jpeg',
+    return file_instance(source_filepath='/source/media.jpg',
+                         destination_filepath='/destination/media.jpg',
                          copied=False, copy_attempted=True, size=17825792)
 
 

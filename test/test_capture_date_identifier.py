@@ -9,7 +9,7 @@ def teardown():
     cleanup()
 
 
-def test_identifies_capture_date_for_jpeg():
+def test_identifies_capture_date_for_jpg():
     photo_path = construct_path(static_media_directory, 'RRY01936.JPG')
     file_date = CaptureDateIdentifier().media_capture_date(photo_path)
     expected_date = datetime.strptime('1 April 2025', "%d %B %Y").date()

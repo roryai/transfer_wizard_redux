@@ -21,7 +21,7 @@ def test_creates_a_directory():
 
 
 def test_files_in_existing_directory_persist_after_second_call_to_create_directory():
-    filename = 'test_file.jpeg'
+    filename = 'test_file.jpg'
     source_filepath = create_file_on_disk(source_directory, filename)
     destination_filepath = construct_path(media_destination_year_directory, filename)
 

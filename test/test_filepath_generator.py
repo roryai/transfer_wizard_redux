@@ -39,7 +39,7 @@ class TestSharedFunctionality:
             create_destination_file=True)
 
         generated_destination_path = generate_filepath(source_filepath)
-        expected_filename = f'{Path(filename).stem}___1.jpeg'
+        expected_filename = f'{Path(filename).stem}___1.jpg'
         expected_destination_path = construct_path(destination_directory, expected_filename)
 
         assert generated_destination_path == expected_destination_path
@@ -47,7 +47,7 @@ class TestSharedFunctionality:
     def test_returns_none_if_identical_destination_path_and_size_exists_in_db(
             self):
         file_instance(size=16).save()
-        source_filepath = create_file_on_disk_with_data(source_directory, 'test_media_file.jpeg', 'this is 16 bytes')
+        source_filepath = create_file_on_disk_with_data(source_directory, 'test_media_file.jpg', 'this is 16 bytes')
         generated_destination_path = generate_filepath(source_filepath)
 
         assert generated_destination_path is None
@@ -55,30 +55,30 @@ class TestSharedFunctionality:
     def test_increments_number_suffix_if_existing_file_already_has_suffix_and_different_size(
             self):
         _, source_filepath, destination_directory, _ = create_test_media_files(
-            filename='a_file___1.jpeg', create_destination_file=True)
+            filename='a_file___1.jpg', create_destination_file=True)
 
         generated_destination_path = generate_filepath(source_filepath)
-        expected_destination_path = construct_path(destination_directory, 'a_file___2.jpeg')
+        expected_destination_path = construct_path(destination_directory, 'a_file___2.jpg')
 
         assert generated_destination_path == expected_destination_path
 
     def test_returns_none_if_generated_path_points_to_identical_file(self):
         data = 'same data'
         _, source_filepath, _, _ = create_test_media_files(
-            filename='a_file___1.jpeg', source_data=data, dest_data=data, create_destination_file=True)
+            filename='a_file___1.jpg', source_data=data, dest_data=data, create_destination_file=True)
         generated_destination_path = generate_filepath(source_filepath)
 
         assert generated_destination_path is None
 
     def test_returns_none_if_second_path_generated_points_to_file_with_identical_name_and_suffix_and_size(
             self):
-        filename = 'test_file.jpeg'
+        filename = 'test_file.jpg'
         source_filepath = create_file_on_disk_with_data(source_directory, filename, 'Same data')
 
         # source filepath has name clash with this filepath, so generated filename is incremented
         create_file_on_disk_with_data(media_destination_year_directory, filename, 'Unique data')
         # generated incremented filepath is identical, and files are same size/have same data
-        create_file_on_disk_with_data(media_destination_year_directory, 'test_file___1.jpeg', 'Same data')
+        create_file_on_disk_with_data(media_destination_year_directory, 'test_file___1.jpg', 'Same data')
 
         generated_destination_path = FilepathGenerator(source_filepath,
                                                        destination_root_directory

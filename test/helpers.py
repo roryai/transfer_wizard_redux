@@ -22,8 +22,8 @@ logfile_directory = construct_path(test_directory, 'logs')
 destination_root_directory = construct_path(test_resources_directory, 'destination')
 media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
 metadata_error_destination_year_directory = construct_path(destination_root_directory, 'error/2023/Q4')
-default_source_media_filepath = construct_path(source_directory, 'test_media_file.jpeg')
-default_destination_media_filepath = construct_path(media_destination_year_directory, 'test_media_file.jpeg')
+default_source_media_filepath = construct_path(source_directory, 'test_media_file.jpg')
+default_destination_media_filepath = construct_path(media_destination_year_directory, 'test_media_file.jpg')
 image_with_metadata_filename = 'IMG_1687_68E3.jpg'
 image_with_metadata_source_filepath = os.path.join(static_media_directory, image_with_metadata_filename)
 image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2018/Q3')
@@ -41,7 +41,7 @@ def file_instance(source_filepath=default_source_media_filepath,
                 copy_attempted=copy_attempted)
 
 
-def create_test_media_files(filename='test_media_file.jpeg', create_destination_file=False,
+def create_test_media_files(filename='test_media_file.jpg', create_destination_file=False,
                             source_data='default_source_data', dest_data='default_destination_data'):
     source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
     set_file_creation_time(source_filepath)

@@ -40,11 +40,11 @@ def test_discovers_multiple_media_files():
 def test_discovers_a_file_in_a_nested_directory():
     nested_directory = construct_path(source_directory, 'nested')
     Path(nested_directory).mkdir(parents=True, exist_ok=True)
-    misc_filepath = create_file_on_disk(nested_directory, 'file.mov')
+    filepath = create_file_on_disk(nested_directory, 'file.mov')
 
     discovered_extensions = list(scanner.media_filepaths_in(source_directory))
 
-    assert discovered_extensions == [misc_filepath]
+    assert discovered_extensions == [filepath]
 
 
 def test_discovers_a_file_in_a_twice_nested_directory():
@@ -52,11 +52,11 @@ def test_discovers_a_file_in_a_twice_nested_directory():
     inside_nested_directory = construct_path(source_directory, 'egg')
     Path(nested_directory).mkdir(parents=True, exist_ok=True)
     Path(inside_nested_directory).mkdir(parents=True, exist_ok=True)
-    misc_filepath = create_file_on_disk(inside_nested_directory, 'file.raf')
+    filepath = create_file_on_disk(inside_nested_directory, 'file.raf')
 
     discovered_extensions = list(scanner.media_filepaths_in(source_directory))
 
-    assert discovered_extensions == [misc_filepath]
+    assert discovered_extensions == [filepath]
 
 
 def test_discovers_an_upper_case_jpg():

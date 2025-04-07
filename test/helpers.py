@@ -20,8 +20,6 @@ source_directory = construct_path(test_resources_directory, 'source')
 static_media_directory = construct_path(test_resources_directory, 'static_media')
 logfile_directory = construct_path(test_directory, 'logs')
 destination_root_directory = construct_path(test_resources_directory, 'destination')
-misc_destination_root_directory = construct_path(destination_root_directory, 'misc')
-misc_destination_year_directory = construct_path(misc_destination_root_directory, '2023')
 media_destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
 metadata_error_destination_year_directory = construct_path(destination_root_directory, 'error/2023/Q4')
 default_source_media_filepath = construct_path(source_directory, 'test_media_file.jpeg')
@@ -36,10 +34,10 @@ Logger().init_log_file(logfile_directory)
 
 def file_instance(source_filepath=default_source_media_filepath,
                   destination_filepath=default_destination_media_filepath,
-                  size=1024, copied=False, name_clash=False, media=True,
+                  size=1024, copied=False, name_clash=False,
                   copy_attempted=False):
     return File(source_filepath=source_filepath, destination_filepath=destination_filepath,
-                size=size, copied=copied, name_clash=name_clash, media=media,
+                size=size, copied=copied, name_clash=name_clash,
                 copy_attempted=copy_attempted)
 
 
@@ -51,16 +49,6 @@ def create_test_media_files(filename='test_media_file.jpeg', create_destination_
     create_file_on_disk_with_data(media_destination_year_directory, filename,
                                   dest_data) if create_destination_file else None
     return filename, source_filepath, media_destination_year_directory, destination_filepath
-
-
-def create_test_misc_files(filename='test_misc_file.gif', create_destination_file=False,
-                           source_data='default_source_data', dest_data='default_destination_data'):
-    source_filepath = create_file_on_disk_with_data(source_directory, filename, source_data)
-    set_file_creation_time(source_filepath)
-    destination_filepath = construct_path(misc_destination_year_directory, filename)
-    create_file_on_disk_with_data(misc_destination_year_directory, filename, dest_data) \
-        if create_destination_file else None
-    return filename, source_filepath, misc_destination_year_directory, destination_filepath
 
 
 def prepare_test_media_source_file(directory=source_directory):

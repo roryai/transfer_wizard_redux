@@ -38,7 +38,7 @@ Total to be copied:
 
 
 def test_summary_and_table_output_with_data(capsys, uncopied_media_file,
-                                            duplicate_media_file,
+                                            duplicate_media_file_1,
                                             media_file_with_name_clash):
     expected_output = """Source root directory: source/
 Destination root directory: destination/
@@ -56,7 +56,7 @@ Total to be copied:
 90.0MB
 
 """
-    for f in [uncopied_media_file, duplicate_media_file, media_file_with_name_clash]:
+    for f in [uncopied_media_file, duplicate_media_file_1, media_file_with_name_clash]:
         insert_db_record(f)
 
     present_stats()

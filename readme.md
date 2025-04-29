@@ -1,11 +1,21 @@
 # Transfer Wizard
 ### A tool to organise your media files by date into folders structured by year and quarter
 
+<img width="401" alt="Screenshot 2025-04-29 at 09 33 34" src="https://github.com/user-attachments/assets/6641aca9-6b94-407e-a42b-a0ef0ce5d685" />
+
+I have used this program to confidently deduplicate and sort more than 45,000 photos and videos that I have taken over the course of more than 20 years.
+
+My photos are my most treasured possession and it speaks to my thoroughness in writing and testing this program that I felt able to rely on it for such an important task.
+
+I was able to point this program at several different hard drives that contained overlapping backups and copies of my photo library, and sort the photos to a single unified destination.
+
+The [active branch](https://github.com/roryai/transfer_wizard_redux/tree/auto_xt4) is optimised for transferring photos from my Fuji X-T4. The plan is to have a script run the program to copy all photos from the camera to a NAS drive in my house each time the camera is connected.
+
 ### Overview
 
 This program will allow you to unify your disparate photo and video libraries in to an organised directory structure.
 
-It also allows you to copy photos from your camera to your hard drive (see the Roadmap below for plans in this area).
+It also allows you to copy photos from your camera to your hard drive .
 
 It scans files in the source directory, analyses them, and copies them to the new directory structure in the destination directory.
 

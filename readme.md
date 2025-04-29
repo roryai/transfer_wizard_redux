@@ -5,7 +5,7 @@
 
 I have used this program to confidently deduplicate and sort more than 45,000 photos and videos that I have taken over the course of more than 20 years.
 
-My photos are my most treasured possession and it speaks to my thoroughness in writing and testing this program that I felt able to rely on it for such an important task.
+My photos are my most treasured possession and I feel deep satisfaction that I was able to rely on it for such an important task.
 
 I was able to point this program at several different hard drives that contained overlapping backups and copies of my photo library, and sort the photos to a single unified destination.
 

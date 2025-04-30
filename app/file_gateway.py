@@ -6,11 +6,12 @@ class FileGateway:
     def __init__(self):
         self.db_controller = DBController()
 
-    def execute_query(self, statement, values=[]):
+    def execute_query(self, statement, values=None):
+        values = values or []
         return self.db_controller.execute_query(statement, values)
 
     def execute_read_query(self, statement, values=None):
-        values = values if values else []
+        values = values or []
         return self.min_size_zero(self.db_controller.execute_read_query(statement, values)[0][0])
 
     def min_size_zero(self, result):

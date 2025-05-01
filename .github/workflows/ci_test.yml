@@ -53,6 +53,7 @@ jobs:
       - name: Set up Kind
         uses: helm/kind-action@v1
         with:
+          cluster_name: kind
           wait: 30s
 
       - name: Load Docker image into Kind

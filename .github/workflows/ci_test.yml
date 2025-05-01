@@ -71,7 +71,7 @@ jobs:
       - name: Run tests in Kubernetes
         run: |
           POD_NAME=$(kubectl get pods --selector=app=transfer-wizard -o jsonpath='{.items[0].metadata.name}')
-          kubectl exec "$POD_NAME" -- /bin/sh -c "pytest"
+          kubectl exec "$POD_NAME" -- /bin/sh -c "pytest -n 2"
 
       - name: Clean up Kubernetes resources
         run: |

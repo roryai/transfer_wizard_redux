@@ -19,14 +19,13 @@ class Logger(metaclass=LoggerMeta):
         self.successful_copy_count = 0
         self.unsuccessful_copy_count = 0
 
-    def init_log_file(self, destination_root_directory):
+    def init_log_file(self, logfile_directory):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
         suffix = '_media_transfer_logfile.txt'
         filename = f'{timestamp}{suffix}'
-        log_file_path = Path(destination_root_directory, filename)
-
+        log_file_path = Path(logfile_directory, filename)
+        log_file_path.parent.mkdir(parents=True, exist_ok=True)
         open(log_file_path, 'w').close()
-
         self.log_file_path = log_file_path
 
     def log_successful_copy(self, source_file_path, destination_filepath):

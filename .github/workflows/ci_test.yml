@@ -60,18 +60,18 @@ jobs:
         run: kind load docker-image $IMAGE_NAME:$IMAGE_TAG
 
       - name: Create a Kubernetes Deployment
-        run: kubectl create deployment transfer_wizard --image=$IMAGE_NAME:$IMAGE_TAG
+        run: kubectl create deployment transfer-wizard --image=$IMAGE_NAME:$IMAGE_TAG
 
       - name: Expose the Deployment as a Service
-        run: kubectl expose deployment transfer_wizard --port=8080 --type=NodePort
+        run: kubectl expose deployment transfer-wizard --port=8080 --type=NodePort
 
       - name: Wait for pod to be ready
-        run: kubectl rollout status deployment/transfer_wizard
+        run: kubectl rollout status deployment/transfer-wizard
 
       - name: Run tests in Kubernetes
-        run: kubectl exec -it $(kubectl get pods --selector=app=transfer_wizard -o jsonpath='{.items[0].metadata.name}') -- pytest
+        run: kubectl exec -it $(kubectl get pods --selector=app=transfer-wizard -o jsonpath='{.items[0].metadata.name}') -- pytest
 
       - name: Clean up Kubernetes resources
         run: |
-          kubectl delete deployment transfer_wizard
-          kubectl delete service transfer_wizard
+          kubectl delete deployment transfer-wizard
+          kubectl delete service transfer-wizard

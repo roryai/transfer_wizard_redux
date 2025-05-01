@@ -5,6 +5,10 @@ on:
     branches:
       - '**'
 
+env:
+  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_TAG: ${{ github.sha }}
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -39,11 +43,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+
       - name: Build Docker image
-        run: |
-          IMAGE_NAME="${{ github.repository }}"
-          IMAGE_TAG="${{ github.sha }}"
-          docker build -t $IMAGE_NAME:$IMAGE_TAG .
+        run: docker build -t $IMAGE_NAME:$IMAGE_TAG .
 
       - name: Run tests in Docker
         run: docker run --rm $IMAGE_NAME:$IMAGE_TAG pytest

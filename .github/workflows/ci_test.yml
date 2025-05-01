@@ -60,7 +60,11 @@ jobs:
         run: kind load docker-image $IMAGE_NAME:$IMAGE_TAG
 
       - name: Create a Kubernetes Deployment
-        run: kubectl create deployment transfer-wizard --image=$IMAGE_NAME:$IMAGE_TAG
+        run: |
+          kubectl create deployment transfer-wizard --image=$IMAGE_NAME:$IMAGE_TAG
+          kubectl set resources deployment transfer-wizard \
+            --limits=memory=2Gi,cpu=1 \
+            --requests=memory=1Gi,cpu=500m
 
       - name: Expose the Deployment as a Service
         run: kubectl expose deployment transfer-wizard --port=8080 --type=NodePort
@@ -71,7 +75,7 @@ jobs:
       - name: Run tests in Kubernetes
         run: |
           POD_NAME=$(kubectl get pods --selector=app=transfer-wizard -o jsonpath='{.items[0].metadata.name}')
-          kubectl exec "$POD_NAME" -- /bin/sh -c "pytest -n 2"
+          kubectl exec "$POD_NAME" -- /bin/sh -c "pytest"
 
       - name: Clean up Kubernetes resources
         run: |

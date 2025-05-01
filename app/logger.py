@@ -1,5 +1,5 @@
 from datetime import datetime
-import os
+from pathlib import Path
 
 
 class LoggerMeta(type):
@@ -23,7 +23,7 @@ class Logger(metaclass=LoggerMeta):
         timestamp = datetime.now().strftime('%Y-%m-%d-%H%M.%S')
         suffix = '_media_transfer_logfile.txt'
         filename = f'{timestamp}{suffix}'
-        log_file_path = os.path.join(destination_root_directory, filename)
+        log_file_path = Path(destination_root_directory, filename)
 
         open(log_file_path, 'w').close()
 

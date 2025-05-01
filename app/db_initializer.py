@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import sqlite3
 
 from app.db_controller import DBController
@@ -26,7 +26,7 @@ class DBInitializer:
 
     def _db_path(self, db_name):
         db_filename = f'{db_name}.db'
-        return os.path.join(self.project_root, db_filename)
+        return Path(self.project_root, db_filename)
 
     def _create_table(self):
         create_files_table = """

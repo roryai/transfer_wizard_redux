@@ -1,6 +1,6 @@
-from pathlib import Path
 import os
 import re
+from pathlib import Path
 
 from app.capture_date_identifier import CaptureDateIdentifier
 from app.file import File
@@ -21,7 +21,7 @@ class FilepathGenerator:
         filename = Path(self.source_filepath).name
         capture_date = CaptureDateIdentifier().capture_date(self.source_filepath)
         quarter = self._determine_quarter(capture_date.month)
-        prospective_destination_filepath = os.path.join(
+        prospective_destination_filepath = Path(
             self.destination_root_directory, str(capture_date.year), quarter, filename)
         return self._resolve_path(prospective_destination_filepath)
 
@@ -65,7 +65,7 @@ class FilepathGenerator:
     def _generate_next_available_path(self, destination_filepath):
         path = Path(destination_filepath)
         filename = self._distinct_filename(path.stem)
-        next_path = os.path.join(path.parent, f'{filename}{path.suffix}')
+        next_path = Path(path.parent, f'{filename}{path.suffix}')
         return self._resolve_path(next_path) if self._path_in_use(next_path) else next_path
 
     def _distinct_filename(self, filename):

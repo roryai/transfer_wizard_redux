@@ -17,15 +17,15 @@ def parse_args():
 
 def test_parses_args_for_copying_media_files_default_path(set_default_copy_args):
     args = parse_args()
-    assert args.source == source_directory
-    assert args.destination == destination_root_directory
+    assert args.source == source
+    assert args.destination == destination
     assert args.year is False
 
 
 def test_parses_args_for_copying_media_files_year_path(set_year_mode_args):
     args = parse_args()
-    assert args.source == source_directory
-    assert args.destination == destination_root_directory
+    assert args.source == source
+    assert args.destination == destination
     assert args.year is True
 
 
@@ -51,8 +51,8 @@ def test_calls_expected_classes_when_source_and_destination_args_provided(mocker
     main()
 
     mocked_directory_manager.return_value.check_if_directory_exists.assert_has_calls(
-        [mocker.call(source_directory), mocker.call(destination_root_directory)], any_order=True)
-    mocked_copy_controller.assert_called_once_with(destination_root_directory, source_directory)
+        [mocker.call(source), mocker.call(destination)], any_order=True)
+    mocked_copy_controller.assert_called_once_with(destination, source)
     mocked_copy_controller.return_value.copy_files.assert_called_once()
 
 

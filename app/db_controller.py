@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import sqlite3
 from sqlite3 import Error
 
@@ -25,13 +27,18 @@ class DBController(metaclass=DBControllerMeta):
     def execute_query(self, query, values):
         cursor = self.connection.cursor()
         try:
-            cursor.execute(query, values)
+            cursor.execute(query, self.sanitize_values(values))
             self.connection.commit()
         except Error as e:
             Logger().log_error('Error in DBController', e, values)
 
     def execute_read_query(self, query, values):
         cursor = self.connection.cursor()
-        cursor.execute(query, values)
+        cursor.execute(query, self.sanitize_values(values))
         result = cursor.fetchall()
         return result
+
+    def sanitize_values(self, values):
+        if isinstance(values, (list, tuple)):
+            return tuple(str(v) if isinstance(v, Path) else v for v in values)
+        return values

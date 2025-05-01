@@ -11,22 +11,28 @@ from app.logger import Logger, LoggerMeta
 
 
 def construct_path(*args):
-    return os.path.join(*args)
+    return Path(*args)
 
 
-test_directory = str(Path(__file__).parent)
-test_resources_directory = construct_path(test_directory, 'test_resources')
-source_directory = construct_path(test_resources_directory, 'source')
-static_media_directory = construct_path(test_resources_directory, 'static_media')
-logfile_directory = construct_path(test_directory, 'logs')
-destination_root_directory = construct_path(test_resources_directory, 'destination')
-destination_year_directory = construct_path(destination_root_directory, '2023/Q4')
-default_source_filepath = construct_path(source_directory, 'test_file.jpg')
-default_destination_filepath = construct_path(destination_year_directory, 'test_file.jpg')
+test_directory = Path(__file__).parent
+
+# Test resource directories
+test_resources_directory = test_directory / 'test_resources'
+source_directory = test_resources_directory / 'source'
+static_media_directory = test_resources_directory / 'static_media'
+logfile_directory = test_directory / 'logs'
+destination_root_directory = test_resources_directory / 'destination'
+destination_year_directory = destination_root_directory / '2023/Q4'
+
+# Filepaths
+default_source_filepath = source_directory / 'test_file.jpg'
+default_destination_filepath = destination_year_directory / 'test_file.jpg'
+
+# Media info
 image_with_metadata_filename = 'RRY01936.JPG'
 image_with_metadata_file_size = 2374209
-image_with_metadata_source_filepath = os.path.join(static_media_directory, image_with_metadata_filename)
-image_with_metadata_destination_directory = os.path.join(destination_root_directory, '2025/Q2')
+image_with_metadata_source_filepath = static_media_directory / image_with_metadata_filename
+image_with_metadata_destination_directory = destination_root_directory / '2025/Q2'
 
 DBInitializer(ROOT_DIR).init_test_database()
 Logger().init_log_file(logfile_directory)
@@ -53,11 +59,11 @@ def create_test_files(filename='test_file.jpg', create_destination_file=False,
 def prepare_source_file(directory=source_directory):
     Path(directory).mkdir(parents=True, exist_ok=True)
     shutil.copy2(image_with_metadata_source_filepath, directory)
-    return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
+    return Path(image_with_metadata_destination_directory, image_with_metadata_filename)
 
 
 def prepare_destination_name_clash_file():
-    destination_filepath = os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
+    destination_filepath = Path(image_with_metadata_destination_directory, image_with_metadata_filename)
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     open(destination_filepath, 'x').close()
     return destination_filepath
@@ -66,7 +72,7 @@ def prepare_destination_name_clash_file():
 def prepare_destination_duplicate_file():
     Path(image_with_metadata_destination_directory).mkdir(parents=True, exist_ok=True)
     shutil.copy2(image_with_metadata_source_filepath, image_with_metadata_destination_directory)
-    return os.path.join(image_with_metadata_destination_directory, image_with_metadata_filename)
+    return Path(image_with_metadata_destination_directory, image_with_metadata_filename)
 
 
 def create_file_on_disk(directory, filename):

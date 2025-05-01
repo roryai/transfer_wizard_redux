@@ -7,8 +7,8 @@ class File:
 
     def __init__(self, source_filepath, destination_filepath, size,
                  copied, name_clash, copy_attempted):
-        self.source_filepath = source_filepath
-        self.destination_filepath = destination_filepath
+        self.source_filepath = Path(source_filepath)
+        self.destination_filepath = Path(destination_filepath) if destination_filepath is not None else None
         self.size = size
         self.copied = copied
         self.name_clash = name_clash

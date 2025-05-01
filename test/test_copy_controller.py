@@ -1,8 +1,9 @@
 import os
+from pathlib import Path
 
 from app.copy_controller import CopyController
 from app.logger import Logger
-from .helpers import (pytest, Path, cleanup, construct_path, image_with_metadata_file_size, destination_root_directory,
+from .helpers import (pytest, cleanup, construct_path, image_with_metadata_file_size, destination_root_directory,
                       prepare_source_file, prepare_destination_duplicate_file,
                       prepare_destination_name_clash_file, image_with_metadata_destination_directory,
                       source_directory)

@@ -19,7 +19,6 @@ def insert_records(*args):
 
 def test_can_read_and_write_file(file):
     gateway.insert(file)
-    print("")
     retrieved_file = instantiate_file_from_db_record(file.source_filepath)
 
     assert file == retrieved_file

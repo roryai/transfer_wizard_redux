@@ -1,25 +1,27 @@
 import pytest
 from test.helpers import source_directory, destination_root_directory
 
+source = str(source_directory)
+destination = str(destination_root_directory)
 
 @pytest.fixture
 def set_default_copy_args(monkeypatch):
-    set_args(monkeypatch, ['-s', source_directory, '-d', destination_root_directory])
+    set_args(monkeypatch, ['-s', source, '-d', destination])
 
 
 @pytest.fixture
 def set_year_mode_args(monkeypatch):
-    set_args(monkeypatch, ['-s', source_directory, '-d', destination_root_directory, '-y'])
+    set_args(monkeypatch, ['-s', source, '-d', destination, '-y'])
 
 
 @pytest.fixture
 def set_only_source_arg(monkeypatch):
-    set_args(monkeypatch, ['-s', source_directory])
+    set_args(monkeypatch, ['-s', source])
 
 
 @pytest.fixture
 def set_only_destination_arg(monkeypatch):
-    set_args(monkeypatch, ['-d', destination_root_directory])
+    set_args(monkeypatch, ['-d', destination])
 
 
 @pytest.fixture

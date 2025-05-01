@@ -17,7 +17,7 @@ class Scanner:
         return Path(filepath).suffix
 
     def _full_file_path(self, source_directory, filename):
-        return os.path.join(source_directory, filename)
+        return Path(source_directory, filename)
 
     def _extension_only(self, _, filename):
         return self._extension(filename)

@@ -52,6 +52,8 @@ jobs:
 
       - name: Set up Kind
         uses: helm/kind-action@v1
+        with:
+          wait: 30s
 
       - name: Load Docker image into Kind
         run: kind load docker-image $IMAGE_NAME:$IMAGE_TAG

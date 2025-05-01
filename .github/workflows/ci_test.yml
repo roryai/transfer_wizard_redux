@@ -55,6 +55,7 @@ jobs:
         with:
           cluster_name: kind
           wait: 30s
+          extra_args: --config kind-config.yaml
 
       - name: Load Docker image into Kind
         run: kind load docker-image $IMAGE_NAME:$IMAGE_TAG
